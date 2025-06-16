@@ -182,7 +182,7 @@ export default function App() {
               {/* <Code className="h-8 w-8" style={{ color: colors.black }} /> */}
               <img
                 className="w-8 aspect-square object-cover rounded-full"
-                src="/assets/images/poster.png"
+                src="/bundai.svg"
               />
               <span
                 className="text-xl font-bold"
@@ -194,34 +194,34 @@ export default function App() {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              <button
+              <a
                 onClick={() => scrollToSection("home")}
-                className="transition-colors hover:opacity-80"
+                className="cursor-pointer transition-colors hover:opacity-80"
                 style={{ color: colors.text.secondary }}
               >
                 Home
-              </button>
-              <button
+              </a>
+              <a
                 onClick={() => scrollToSection("features")}
-                className="transition-colors hover:opacity-80"
+                className="cursor-pointer transition-colors hover:opacity-80"
                 style={{ color: colors.text.secondary }}
               >
                 Features
-              </button>
-              <button
+              </a>
+              <a
                 onClick={() => scrollToSection("demo")}
-                className="transition-colors hover:opacity-80"
+                className="cursor-pointer transition-colors hover:opacity-80"
                 style={{ color: colors.text.secondary }}
               >
                 Demo
-              </button>
-              <button
+              </a>
+              <a
                 onClick={() => scrollToSection("contact")}
-                className="transition-colors hover:opacity-80"
+                className="cursor-pointer transition-colors hover:opacity-80"
                 style={{ color: colors.text.secondary }}
               >
                 Contact
-              </button>
+              </a>
               <Button size="sm">Get Started</Button>
             </nav>
 
@@ -246,34 +246,34 @@ export default function App() {
               style={{ borderColor: colors.border.light }}
             >
               <div className="flex flex-col space-y-4 pt-4">
-                <span
+                <a
                   onClick={() => scrollToSection("home")}
-                  className="text-left transition-colors hover:opacity-80"
+                  className="cursor-pointer text-left transition-colors hover:opacity-80"
                   style={{ color: colors.text.secondary }}
                 >
                   Home
-                </span>
-                <span
+                </a>
+                <a
                   onClick={() => scrollToSection("features")}
-                  className="text-left transition-colors hover:opacity-80"
+                  className="cursor-pointer text-left transition-colors hover:opacity-80"
                   style={{ color: colors.text.secondary }}
                 >
                   Features
-                </span>
-                <span
+                </a>
+                <a
                   onClick={() => scrollToSection("demo")}
-                  className="text-left transition-colors hover:opacity-80"
+                  className="cursor-pointer text-left transition-colors hover:opacity-80"
                   style={{ color: colors.text.secondary }}
                 >
                   Demo
-                </span>
-                <span
+                </a>
+                <a
                   onClick={() => scrollToSection("contact")}
-                  className="text-left transition-colors hover:opacity-80"
+                  className="cursor-pointer text-left transition-colors hover:opacity-80"
                   style={{ color: colors.text.secondary }}
                 >
                   Contact
-                </span>
+                </a>
                 <Button size="sm" className="w-fit font-bold">
                   Get Started
                 </Button>
@@ -501,7 +501,7 @@ export default function App() {
                       <video
                         className="w-full h-full object-cover"
                         controls
-                        poster="/assets/images/poster.png"
+                        poster="/bundai.svg"
                       >
                         <source
                           src="/assets/videos/sample.mp4"
@@ -916,7 +916,7 @@ export default function App() {
                   viewBox="0 0 24 24"
                   style={{ color: colors.black }}
                 >
-                  <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zm4.5 3a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 2a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm4.75-.75a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5z" />
+                  <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zm4.5 3a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 2a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z" />
                 </svg>
                 <h3
                   className="text-2xl font-bold"
@@ -932,46 +932,53 @@ export default function App() {
 
       {/* Footer */}
       <footer
-        className="py-8 px-4"
-        style={{ backgroundColor: colors.black, color: colors.ivory }}
+        className="w-full backdrop-blur-md border-t-2"
+        style={{
+          backgroundColor: `${colors.honeydew}E6`,
+          borderColor: colors.border.light,
+        }}
       >
         <div className="w-full mx-auto">
-          <div className="max-w-7xl mx-auto px-4">
+          <div className="max-w-7xl mx-auto px-4 py-4">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="flex items-center space-x-2 mb-4 md:mb-0">
-                {/* <Code className="h-6 w-6" style={{ color: colors.ivory }} /> */}
                 <img
                   className="w-8 aspect-square object-cover rounded-full"
-                  src="/assets/images/poster.png"
+                  src="/bundai.svg"
                 />
-                <span className="text-lg font-semibold">Bundai</span>
+                <span
+                  className="text-xl font-bold"
+                  style={{ color: colors.black }}
+                >
+                  Bundai
+                </span>
               </div>
-              <div className="flex space-x-6">
+              <nav className="flex space-x-6">
                 <a
-                  className="transition-colors hover:opacity-80"
-                  style={{ color: colors.ivory }}
+                  className="cursor-pointer transition-colors hover:opacity-80"
+                  style={{ color: colors.text.secondary }}
                 >
                   Privacy
                 </a>
                 <a
-                  className="transition-colors hover:opacity-80"
-                  style={{ color: colors.ivory }}
+                  className="cursor-pointer transition-colors hover:opacity-80"
+                  style={{ color: colors.text.secondary }}
                 >
                   Terms
                 </a>
                 <a
-                  className="transition-colors hover:opacity-80"
-                  style={{ color: colors.ivory }}
+                  className="cursor-pointer transition-colors hover:opacity-80"
+                  style={{ color: colors.text.secondary }}
                 >
                   Support
                 </a>
-              </div>
+              </nav>
             </div>
             <div
-              className="border-t mt-8 pt-8 text-center"
+              className="border-t mt-4 pt-4 text-center text-sm"
               style={{
-                borderColor: colors.text.secondary,
-                color: colors.ivory,
+                borderColor: colors.border.light,
+                color: colors.text.secondary,
               }}
             >
               <p>&copy; 2024 Bundai. Built with Vite + React + JavaScript.</p>
