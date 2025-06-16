@@ -311,6 +311,229 @@ export default function App() {
         </div>
       </section>
 
+      {/* Showcase Section */}
+      <section
+        className="py-16 px-4"
+        style={{ backgroundColor: colors.honeydew }}
+      >
+        <div className="w-full mx-auto">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2
+                className="text-3xl md:text-4xl font-bold mb-4"
+                style={{ color: colors.black }}
+              >
+                Complete Learning Ecosystem
+              </h2>
+              <p
+                className="text-lg max-w-2xl mx-auto"
+                style={{ color: colors.text.secondary }}
+              >
+                Seamlessly learn across all your devices with our Chrome
+                extension and mobile app
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              {/* PC Mockup - Left Side */}
+              <div className="flex justify-center">
+                <div className="relative">
+                  {/* Laptop Frame */}
+                  <div
+                    className="relative w-96 h-64 rounded-t-2xl border-4 shadow-2xl"
+                    style={{
+                      backgroundColor: colors.black,
+                      borderColor: colors.black,
+                    }}
+                  >
+                    {/* Screen */}
+                    <div
+                      className="absolute inset-2 rounded-t-xl overflow-hidden"
+                      style={{ backgroundColor: colors.ivory }}
+                    >
+                      {/* Extension Demo Image Placeholder */}
+                      {/* Extension Demo Image - Replace the entire div with this */}
+                      <img
+                        src={"/assets/images/extension.jpg"}
+                        alt="Chrome Extension Demo"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Laptop Base */}
+                  <div
+                    className="w-[420px] h-6 rounded-b-2xl border-4 border-t-0 relative"
+                    style={{
+                      backgroundColor: colors.black,
+                      borderColor: colors.black,
+                    }}
+                  >
+                    {/* Trackpad */}
+                    <div
+                      className="absolute top-1 left-1/2 transform -translate-x-1/2 w-16 h-3 rounded"
+                      style={{ backgroundColor: colors.text.muted }}
+                    ></div>
+                  </div>
+
+                  {/* Floating Extension Icon */}
+                  <div
+                    className="absolute -top-4 -right-4 w-12 h-12 rounded-full flex items-center justify-center animate-pulse"
+                    style={{ backgroundColor: "#FFFDD0" }}
+                  >
+                    <Monitor
+                      className="w-6 h-6"
+                      style={{ color: colors.black }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* iPhone Scissor Mockups - Right Side */}
+              <div className="flex justify-center">
+                <div className="relative w-80 h-80 scissor-container">
+                  {/* First iPhone */}
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scissor-phone-1 transition-all duration-500 ease-in-out">
+                    <div
+                      className="relative w-40 h-80 rounded-[2rem] border-4 shadow-xl"
+                      style={{
+                        backgroundColor: colors.black,
+                        borderColor: colors.black,
+                        transformOrigin: "bottom center",
+                      }}
+                    >
+                      {/* Screen */}
+                      <div
+                        className="absolute inset-2 rounded-[1.5rem] overflow-hidden"
+                        style={{ backgroundColor: colors.black }}
+                      >
+                        {/* Quiz Mode Screenshot */}
+                        <img
+                          src="/assets/images/phone1.jpg"
+                          alt="Quiz Mode Screenshot"
+                          className="w-full h-full object-cover rounded-[1.5rem]"
+                        />
+                      </div>
+
+                      {/* iPhone Details */}
+                      <div
+                        className="absolute top-3 left-1/2 transform -translate-x-1/2 w-8 h-0.5 rounded-full"
+                        style={{ backgroundColor: colors.text.muted }}
+                      ></div>
+                      <div
+                        className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-16 h-0.5 rounded-full"
+                        style={{ backgroundColor: colors.text.muted }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  {/* Second iPhone */}
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scissor-phone-2 transition-all duration-500 ease-in-out">
+                    <div
+                      className="relative w-40 h-80 rounded-[2rem] border-4 shadow-xl"
+                      style={{
+                        backgroundColor: colors.black,
+                        borderColor: colors.black,
+                        transformOrigin: "bottom center",
+                      }}
+                    >
+                      {/* Screen */}
+                      <div
+                        className="absolute inset-2 rounded-[1.5rem] overflow-hidden"
+                        style={{ backgroundColor: colors.black }}
+                      >
+                        {/* Kanji Study Screenshot */}
+                        <img
+                          src="/assets/images/phone2.jpg"
+                          alt="Kanji Study Screenshot"
+                          className="w-full h-full object-cover rounded-[1.5rem]"
+                        />
+                      </div>
+
+                      {/* iPhone Details */}
+                      <div
+                        className="absolute top-3 left-1/2 transform -translate-x-1/2 w-8 h-0.5 rounded-full"
+                        style={{ backgroundColor: colors.text.muted }}
+                      ></div>
+                      <div
+                        className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-16 h-0.5 rounded-full"
+                        style={{ backgroundColor: colors.text.muted }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  {/* Floating Elements */}
+                  <div
+                    className="absolute -top-6 -left-6 w-10 h-10 rounded-full flex items-center justify-center animate-bounce"
+                    style={{ backgroundColor: colors.honeydew }}
+                  >
+                    <Eye className="w-5 h-5" style={{ color: colors.black }} />
+                  </div>
+
+                  <div
+                    className="absolute -bottom-6 -right-6 w-10 h-10 rounded-full flex items-center justify-center animate-pulse"
+                    style={{ backgroundColor: "#FFFDD0" }}
+                  >
+                    <RotateCcw
+                      className="w-5 h-5"
+                      style={{ color: colors.black }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Feature Highlights */}
+            <div className="grid md:grid-cols-2 gap-8 mt-16">
+              <div className="text-center">
+                <h3
+                  className="text-xl font-bold mb-3"
+                  style={{ color: colors.black }}
+                >
+                  Web Extension
+                </h3>
+                <p style={{ color: colors.text.secondary }}>
+                  Learn Japanese while watching YouTube videos with real-time
+                  translations and vocabulary building
+                </p>
+              </div>
+              <div className="text-center">
+                <h3
+                  className="text-xl font-bold mb-3"
+                  style={{ color: colors.black }}
+                >
+                  Mobile App
+                </h3>
+                <p style={{ color: colors.text.secondary }}>
+                  Practice on-the-go with interactive quizzes, kanji
+                  recognition, and spaced repetition system
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <style jsx>{`
+        .scissor-container:hover .scissor-phone-1 {
+          transform: translateX(-50%) rotate(-15deg);
+        }
+
+        .scissor-container:hover .scissor-phone-2 {
+          transform: translateX(-50%) rotate(15deg);
+        }
+
+        .scissor-phone-1 {
+          transform: translateX(-50%) rotate(-5deg);
+          z-index: 2;
+        }
+
+        .scissor-phone-2 {
+          transform: translateX(-50%) rotate(5deg);
+          z-index: 1;
+        }
+      `}</style>
+
       {/* Features Section */}
       <section
         id="features"
@@ -567,229 +790,6 @@ export default function App() {
           </div>
         </div>
       </section>
-
-      {/* Showcase Section */}
-      <section
-        className="py-16 px-4"
-        style={{ backgroundColor: colors.honeydew }}
-      >
-        <div className="w-full mx-auto">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2
-                className="text-3xl md:text-4xl font-bold mb-4"
-                style={{ color: colors.black }}
-              >
-                Complete Learning Ecosystem
-              </h2>
-              <p
-                className="text-lg max-w-2xl mx-auto"
-                style={{ color: colors.text.secondary }}
-              >
-                Seamlessly learn across all your devices with our Chrome
-                extension and mobile app
-              </p>
-            </div>
-
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              {/* PC Mockup - Left Side */}
-              <div className="flex justify-center">
-                <div className="relative">
-                  {/* Laptop Frame */}
-                  <div
-                    className="relative w-96 h-64 rounded-t-2xl border-4 shadow-2xl"
-                    style={{
-                      backgroundColor: colors.black,
-                      borderColor: colors.black,
-                    }}
-                  >
-                    {/* Screen */}
-                    <div
-                      className="absolute inset-2 rounded-t-xl overflow-hidden"
-                      style={{ backgroundColor: colors.ivory }}
-                    >
-                      {/* Extension Demo Image Placeholder */}
-                      {/* Extension Demo Image - Replace the entire div with this */}
-                      <img
-                        src={"/assets/images/extension.jpg"}
-                        alt="Chrome Extension Demo"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Laptop Base */}
-                  <div
-                    className="w-[420px] h-6 rounded-b-2xl border-4 border-t-0 relative"
-                    style={{
-                      backgroundColor: colors.black,
-                      borderColor: colors.black,
-                    }}
-                  >
-                    {/* Trackpad */}
-                    <div
-                      className="absolute top-1 left-1/2 transform -translate-x-1/2 w-16 h-3 rounded"
-                      style={{ backgroundColor: colors.text.muted }}
-                    ></div>
-                  </div>
-
-                  {/* Floating Extension Icon */}
-                  <div
-                    className="absolute -top-4 -right-4 w-12 h-12 rounded-full flex items-center justify-center animate-pulse"
-                    style={{ backgroundColor: "#FFFDD0" }}
-                  >
-                    <Monitor
-                      className="w-6 h-6"
-                      style={{ color: colors.black }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* iPhone Scissor Mockups - Right Side */}
-              <div className="flex justify-center">
-                <div className="relative w-80 h-80 scissor-container">
-                  {/* First iPhone */}
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scissor-phone-1 transition-all duration-500 ease-in-out">
-                    <div
-                      className="relative w-40 h-80 rounded-[2rem] border-4 shadow-xl"
-                      style={{
-                        backgroundColor: colors.black,
-                        borderColor: colors.black,
-                        transformOrigin: "bottom center",
-                      }}
-                    >
-                      {/* Screen */}
-                      <div
-                        className="absolute inset-2 rounded-[1.5rem] overflow-hidden"
-                        style={{ backgroundColor: colors.black }}
-                      >
-                        {/* Quiz Mode Screenshot */}
-                        <img
-                          src="/assets/images/phone1.jpg"
-                          alt="Quiz Mode Screenshot"
-                          className="w-full h-full object-cover rounded-[1.5rem]"
-                        />
-                      </div>
-
-                      {/* iPhone Details */}
-                      <div
-                        className="absolute top-3 left-1/2 transform -translate-x-1/2 w-8 h-0.5 rounded-full"
-                        style={{ backgroundColor: colors.text.muted }}
-                      ></div>
-                      <div
-                        className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-16 h-0.5 rounded-full"
-                        style={{ backgroundColor: colors.text.muted }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  {/* Second iPhone */}
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scissor-phone-2 transition-all duration-500 ease-in-out">
-                    <div
-                      className="relative w-40 h-80 rounded-[2rem] border-4 shadow-xl"
-                      style={{
-                        backgroundColor: colors.black,
-                        borderColor: colors.black,
-                        transformOrigin: "bottom center",
-                      }}
-                    >
-                      {/* Screen */}
-                      <div
-                        className="absolute inset-2 rounded-[1.5rem] overflow-hidden"
-                        style={{ backgroundColor: colors.black }}
-                      >
-                        {/* Kanji Study Screenshot */}
-                        <img
-                          src="/assets/images/phone2.jpg"
-                          alt="Kanji Study Screenshot"
-                          className="w-full h-full object-cover rounded-[1.5rem]"
-                        />
-                      </div>
-
-                      {/* iPhone Details */}
-                      <div
-                        className="absolute top-3 left-1/2 transform -translate-x-1/2 w-8 h-0.5 rounded-full"
-                        style={{ backgroundColor: colors.text.muted }}
-                      ></div>
-                      <div
-                        className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-16 h-0.5 rounded-full"
-                        style={{ backgroundColor: colors.text.muted }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  {/* Floating Elements */}
-                  <div
-                    className="absolute -top-6 -left-6 w-10 h-10 rounded-full flex items-center justify-center animate-bounce"
-                    style={{ backgroundColor: colors.honeydew }}
-                  >
-                    <Eye className="w-5 h-5" style={{ color: colors.black }} />
-                  </div>
-
-                  <div
-                    className="absolute -bottom-6 -right-6 w-10 h-10 rounded-full flex items-center justify-center animate-pulse"
-                    style={{ backgroundColor: "#FFFDD0" }}
-                  >
-                    <RotateCcw
-                      className="w-5 h-5"
-                      style={{ color: colors.black }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Feature Highlights */}
-            <div className="grid md:grid-cols-2 gap-8 mt-16">
-              <div className="text-center">
-                <h3
-                  className="text-xl font-bold mb-3"
-                  style={{ color: colors.black }}
-                >
-                  Web Extension
-                </h3>
-                <p style={{ color: colors.text.secondary }}>
-                  Learn Japanese while watching YouTube videos with real-time
-                  translations and vocabulary building
-                </p>
-              </div>
-              <div className="text-center">
-                <h3
-                  className="text-xl font-bold mb-3"
-                  style={{ color: colors.black }}
-                >
-                  Mobile App
-                </h3>
-                <p style={{ color: colors.text.secondary }}>
-                  Practice on-the-go with interactive quizzes, kanji
-                  recognition, and spaced repetition system
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <style jsx>{`
-        .scissor-container:hover .scissor-phone-1 {
-          transform: translateX(-50%) rotate(-15deg);
-        }
-
-        .scissor-container:hover .scissor-phone-2 {
-          transform: translateX(-50%) rotate(15deg);
-        }
-
-        .scissor-phone-1 {
-          transform: translateX(-50%) rotate(-5deg);
-          z-index: 2;
-        }
-
-        .scissor-phone-2 {
-          transform: translateX(-50%) rotate(5deg);
-          z-index: 1;
-        }
-      `}</style>
 
       {/* Contact Section */}
       <section
