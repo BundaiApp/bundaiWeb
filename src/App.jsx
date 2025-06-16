@@ -202,6 +202,13 @@ export default function App() {
                 Home
               </a>
               <a
+                onClick={() => scrollToSection("platforms")}
+                className="cursor-pointer transition-colors hover:opacity-80"
+                style={{ color: colors.text.secondary }}
+              >
+                Platforms
+              </a>
+              <a
                 onClick={() => scrollToSection("features")}
                 className="cursor-pointer transition-colors hover:opacity-80"
                 style={{ color: colors.text.secondary }}
@@ -252,6 +259,13 @@ export default function App() {
                   style={{ color: colors.text.secondary }}
                 >
                   Home
+                </a>
+                <a
+                  onClick={() => scrollToSection("platforms")}
+                  className="cursor-pointer text-left transition-colors hover:opacity-80"
+                  style={{ color: colors.text.secondary }}
+                >
+                  Platforms
                 </a>
                 <a
                   onClick={() => scrollToSection("features")}
@@ -311,8 +325,9 @@ export default function App() {
         </div>
       </section>
 
-      {/* Showcase Section */}
+      {/* Complete Learning Ecosystem Section */}
       <section
+        id="platforms"
         className="py-16 px-4"
         style={{ backgroundColor: colors.honeydew }}
       >
