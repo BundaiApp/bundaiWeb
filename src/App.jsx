@@ -4,15 +4,15 @@ import { useState } from "react";
 import {
   Menu,
   X,
-  Code,
   Languages,
   RotateCcw,
   BookOpen,
   Brain,
   Eye,
   MonitorSmartphone,
-  Play,
   Monitor,
+  Globe,
+  Smartphone,
 } from "lucide-react";
 import colors from "./colors.js";
 
@@ -334,13 +334,13 @@ export default function App() {
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="grid lg:grid-cols-3 gap-12 items-center">
               {/* PC Mockup - Left Side */}
               <div className="flex justify-center">
                 <div className="relative">
                   {/* Laptop Frame */}
                   <div
-                    className="relative w-96 h-64 rounded-t-2xl border-4 shadow-2xl"
+                    className="relative w-80 h-52 rounded-t-2xl border-4 shadow-2xl"
                     style={{
                       backgroundColor: colors.black,
                       borderColor: colors.black,
@@ -351,8 +351,7 @@ export default function App() {
                       className="absolute inset-2 rounded-t-xl overflow-hidden"
                       style={{ backgroundColor: colors.ivory }}
                     >
-                      {/* Extension Demo Image Placeholder */}
-                      {/* Extension Demo Image - Replace the entire div with this */}
+                      {/* Extension Demo Image */}
                       <img
                         src={"/assets/images/extension.jpg"}
                         alt="Chrome Extension Demo"
@@ -363,7 +362,7 @@ export default function App() {
 
                   {/* Laptop Base */}
                   <div
-                    className="w-[420px] h-6 rounded-b-2xl border-4 border-t-0 relative"
+                    className="w-[336px] h-6 rounded-b-2xl border-4 border-t-0 relative"
                     style={{
                       backgroundColor: colors.black,
                       borderColor: colors.black,
@@ -380,6 +379,62 @@ export default function App() {
                   <div
                     className="absolute -top-4 -right-4 w-12 h-12 rounded-full flex items-center justify-center animate-pulse"
                     style={{ backgroundColor: "#FFFDD0" }}
+                  >
+                    <Globe
+                      className="w-6 h-6"
+                      style={{ color: colors.black }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop App Mockup - Center */}
+              <div className="flex justify-center">
+                <div className="relative">
+                  {/* Desktop Monitor Frame */}
+                  <div
+                    className="relative w-80 h-52 rounded-t-lg border-4 shadow-2xl"
+                    style={{
+                      backgroundColor: colors.black,
+                      borderColor: colors.black,
+                    }}
+                  >
+                    {/* Screen */}
+                    <div
+                      className="absolute inset-2 rounded-t-md overflow-hidden"
+                      style={{ backgroundColor: colors.ivory }}
+                    >
+                      {/* Desktop App Demo Image Placeholder */}
+                      <img
+                        src="/assets/images/desktop.jpg"
+                        alt="Desktop App Demo"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Monitor Stand */}
+                  <div
+                    className="w-16 h-8 mx-auto border-4 border-t-0"
+                    style={{
+                      backgroundColor: colors.black,
+                      borderColor: colors.black,
+                    }}
+                  ></div>
+
+                  {/* Monitor Base */}
+                  <div
+                    className="w-32 h-3 mx-auto rounded-b-lg border-4 border-t-0"
+                    style={{
+                      backgroundColor: colors.black,
+                      borderColor: colors.black,
+                    }}
+                  ></div>
+
+                  {/* Floating Desktop Icon */}
+                  <div
+                    className="absolute -top-4 -right-4 w-12 h-12 rounded-full flex items-center justify-center animate-bounce"
+                    style={{ backgroundColor: colors.honeydew }}
                   >
                     <Monitor
                       className="w-6 h-6"
@@ -467,7 +522,10 @@ export default function App() {
                     className="absolute -top-6 -left-6 w-10 h-10 rounded-full flex items-center justify-center animate-bounce"
                     style={{ backgroundColor: colors.honeydew }}
                   >
-                    <Eye className="w-5 h-5" style={{ color: colors.black }} />
+                    <Smartphone
+                      className="w-5 h-5"
+                      style={{ color: colors.black }}
+                    />
                   </div>
 
                   <div
@@ -484,7 +542,7 @@ export default function App() {
             </div>
 
             {/* Feature Highlights */}
-            <div className="grid md:grid-cols-2 gap-8 mt-16">
+            <div className="grid md:grid-cols-3 gap-8 mt-16">
               <div className="text-center">
                 <h3
                   className="text-xl font-bold mb-3"
@@ -495,6 +553,18 @@ export default function App() {
                 <p style={{ color: colors.text.secondary }}>
                   Learn Japanese while watching YouTube videos with real-time
                   translations and vocabulary building
+                </p>
+              </div>
+              <div className="text-center">
+                <h3
+                  className="text-xl font-bold mb-3"
+                  style={{ color: colors.black }}
+                >
+                  Desktop App
+                </h3>
+                <p style={{ color: colors.text.secondary }}>
+                  Full-featured desktop application with advanced study tools,
+                  progress tracking, and comprehensive kanji practice sessions
                 </p>
               </div>
               <div className="text-center">
