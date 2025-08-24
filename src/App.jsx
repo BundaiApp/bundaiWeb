@@ -13,47 +13,82 @@ import {
   Monitor,
   Globe,
   Smartphone,
+  Play,
+  Star,
+  CheckCircle,
+  ArrowRight,
+  Download,
 } from "lucide-react";
-import colors from "./colors.js";
 
-// Simple Button component
+// Color scheme
+const colors = {
+  primary: '#2563eb',
+  secondary: '#1e40af',
+  accent: '#f59e0b',
+  success: '#10b981',
+  white: '#ffffff',
+  gray: {
+    50: '#f9fafb',
+    100: '#f3f4f6',
+    200: '#e5e7eb',
+    300: '#d1d5db',
+    400: '#9ca3af',
+    500: '#6b7280',
+    600: '#4b5563',
+    700: '#374151',
+    800: '#1f2937',
+    900: '#111827',
+  },
+  red: '#dc2626',
+  orange: '#ea580c',
+  gradient: {
+    primary: 'from-blue-600 via-purple-600 to-indigo-700',
+    secondary: 'from-orange-400 to-red-500',
+    accent: 'from-emerald-400 to-cyan-500',
+  }
+};
+
+// Enhanced Button component with glass morphism
 const Button = ({
   children,
   onClick,
   size = "md",
   variant = "primary",
-  type = "button",
   className = "",
   ...props
 }) => {
   const baseClasses =
-    "inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
+    "inline-flex items-center justify-center rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-opacity-50 disabled:opacity-50 disabled:pointer-events-none transform hover:scale-105 active:scale-95";
+  
   const sizeClasses = {
-    sm: "h-9 px-3 text-sm",
-    md: "h-10 px-4 py-2",
-    lg: "h-11 px-8 text-lg",
+    sm: "h-10 px-4 text-sm",
+    md: "h-12 px-6 text-base",
+    lg: "h-14 px-8 text-lg",
+    xl: "h-16 px-10 text-xl",
   };
+
   const variantClasses = {
-    primary: `bg-black text-white hover:bg-gray-800 focus:ring-gray-500`,
-    secondary: `bg-white text-black border-2 hover:bg-gray-50 focus:ring-gray-500`,
-    outline: `border-2 border-black bg-transparent text-black hover:bg-gray-50 focus:ring-gray-500`,
+    primary:
+      "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-blue-500",
+  
+    secondary:
+      "bg-white/20 text-white font-semibold border border-white/40 backdrop-blur-md hover:bg-white/30 hover:border-white/50 shadow-sm focus:outline-none focus:ring-2 focus:ring-white/60",
+  
+    accent:
+      "bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-orange-500",
+  
+    success:
+      "bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:from-emerald-600 hover:to-cyan-600 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-emerald-500",
+  
+    outline:
+      "border-2 border-current bg-transparent hover:bg-current hover:text-white text-current focus:outline-none focus:ring-2 focus:ring-current/50",
   };
+  
 
   return (
     <button
-      type={type}
       onClick={onClick}
       className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
-      style={{
-        backgroundColor:
-          variant === "primary"
-            ? colors.black
-            : variant === "secondary"
-            ? colors.ivory
-            : "transparent",
-        color: variant === "primary" ? colors.ivory : colors.black,
-        borderColor: colors.black,
-      }}
       {...props}
     >
       {children}
@@ -61,80 +96,33 @@ const Button = ({
   );
 };
 
-// Simple Input component
-const Input = ({ className = "", ...props }) => {
-  return (
-    <input
-      className={`flex h-10 w-full rounded-md border-2 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-      style={{
-        backgroundColor: colors.ivory,
-        borderColor: colors.border.medium,
-        color: colors.text.primary,
-        "--tw-ring-color": colors.black,
-      }}
-      {...props}
-    />
-  );
-};
-
-// Simple Card components
-const Card = ({ children, style, className = "" }) => {
+// Glass card component
+const GlassCard = ({ children, className = "", hover = true }) => {
   return (
     <div
-      className={`rounded-lg border-2 shadow-sm ${className}`}
-      style={{
-        backgroundColor: colors.ivory,
-        borderColor: colors.border.light,
-        ...style,
-      }}
+      className={`backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl shadow-xl ${
+        hover ? "hover:bg-white/20 transition-all duration-300 hover:scale-105" : ""
+      } ${className}`}
     >
       {children}
     </div>
   );
 };
 
-const CardHeader = ({ children, className = "" }) => {
+// Animated background component
+const AnimatedBackground = () => {
   return (
-    <div className={`flex flex-col space-y-1.5 p-6 ${className}`}>
-      {children}
-    </div>
-  );
-};
-
-const CardTitle = ({ children, className = "" }) => {
-  return (
-    <h3
-      className={`text-2xl font-semibold leading-none tracking-tight ${className}`}
-      style={{ color: colors.text.primary }}
-    >
-      {children}
-    </h3>
-  );
-};
-
-const CardDescription = ({ children, className = "" }) => {
-  return (
-    <p
-      className={`text-sm ${className}`}
-      style={{ color: colors.text.secondary }}
-    >
-      {children}
-    </p>
-  );
-};
-
-// Simple Badge component
-const Badge = ({ children, variant = "primary", className = "" }) => {
-  return (
-    <div
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${className}`}
-      style={{
-        backgroundColor:
-          variant === "primary" ? colors.honeydewDark : colors.ivoryDark,
-        color: colors.text.primary,
-      }}
-    >
-      {children}
+    <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none">
+      {/* Floating Japanese characters */}
+      <div className="absolute top-20 left-10 text-6xl text-white/5 animate-bounce">漢</div>
+      <div className="absolute top-40 right-20 text-8xl text-white/5 animate-pulse">字</div>
+      <div className="absolute bottom-40 left-20 text-5xl text-white/5 animate-bounce delay-500">本</div>
+      <div className="absolute bottom-60 right-10 text-7xl text-white/5 animate-pulse delay-1000">語</div>
+      
+      {/* Gradient orbs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-orange-400/30 to-red-400/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-r from-emerald-400/30 to-cyan-400/30 rounded-full blur-3xl animate-pulse delay-500"></div>
     </div>
   );
 };
@@ -143,951 +131,721 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [email, setEmail] = useState("");
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
     setIsMenuOpen(false);
   };
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-    alert(`Thanks for subscribing with email: ${email}`);
+    alert(`Welcome to Bundai! We'll keep you updated at: ${email}`);
     setEmail("");
   };
 
   return (
-    <div
-      className="min-h-screen min-w-screen"
-      style={{
-        background: `linear-gradient(to bottom right, ${colors.honeydew}, ${colors.ivory})`,
-      }}
-    >
-      {/* Header */}
-      <header
-        className="fixed top-0 w-full backdrop-blur-md border-b-2 z-50"
-        style={{
-          backgroundColor: `${colors.honeydew}E6`, // Adding transparency
-          borderColor: colors.border.light,
-        }}
-      >
-        <div className="max-w-full mx-auto px-4 py-4">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white" >
+      <AnimatedBackground />
+
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 backdrop-blur-lg bg-black/20 border-b border-white/10">
+        <div className="mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              {/* <Code className="h-8 w-8" style={{ color: colors.black }} /> */}
-              <img
-                className="w-8 aspect-square object-cover rounded-full"
-                src="/bundai.svg"
-              />
-              <span
-                className="text-xl font-bold"
-                style={{ color: colors.black }}
-              >
+            {/* Logo */}
+            <div className="flex items-center space-x-3 z-10">
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">文</span>
+              </div>
+              <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                 Bundai
               </span>
             </div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <a
-                onClick={() => scrollToSection("home")}
-                className="cursor-pointer transition-colors hover:opacity-80"
-                style={{ color: colors.text.secondary }}
-              >
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center space-x-8">
+              <a onClick={() => scrollToSection("home")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
                 Home
               </a>
-              <a
-                onClick={() => scrollToSection("platforms")}
-                className="cursor-pointer transition-colors hover:opacity-80"
-                style={{ color: colors.text.secondary }}
-              >
-                Platforms
-              </a>
-              <a
-                onClick={() => scrollToSection("features")}
-                className="cursor-pointer transition-colors hover:opacity-80"
-                style={{ color: colors.text.secondary }}
-              >
+              <a onClick={() => scrollToSection("features")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
                 Features
               </a>
-              <a
-                onClick={() => scrollToSection("demo")}
-                className="cursor-pointer transition-colors hover:opacity-80"
-                style={{ color: colors.text.secondary }}
-              >
+              <a onClick={() => scrollToSection("demo")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
                 Demo
               </a>
-              <a
-                onClick={() => scrollToSection("contact")}
-                className="cursor-pointer transition-colors hover:opacity-80"
-                style={{ color: colors.text.secondary }}
-              >
-                Contact
+              <a onClick={() => scrollToSection("testimonials")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
+                Reviews
               </a>
-              <Button size="sm">Get Started</Button>
-            </nav>
+              <Button size="sm" variant="primary">
+                Get Started
+              </Button>
+            </div>
 
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMenu}
-              className="md:hidden p-2 hover:opacity-80"
-              style={{ color: colors.text.secondary }}
+              className="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
             >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
 
-          {/* Mobile Navigation */}
+          {/* Mobile Menu */}
           {isMenuOpen && (
-            <nav
-              className="md:hidden mt-4 pb-4 border-t-2"
-              style={{ borderColor: colors.border.light }}
-            >
+            <div className="md:hidden mt-4 pb-6 border-t border-white/10">
               <div className="flex flex-col space-y-4 pt-4">
-                <a
-                  onClick={() => scrollToSection("home")}
-                  className="cursor-pointer text-left transition-colors hover:opacity-80"
-                  style={{ color: colors.text.secondary }}
-                >
+                <a onClick={() => scrollToSection("home")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
                   Home
                 </a>
-                <a
-                  onClick={() => scrollToSection("platforms")}
-                  className="cursor-pointer text-left transition-colors hover:opacity-80"
-                  style={{ color: colors.text.secondary }}
-                >
-                  Platforms
-                </a>
-                <a
-                  onClick={() => scrollToSection("features")}
-                  className="cursor-pointer text-left transition-colors hover:opacity-80"
-                  style={{ color: colors.text.secondary }}
-                >
+                <a onClick={() => scrollToSection("features")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
                   Features
                 </a>
-                <a
-                  onClick={() => scrollToSection("demo")}
-                  className="cursor-pointer text-left transition-colors hover:opacity-80"
-                  style={{ color: colors.text.secondary }}
-                >
+                <a onClick={() => scrollToSection("demo")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
                   Demo
                 </a>
-                <a
-                  onClick={() => scrollToSection("contact")}
-                  className="cursor-pointer text-left transition-colors hover:opacity-80"
-                  style={{ color: colors.text.secondary }}
-                >
-                  Contact
+                <a onClick={() => scrollToSection("testimonials")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
+                  Reviews
                 </a>
-                <Button size="sm" className="w-fit font-bold">
+                <Button size="sm" variant="primary" className="w-fit">
                   Get Started
                 </Button>
               </div>
-            </nav>
+            </div>
           )}
         </div>
-      </header>
+      </nav>
 
-      {/* Hero Section */}
-      <section id="home" className="pt-24 pb-16 px-4">
-        <div className="max-w-[80vw] mx-auto text-center flex flex-col">
-          <span
-            className="text-5xl md:text-9xl font-[900] mb-12"
-            style={{ color: colors.black }}
-          >
-            Start watching YouTube in{" "}
-            <span style={{ color: "red" }}>Japanese</span> {" in "}
-            <span style={{ color: "red" }}>3 months</span>
-          </span>
-          <p
-            className="text-3xl mb-12 max-w-[60vw] mx-auto"
-            style={{ color: colors.text.secondary }}
-          >
-            Ever wondered if you'll progress past ineffective apps and textbooks
-            and start learning the real living language?{" "}
-            <span style={{ fontWeight: "bolder", color: "yellowgreen" }}>
-              Bundai
-            </span>{" "}
-            has tools and concrete steps that will get you there fast.
+{/* Hero Section */}
+<section id="home" className="relative min-h-screen flex items-center justify-center px-6 pt-20">
+        <div className="w-full mx-auto">
+          <div className="text-center relative z-10">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 mb-8">
+              <span className="text-orange-300 text-sm font-medium">Master Japanese in 90 Days</span>
+            </div>
+            
+            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black mb-8 leading-tight max-w-5xl mx-auto">
+              Start Watching{" "}
+              <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
+                YouTube
+              </span>
+              <br />
+              in{" "}
+              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Japanese
+              </span>{" "}
+              in{" "}
+              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                3 Months
+              </span>
+            </h1>
+
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
+              Stop struggling with boring textbooks and ineffective apps. 
+              <span className="text-emerald-400 font-semibold"> Bundai </span>
+              uses immersive learning with real Japanese content to get you fluent fast.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
+              <Button size="xl" variant="primary" className="group">
+                Start Learning Now
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button size="xl" variant="secondary">
+                <Play className="w-5 h-5 mr-2" />
+                Watch Demo
+              </Button>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              <div className="text-center p-6 bg-white/5 rounded-2xl backdrop-blur-sm">
+                <div className="text-3xl font-bold text-emerald-400 mb-2">2000+</div>
+                <div className="text-gray-300">Kanji Characters</div>
+              </div>
+              <div className="text-center p-6 bg-white/5 rounded-2xl backdrop-blur-sm">
+                <div className="text-3xl font-bold text-blue-400 mb-2">10,000+</div>
+                <div className="text-gray-300">Happy Learners</div>
+              </div>
+              <div className="text-center p-6 bg-white/5 rounded-2xl backdrop-blur-sm">
+                <div className="text-3xl font-bold text-purple-400 mb-2">90 Days</div>
+                <div className="text-gray-300">Average to Fluency</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating phone mockup - repositioned */}
+          <div className="absolute top-20 right-4 lg:right-10 hidden lg:block opacity-30 hover:opacity-60 transition-opacity">
+            <div className="relative animate-float">
+              <div className="w-48 h-80 bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl border-2 border-gray-700 shadow-2xl">
+                <div className="p-3 h-full bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-3xl flex items-center justify-center">
+                  <div className="text-center">
+                    <Languages className="w-8 h-8 text-blue-400 mx-auto mb-3" />
+                    <div className="text-white text-xs">Learning Japanese</div>
+                    <div className="text-gray-300 text-xs mt-1">漢字 Practice</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="relative py-20 px-6 bg-black/20">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Choose Your
+              <span className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent"> Learning Path</span>
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Start free and upgrade when you're ready to accelerate your Japanese mastery.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {/* Free Plan */}
+            <GlassCard className="p-8 text-center">
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold mb-2">Free</h3>
+                <div className="text-4xl font-black mb-2">$0</div>
+                <div className="text-gray-400">Forever</div>
+              </div>
+              <ul className="text-left space-y-3 mb-8">
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">50 Kanji characters</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">Basic vocabulary (100 words)</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">Daily practice sessions</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">Mobile app access</span>
+                </li>
+              </ul>
+              <Button variant="outline" className="w-full">
+                Get Started Free
+              </Button>
+            </GlassCard>
+
+            {/* Premium Plan */}
+            <GlassCard className="p-8 text-center relative scale-105 border-2 border-gradient-to-r from-blue-500 to-purple-500">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-1 rounded-full text-white text-sm font-medium">
+                Most Popular
+              </div>
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold mb-2">Premium</h3>
+                <div className="text-4xl font-black mb-2">$19</div>
+                <div className="text-gray-400">per month</div>
+              </div>
+              <ul className="text-left space-y-3 mb-8">
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">All 2000 Kanji characters</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">Complete vocabulary (10,000+ words)</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">YouTube extension</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">AI-powered SRS system</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">Progress analytics</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">Unlimited practice sessions</span>
+                </li>
+              </ul>
+              <Button variant="primary" className="w-full">
+                Start Premium Trial
+              </Button>
+            </GlassCard>
+
+            {/* Lifetime Plan */}
+            <GlassCard className="p-8 text-center">
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold mb-2">Lifetime</h3>
+                <div className="text-4xl font-black mb-2">$199</div>
+                <div className="text-gray-400">One-time payment</div>
+                <div className="text-sm text-green-400 mt-1">Save $429!</div>
+              </div>
+              <ul className="text-left space-y-3 mb-8">
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">Everything in Premium</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">Lifetime updates</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">Priority support</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">Exclusive features</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">No monthly fees ever</span>
+                </li>
+              </ul>
+              <Button variant="success" className="w-full">
+                Get Lifetime Access
+              </Button>
+            </GlassCard>
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-gray-400 mb-4">🎯 30-day money-back guarantee • 🔒 Secure payment • 📱 Instant access</p>
+          </div>
+        </div>
+      </section>
+
+{/* Features Section */}
+<section id="features" className="relative py-20 px-6">
+  <div className="mx-auto">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl md:text-5xl font-bold mb-6">
+        Revolutionary Learning
+        <span className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent"> Features</span>
+      </h2>
+      <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+        Powered by AI and designed for real-world fluency, not just test scores.
+      </p>
+    </div>
+
+    {/* Feature grid */}
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+      
+      {/* Highlighted (most important) card */}
+      <GlassCard className="p-8 text-center transform transition-all hover:scale-105 hover:shadow-xl bg-gradient-to-br from-blue-500 to-purple-500 hover:bg-gradient-to-br hover:from-blue-600 hover:to-purple-600">
+        <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <MonitorSmartphone className="w-8 h-8 text-white" />
+        </div>
+        <h3 className="text-2xl font-bold mb-4">Cross-Platform Sync</h3>
+        <p className="text-white leading-relaxed">
+          Learn seamlessly across desktop, mobile, and browser extension. Your progress syncs everywhere instantly.
+        </p>
+      </GlassCard>
+
+      {/* Other cards */}
+      <GlassCard className="p-8 text-center">
+        <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <Languages className="w-8 h-8 text-white" />
+        </div>
+        <h3 className="text-2xl font-bold mb-4">2000 Essential Kanji</h3>
+        <p className="text-gray-300 leading-relaxed">
+          Master every kanji you need with our scientifically-ordered curriculum and visual memory techniques.
+        </p>
+      </GlassCard>
+
+      <GlassCard className="p-8 text-center">
+        <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <Brain className="w-8 h-8 text-white" />
+        </div>
+        <h3 className="text-2xl font-bold mb-4">AI-Powered SRS</h3>
+        <p className="text-gray-300 leading-relaxed">
+          Our intelligent spaced repetition adapts to your learning speed and optimizes retention automatically.
+        </p>
+      </GlassCard>
+
+      <GlassCard className="p-8 text-center">
+        <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <Globe className="w-8 h-8 text-white" />
+        </div>
+        <h3 className="text-2xl font-bold mb-4">YouTube Integration</h3>
+        <p className="text-gray-300 leading-relaxed">
+          Learn from real Japanese content. Our extension provides instant translations and vocabulary building.
+        </p>
+      </GlassCard>
+
+      <GlassCard className="p-8 text-center">
+        <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <BookOpen className="w-8 h-8 text-white" />
+        </div>
+        <h3 className="text-2xl font-bold mb-4">1000 Core Words</h3>
+        <p className="text-gray-300 leading-relaxed">
+          Immersive vocabulary learning with audio-first approach and contextual understanding.
+        </p>
+      </GlassCard>
+
+      <GlassCard className="p-8 text-center">
+        <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <Eye className="w-8 h-8 text-white" />
+        </div>
+        <h3 className="text-2xl font-bold mb-4">Similar Kanji Training</h3>
+        <p className="text-gray-300 leading-relaxed">
+          Never confuse similar-looking characters again with our specialized recognition training system.
+        </p>
+      </GlassCard>
+      
+    </div>
+
+    {/* Platform showcase */}
+    <div className="text-center mb-12">
+      <h3 className="text-3xl font-bold mb-8">Learn Anywhere, Anytime</h3>
+    </div>
+    
+    <div className="grid lg:grid-cols-2 gap-16 items-center">
+      {/* Desktop mockup */}
+      <div className="relative">
+        <div className="relative mx-auto" style={{width: "500px", height: "300px"}}>
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl">
+            <div className="p-6 h-full">
+              <div className="bg-gradient-to-br from-blue-600/20 to-purple-600/20 h-full rounded-xl flex items-center justify-center relative overflow-hidden">
+                <div className="absolute top-4 left-4 flex space-x-2">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <div className="text-center">
+                  <Monitor className="w-16 h-16 text-blue-400 mx-auto mb-4" />
+                  <div className="text-white font-semibold">Chrome Extension Active</div>
+                  <div className="text-gray-300 text-sm mt-2">Learning from YouTube</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center animate-bounce">
+          <Globe className="w-6 h-6 text-white" />
+        </div>
+      </div>
+
+      {/* Mobile mockups */}
+      <div className="flex justify-center space-x-8">
+        <div className="relative">
+          <div className="w-48 h-96 bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl border-4 border-gray-700 shadow-2xl">
+            <div className="p-4 h-full">
+              <div className="bg-gradient-to-br from-orange-600/20 to-red-600/20 h-full rounded-2xl flex items-center justify-center">
+                <div className="text-center">
+                  <Smartphone className="w-12 h-12 text-orange-400 mx-auto mb-4" />
+                  <div className="text-white text-sm font-semibold">Quiz Mode</div>
+                  <div className="text-gray-300 text-xs mt-2">漢字: 学習</div>
+                  <div className="mt-4 space-y-2">
+                    <div className="w-20 h-2 bg-white/20 rounded mx-auto"></div>
+                    <div className="w-16 h-2 bg-white/20 rounded mx-auto"></div>
+                    <div className="w-24 h-2 bg-orange-400 rounded mx-auto"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center animate-pulse">
+            <Star className="w-4 h-4 text-white" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+      {/* Demo Section */}
+      <section id="demo" className="relative py-20 px-6 bg-black/20">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-8">
+            See Bundai in
+            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"> Action</span>
+          </h2>
+          <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto">
+            Watch how our revolutionary approach transforms Japanese learning from boring to brilliant.
           </p>
-          <span className="bg-[#FFFDD0] hover:bg-[#FFFFF0] text-black text-4xl font-extrabold py-4 px-8 rounded-lg shadow-md transition duration-300 self-center">
-            Get Started
-          </span>
-        </div>
-      </section>
 
-      {/* Complete Learning Ecosystem Section */}
-      <section
-        id="platforms"
-        className="py-16 px-4"
-        style={{ backgroundColor: colors.honeydew }}
-      >
-        <div className="w-full mx-auto">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2
-                className="text-3xl md:text-4xl font-bold mb-4"
-                style={{ color: colors.black }}
-              >
-                Complete Learning Ecosystem
-              </h2>
-              <p
-                className="text-lg max-w-2xl mx-auto"
-                style={{ color: colors.text.secondary }}
-              >
-                Seamlessly learn across all your devices with our Chrome
-                extension and mobile app
-              </p>
-            </div>
-
-            <div className="grid lg:grid-cols-3 gap-12 items-center">
-              {/* PC Mockup - Left Side */}
-              <div className="flex justify-center">
-                <div className="relative">
-                  {/* Laptop Frame */}
-                  <div
-                    className="relative w-80 h-52 rounded-t-2xl border-4 shadow-2xl"
-                    style={{
-                      backgroundColor: colors.black,
-                      borderColor: colors.black,
-                    }}
-                  >
-                    {/* Screen */}
-                    <div
-                      className="absolute inset-2 rounded-t-xl overflow-hidden"
-                      style={{ backgroundColor: colors.ivory }}
-                    >
-                      {/* Extension Demo Image */}
-                      <img
-                        src={"/assets/images/extension.jpg"}
-                        alt="Chrome Extension Demo"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Laptop Base */}
-                  <div
-                    className="w-[336px] h-6 rounded-b-2xl border-4 border-t-0 relative"
-                    style={{
-                      backgroundColor: colors.black,
-                      borderColor: colors.black,
-                    }}
-                  >
-                    {/* Trackpad */}
-                    <div
-                      className="absolute top-1 left-1/2 transform -translate-x-1/2 w-16 h-3 rounded"
-                      style={{ backgroundColor: colors.text.muted }}
-                    ></div>
-                  </div>
-
-                  {/* Floating Extension Icon */}
-                  <div
-                    className="absolute -top-4 -right-4 w-12 h-12 rounded-full flex items-center justify-center animate-pulse"
-                    style={{ backgroundColor: "#FFFDD0" }}
-                  >
-                    <Globe
-                      className="w-6 h-6"
-                      style={{ color: colors.black }}
-                    />
-                  </div>
+          {/* Video player mockup */}
+          <div className="relative mx-auto max-w-2xl">
+            <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl overflow-hidden">
+              <div className="relative h-full flex items-center justify-center bg-gradient-to-br from-blue-600/20 to-purple-600/20">
+                <Button size="lg" variant="accent" className="group">
+                  <Play className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
+                  Watch Demo Video
+                </Button>
+                
+                {/* Floating UI elements */}
+                <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-white">
+                  🎌 Learning Japanese
                 </div>
-              </div>
-
-              {/* Desktop App Mockup - Center */}
-              <div className="flex justify-center">
-                <div className="relative">
-                  {/* Desktop Monitor Frame */}
-                  <div
-                    className="relative w-80 h-52 rounded-t-lg border-4 shadow-2xl"
-                    style={{
-                      backgroundColor: colors.black,
-                      borderColor: colors.black,
-                    }}
-                  >
-                    {/* Screen */}
-                    <div
-                      className="absolute inset-2 rounded-t-md overflow-hidden"
-                      style={{ backgroundColor: colors.ivory }}
-                    >
-                      {/* Desktop App Demo Image Placeholder */}
-                      <img
-                        src="/assets/images/desktop.jpg"
-                        alt="Desktop App Demo"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Monitor Stand */}
-                  <div
-                    className="w-16 h-8 mx-auto border-4 border-t-0"
-                    style={{
-                      backgroundColor: colors.black,
-                      borderColor: colors.black,
-                    }}
-                  ></div>
-
-                  {/* Monitor Base */}
-                  <div
-                    className="w-32 h-3 mx-auto rounded-b-lg border-4 border-t-0"
-                    style={{
-                      backgroundColor: colors.black,
-                      borderColor: colors.black,
-                    }}
-                  ></div>
-
-                  {/* Floating Desktop Icon */}
-                  <div
-                    className="absolute -top-4 -right-4 w-12 h-12 rounded-full flex items-center justify-center animate-bounce"
-                    style={{ backgroundColor: colors.honeydew }}
-                  >
-                    <Monitor
-                      className="w-6 h-6"
-                      style={{ color: colors.black }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* iPhone Scissor Mockups - Right Side */}
-              <div className="flex justify-center">
-                <div className="relative w-80 h-80 scissor-container">
-                  {/* First iPhone */}
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scissor-phone-1 transition-all duration-500 ease-in-out">
-                    <div
-                      className="relative w-40 h-80 rounded-[2rem] border-4 shadow-xl"
-                      style={{
-                        backgroundColor: colors.black,
-                        borderColor: colors.black,
-                        transformOrigin: "bottom center",
-                      }}
-                    >
-                      {/* Screen */}
-                      <div
-                        className="absolute inset-2 rounded-[1.5rem] overflow-hidden"
-                        style={{ backgroundColor: colors.black }}
-                      >
-                        {/* Quiz Mode Screenshot */}
-                        <img
-                          src="/assets/images/phone1.jpg"
-                          alt="Quiz Mode Screenshot"
-                          className="w-full h-full object-cover rounded-[1.5rem]"
-                        />
-                      </div>
-
-                      {/* iPhone Details */}
-                      <div
-                        className="absolute top-3 left-1/2 transform -translate-x-1/2 w-8 h-0.5 rounded-full"
-                        style={{ backgroundColor: colors.text.muted }}
-                      ></div>
-                      <div
-                        className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-16 h-0.5 rounded-full"
-                        style={{ backgroundColor: colors.text.muted }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  {/* Second iPhone */}
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scissor-phone-2 transition-all duration-500 ease-in-out">
-                    <div
-                      className="relative w-40 h-80 rounded-[2rem] border-4 shadow-xl"
-                      style={{
-                        backgroundColor: colors.black,
-                        borderColor: colors.black,
-                        transformOrigin: "bottom center",
-                      }}
-                    >
-                      {/* Screen */}
-                      <div
-                        className="absolute inset-2 rounded-[1.5rem] overflow-hidden"
-                        style={{ backgroundColor: colors.black }}
-                      >
-                        {/* Kanji Study Screenshot */}
-                        <img
-                          src="/assets/images/phone2.jpg"
-                          alt="Kanji Study Screenshot"
-                          className="w-full h-full object-cover rounded-[1.5rem]"
-                        />
-                      </div>
-
-                      {/* iPhone Details */}
-                      <div
-                        className="absolute top-3 left-1/2 transform -translate-x-1/2 w-8 h-0.5 rounded-full"
-                        style={{ backgroundColor: colors.text.muted }}
-                      ></div>
-                      <div
-                        className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-16 h-0.5 rounded-full"
-                        style={{ backgroundColor: colors.text.muted }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  {/* Floating Elements */}
-                  <div
-                    className="absolute -top-6 -left-6 w-10 h-10 rounded-full flex items-center justify-center animate-bounce"
-                    style={{ backgroundColor: colors.honeydew }}
-                  >
-                    <Smartphone
-                      className="w-5 h-5"
-                      style={{ color: colors.black }}
-                    />
-                  </div>
-
-                  <div
-                    className="absolute -bottom-6 -right-6 w-10 h-10 rounded-full flex items-center justify-center animate-pulse"
-                    style={{ backgroundColor: "#FFFDD0" }}
-                  >
-                    <RotateCcw
-                      className="w-5 h-5"
-                      style={{ color: colors.black }}
-                    />
-                  </div>
+                <div className="absolute bottom-4 right-4 bg-gradient-to-r from-emerald-500 to-cyan-500 px-3 py-1 rounded-full text-sm text-white font-medium">
+                  Progress: 67%
                 </div>
               </div>
             </div>
+            
+            {/* Floating elements */}
+            <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center animate-bounce delay-300">
+              <Languages className="w-6 h-6 text-white" />
+            </div>
+            <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center animate-pulse">
+              <Brain className="w-6 h-6 text-white" />
+            </div>
+          </div>
 
-            {/* Feature Highlights */}
-            <div className="grid md:grid-cols-3 gap-8 mt-16">
-              <div className="text-center">
-                <h3
-                  className="text-xl font-bold mb-3"
-                  style={{ color: colors.black }}
-                >
-                  Web Extension
-                </h3>
-                <p style={{ color: colors.text.secondary }}>
-                  Learn Japanese while watching YouTube videos with real-time
-                  translations and vocabulary building
-                </p>
+          {/* App store buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12">
+            <div className="bg-black rounded-2xl p-3 hover:scale-105 transition-transform cursor-pointer">
+              <div className="flex items-center space-x-3 px-4">
+                <Download className="w-8 h-8 text-white" />
+                <div className="text-left">
+                  <div className="text-xs text-gray-400">Download on the</div>
+                  <div className="text-lg font-semibold text-white">App Store</div>
+                </div>
               </div>
-              <div className="text-center">
-                <h3
-                  className="text-xl font-bold mb-3"
-                  style={{ color: colors.black }}
-                >
-                  Desktop App
-                </h3>
-                <p style={{ color: colors.text.secondary }}>
-                  Full-featured desktop application with advanced study tools,
-                  progress tracking, and comprehensive kanji practice sessions
-                </p>
-              </div>
-              <div className="text-center">
-                <h3
-                  className="text-xl font-bold mb-3"
-                  style={{ color: colors.black }}
-                >
-                  Mobile App
-                </h3>
-                <p style={{ color: colors.text.secondary }}>
-                  Practice on-the-go with interactive quizzes, kanji
-                  recognition, and spaced repetition system
-                </p>
+            </div>
+            <div className="bg-black rounded-2xl p-3 hover:scale-105 transition-transform cursor-pointer">
+              <div className="flex items-center space-x-3 px-4">
+                <Download className="w-8 h-8 text-white" />
+                <div className="text-left">
+                  <div className="text-xs text-gray-400">Get it on</div>
+                  <div className="text-lg font-semibold text-white">Google Play</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <style jsx>{`
-        .scissor-container:hover .scissor-phone-1 {
-          transform: translateX(-50%) rotate(-15deg);
-        }
-
-        .scissor-container:hover .scissor-phone-2 {
-          transform: translateX(-50%) rotate(15deg);
-        }
-
-        .scissor-phone-1 {
-          transform: translateX(-50%) rotate(-5deg);
-          z-index: 2;
-        }
-
-        .scissor-phone-2 {
-          transform: translateX(-50%) rotate(5deg);
-          z-index: 1;
-        }
-      `}</style>
-
-      {/* Features Section */}
-      <section
-        id="features"
-        className="py-16 px-4"
-        style={{ backgroundColor: colors.honeydew }}
-      >
-        <div className="w-full mx-auto">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2
-                className="text-3xl md:text-4xl font-bold mb-4"
-                style={{ color: colors.black }}
-              >
-                Powerful Features
-              </h2>
-              <p
-                className="text-lg max-w-2xl mx-auto"
-                style={{ color: colors.text.secondary }}
-              >
-                Built with modern technologies to deliver exceptional user
-                experience
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* 2000 Japanese Kanjis List*/}
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <Languages
-                    className="h-12 w-12 mb-4"
-                    style={{ color: colors.black }}
-                  />
-                  <CardTitle>2000 Kanjis</CardTitle>
-                  <CardDescription>
-                    Master kanjis with our comprehensive kanji database and
-                    learning system
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              {/* App and Chrome Extension Sync */}
-              <Card
-                style={{
-                  backgroundColor: "#FFFDD0",
-                }}
-                className="hover:shadow-lg transition-shadow"
-              >
-                <CardHeader>
-                  <MonitorSmartphone
-                    className="h-12 w-12 mb-4"
-                    style={{ color: colors.black }}
-                  />
-                  <CardTitle>App and Extension Sync</CardTitle>
-                  <CardDescription>
-                    Seamlessly sync your progress between mobile app and Chrome
-                    extension for continuous learning
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              {/* SRS - Spaced Repetition System */}
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <RotateCcw
-                    className="h-12 w-12 mb-4"
-                    style={{ color: colors.text.secondary }}
-                  />
-                  <CardTitle>SRS</CardTitle>
-                  <CardDescription>
-                    Intelligent spaced repetition system that optimizes your
-                    learning schedule for maximum retention
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              {/* 1000 Immersion words */}
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <BookOpen
-                    className="h-12 w-12 mb-4"
-                    style={{ color: colors.text.muted }}
-                  />
-                  <CardTitle>1000 immersion words</CardTitle>
-                  <CardDescription>
-                    Immersion based learning with only sound and roumaji
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              {/* Instant Quiz */}
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <Brain
-                    className="h-12 w-12 mb-4"
-                    style={{ color: colors.text.muted }}
-                  />
-                  <CardTitle>Instant Quiz</CardTitle>
-                  <CardDescription>
-                    Quick knowledge checks and practice sessions to reinforce
-                    your learning progress
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              {/* Similar Looking Kanji */}
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <Eye
-                    className="h-12 w-12 mb-4"
-                    style={{ color: colors.text.muted }}
-                  />
-                  <CardTitle>Similar Looking Kanjis</CardTitle>
-                  <CardDescription>
-                    Learn to distinguish between commonly confused kanji
-                    characters with targeted practice
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+      {/* Testimonials */}
+      <section id="testimonials" className="relative py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              What Learners
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"> Say</span>
+            </h2>
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-6 h-6 text-yellow-400 fill-current" />
+              ))}
+              <span className="text-gray-300 ml-2">4.9/5 from 2,847 reviews</span>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* App Demo Section */}
-      <section
-        id="demo"
-        className="py-16 px-4"
-        style={{ backgroundColor: colors.ivory }}
-      >
-        <div className="w-full mx-auto">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2
-                className="text-3xl md:text-4xl font-bold mb-4"
-                style={{ color: colors.black }}
-              >
-                See Bundai in Action
-              </h2>
-              <p
-                className="text-lg max-w-2xl mx-auto"
-                style={{ color: colors.text.secondary }}
-              >
-                Watch how our app transforms your Japanese learning experience
+          <div className="grid md:grid-cols-3 gap-8">
+            <GlassCard className="p-6">
+              <div className="flex items-center space-x-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              <p className="text-gray-300 mb-4 italic">
+                "I went from zero Japanese to watching anime without subtitles in just 4 months. Bundai's approach actually works!"
               </p>
-            </div>
-
-            <div className="flex justify-center items-center">
-              {/* iPhone Mockup */}
-              <div className="relative">
-                {/* iPhone Frame */}
-                <div
-                  className="relative w-80 h-[640px] rounded-[3rem] border-8 shadow-2xl"
-                  style={{
-                    backgroundColor: colors.black,
-                    borderColor: colors.black,
-                  }}
-                >
-                  {/* Screen */}
-                  <div
-                    className="absolute inset-4 rounded-[2.5rem] overflow-hidden"
-                    style={{ backgroundColor: colors.black }}
-                  >
-                    {/* Video Container */}
-                    <div className="relative w-full h-full bg-gray-900 rounded-[2.5rem] overflow-hidden">
-                      {/* Placeholder for video - you can replace this with an actual video element */}
-                      {/* <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-                        <div className="text-center">
-                          <div
-                            className="w-20 h-20 rounded-full flex items-center justify-center mb-4 mx-auto cursor-pointer hover:scale-110 transition-transform"
-                            style={{ backgroundColor: colors.honeydew }}
-                          >
-                            <Play
-                              className="w-8 h-8 ml-1"
-                              style={{ color: colors.black }}
-                            />
-                          </div>
-                          <p
-                            className="text-sm font-medium"
-                            style={{ color: colors.ivory }}
-                          >
-                            Watch App Demo
-                          </p>
-                        </div>
-                      </div> */}
-
-                      {/* You can replace the above div with an actual video element like this: */}
-
-                      <video
-                        className="w-full h-full object-cover"
-                        controls
-                        poster="/bundai.svg"
-                      >
-                        <source
-                          src="/assets/videos/sample.mp4"
-                          type="video/mp4"
-                        />
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                  </div>
-
-                  {/* iPhone Details */}
-                  <div
-                    className="absolute top-6 left-1/2 transform -translate-x-1/2 w-16 h-1 rounded-full"
-                    style={{ backgroundColor: colors.text.muted }}
-                  ></div>
-
-                  {/* Home Indicator */}
-                  <div
-                    className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 rounded-full"
-                    style={{ backgroundColor: colors.text.muted }}
-                  ></div>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold text-sm">SK</span>
                 </div>
-
-                {/* Floating Elements */}
-                <div
-                  className="absolute -top-4 -left-4 w-12 h-12 rounded-full flex items-center justify-center animate-bounce"
-                  style={{ backgroundColor: colors.honeydew }}
-                >
-                  <Languages
-                    className="w-6 h-6"
-                    style={{ color: colors.black }}
-                  />
-                </div>
-
-                <div
-                  className="absolute -top-8 -right-8 w-16 h-16 rounded-full flex items-center justify-center animate-pulse"
-                  style={{ backgroundColor: "#FFFDD0" }}
-                >
-                  <Brain className="w-8 h-8" style={{ color: colors.black }} />
-                </div>
-
-                <div
-                  className="absolute -bottom-4 -right-4 w-12 h-12 rounded-full flex items-center justify-center animate-bounce"
-                  style={{ backgroundColor: colors.honeydew }}
-                >
-                  <Eye className="w-6 h-6" style={{ color: colors.black }} />
+                <div>
+                  <div className="text-white font-medium">Sarah Kim</div>
+                  <div className="text-gray-400 text-sm">Software Engineer</div>
                 </div>
               </div>
-            </div>
+            </GlassCard>
 
-            {/* Call to Action */}
-            <div className="text-center mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-48 h-14 flex items-center justify-center rounded-lg transition-transform hover:scale-105"
-                style={{ backgroundColor: colors.black }}
-              >
-                <img
-                  src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                  alt="Download on the App Store"
-                  className="h-full w-full object-contain"
-                />
-              </a>
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-48 h-14 flex items-center justify-center rounded-lg transition-transform hover:scale-105"
-                style={{ backgroundColor: colors.black }}
-              >
-                <img
-                  src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-                  alt="Get it on Google Play"
-                  className="h-full w-full object-contain"
-                />
-              </a>
-            </div>
+            <GlassCard className="p-6">
+              <div className="flex items-center space-x-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              <p className="text-gray-300 mb-4 italic">
+                "The YouTube integration is genius. I'm learning from real Japanese content instead of boring textbook examples."
+              </p>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold text-sm">MR</span>
+                </div>
+                <div>
+                  <div className="text-white font-medium">Mike Rodriguez</div>
+                  <div className="text-gray-400 text-sm">Marketing Manager</div>
+                </div>
+              </div>
+            </GlassCard>
+
+            <GlassCard className="p-6">
+              <div className="flex items-center space-x-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              <p className="text-gray-300 mb-4 italic">
+                "Finally passed JLPT N2 after struggling for years with other apps. The kanji recognition training is incredible."
+              </p>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold text-sm">AL</span>
+                </div>
+                <div>
+                  <div className="text-white font-medium">Alex Liu</div>
+                  <div className="text-gray-400 text-sm">College Student</div>
+                </div>
+              </div>
+            </GlassCard>
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section
-        id="contact"
-        className="py-16 px-4"
-        style={{ backgroundColor: colors.honeydew }}
-      >
-        <div className="w-full mx-auto">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2
-                className="text-3xl md:text-4xl font-bold mb-4"
-                style={{ color: colors.black }}
-              >
-                Get In Touch
-              </h2>
-              <p
-                className="text-lg max-w-2xl mx-auto"
-                style={{ color: colors.text.secondary }}
-              >
-                Connect with us on social media for updates, tips, and community
-                support
-              </p>
+      {/* Newsletter Section */}
+      <section className="relative py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Ready to Master
+            <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent"> Japanese?</span>
+          </h2>
+          <p className="text-xl text-gray-300 mb-12">
+            Join thousands of learners who chose the fast track to fluency. Start your journey today!
+          </p>
+
+          <form onSubmit={handleSubscribe} className="max-w-md mx-auto mb-8">
+            <div className="flex gap-4">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="flex-1 px-6 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
+                required
+              />
+              <Button type="submit" size="lg" variant="primary">
+                Start Free
+              </Button>
             </div>
+          </form>
 
-            {/* Social Links Only */}
-            <div className="flex flex-wrap justify-center gap-8 max-w-4xl mx-auto">
-              <a
-                href="https://twitter.com/bundaiapp"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="https://twitter.com/bundaiapp"
-                className="flex flex-col items-center p-8 rounded-lg border-2 hover:shadow-xl transition-all duration-300 group"
-                style={{
-                  backgroundColor: colors.ivory,
-                  borderColor: colors.border.light,
-                }}
-              >
-                <svg
-                  className="h-16 w-16 mb-4 group-hover:scale-110 transition-transform"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  style={{ color: colors.black }}
-                >
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-                <h3
-                  className="text-2xl font-bold"
-                  style={{ color: colors.text.primary }}
-                >
-                  Twitter
-                </h3>
-              </a>
-
-              <a
-                href="https://youtube.com/@bundaiapp"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="https://youtube.com/@bundaiapp"
-                className="flex flex-col items-center p-8 rounded-lg border-2 hover:shadow-xl transition-all duration-300 group"
-                style={{
-                  backgroundColor: colors.ivory,
-                  borderColor: colors.border.light,
-                }}
-              >
-                <svg
-                  className="h-16 w-16 mb-4 group-hover:scale-110 transition-transform"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  style={{ color: colors.black }}
-                >
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                </svg>
-                <h3
-                  className="text-2xl font-bold"
-                  style={{ color: colors.text.primary }}
-                >
-                  YouTube
-                </h3>
-              </a>
-              {/* facebook social icon */}
-              <a
-                href="https://facebook.com/bundaiapp"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Facebook"
-                className="flex flex-col items-center p-8 rounded-lg border-2 hover:shadow-xl transition-all duration-300 group"
-                style={{
-                  backgroundColor: colors.ivory,
-                  borderColor: colors.border.light,
-                }}
-              >
-                <svg
-                  className="h-16 w-16 mb-4 group-hover:scale-110 transition-transform"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  style={{ color: colors.black }}
-                >
-                  <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.333v21.333C0 23.403.597 24 1.325 24H12.82v-9.294H9.692V11.12h3.128V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.917.001c-1.504 0-1.795.715-1.795 1.763v2.312h3.59l-.467 3.586h-3.123V24h6.127C23.403 24 24 23.403 24 22.667V1.333C24 .597 23.403 0 22.675 0z" />
-                </svg>
-                <h3
-                  className="text-2xl font-bold"
-                  style={{ color: colors.text.primary }}
-                >
-                  Facebook
-                </h3>
-              </a>
-
-              {/* instagram social icon */}
-              <a
-                href="https://instagram.com/bundaiapp"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Instagram"
-                className="flex flex-col items-center p-8 rounded-lg border-2 hover:shadow-xl transition-all duration-300 group"
-                style={{
-                  backgroundColor: colors.ivory,
-                  borderColor: colors.border.light,
-                }}
-              >
-                <svg
-                  className="h-16 w-16 mb-4 group-hover:scale-110 transition-transform"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  style={{ color: colors.black }}
-                >
-                  <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zm4.5 3a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 2a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z" />
-                </svg>
-                <h3
-                  className="text-2xl font-bold"
-                  style={{ color: colors.text.primary }}
-                >
-                  Instagram
-                </h3>
-              </a>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <Button size="xl" variant="primary" className="group">
+              Download Bundai Now
+              <Download className="w-5 h-5 ml-2 group-hover:translate-y-1 transition-transform" />
+            </Button>
+            <Button size="xl" variant="secondary">
+              Try Chrome Extension
+            </Button>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer
-        className="w-full backdrop-blur-md border-t-2"
-        style={{
-          backgroundColor: `${colors.honeydew}E6`,
-          borderColor: colors.border.light,
-        }}
-      >
-        <div className="w-full mx-auto">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <div className="flex items-center space-x-2 mb-4 md:mb-0">
-                <img
-                  className="w-8 aspect-square object-cover rounded-full"
-                  src="/bundai.svg"
-                />
-                <span
-                  className="text-xl font-bold"
-                  style={{ color: colors.black }}
-                >
+      <footer className="relative border-t border-white/10 py-12 px-6 bg-black/30">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Logo and description */}
+            <div className="md:col-span-2">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-lg">文</span>
+                </div>
+                <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                   Bundai
                 </span>
               </div>
-              <nav className="flex space-x-6">
-                <a
-                  className="cursor-pointer transition-colors hover:opacity-80"
-                  style={{ color: colors.text.secondary }}
-                >
-                  Privacy
+              <p className="text-gray-400 max-w-md leading-relaxed">
+                The fastest way to learn Japanese through immersive, real-world content. 
+                Join thousands of learners mastering Japanese in record time.
+              </p>
+              <div className="flex space-x-4 mt-6">
+                {/* Social media icons */}
+                <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
+                  <span className="text-blue-400">𝕏</span>
                 </a>
-                <a
-                  className="cursor-pointer transition-colors hover:opacity-80"
-                  style={{ color: colors.text.secondary }}
-                >
-                  Terms
+                <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
+                  <span className="text-red-400">▶</span>
                 </a>
-                <a
-                  className="cursor-pointer transition-colors hover:opacity-80"
-                  style={{ color: colors.text.secondary }}
-                >
-                  Support
+                <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
+                  <span className="text-blue-600">f</span>
                 </a>
-              </nav>
+                <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
+                  <span className="text-pink-400">📷</span>
+                </a>
+              </div>
             </div>
-            <div
-              className="border-t mt-4 pt-4 text-center text-sm"
-              style={{
-                borderColor: colors.border.light,
-                color: colors.text.secondary,
-              }}
-            >
-              <p>&copy; 2025 Bundai</p>
+
+            {/* Links */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">Product</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Mobile App</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Chrome Extension</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-white font-semibold mb-4">Support</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between">
+            <p className="text-gray-400 text-sm">
+              © 2025 Bundai. All rights reserved. Made with ❤️ for Japanese learners worldwide.
+            </p>
+            <div className="flex items-center space-x-6 mt-4 md:mt-0">
+              <span className="text-gray-400 text-sm">🌟 4.9/5 rating</span>
+              <span className="text-gray-400 text-sm">📱 10k+ downloads</span>
+              <span className="text-gray-400 text-sm">🎯 90-day guarantee</span>
             </div>
           </div>
         </div>
       </footer>
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(3deg); }
+        }
+        
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+          width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.1);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+          border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(45deg, #2563eb, #7c3aed);
+        }
+        
+        /* Smooth scroll behavior */
+        html {
+          scroll-behavior: smooth;
+        }
+          .text-shadow {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+      `}</style>
+
     </div>
   );
 }
