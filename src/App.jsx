@@ -20,33 +20,6 @@ import {
   Download,
 } from "lucide-react";
 
-// Color scheme
-const colors = {
-  primary: '#2563eb',
-  secondary: '#1e40af',
-  accent: '#f59e0b',
-  success: '#10b981',
-  white: '#ffffff',
-  gray: {
-    50: '#f9fafb',
-    100: '#f3f4f6',
-    200: '#e5e7eb',
-    300: '#d1d5db',
-    400: '#9ca3af',
-    500: '#6b7280',
-    600: '#4b5563',
-    700: '#374151',
-    800: '#1f2937',
-    900: '#111827',
-  },
-  red: '#dc2626',
-  orange: '#ea580c',
-  gradient: {
-    primary: 'from-blue-600 via-purple-600 to-indigo-700',
-    secondary: 'from-orange-400 to-red-500',
-    accent: 'from-emerald-400 to-cyan-500',
-  }
-};
 
 // Enhanced Button component with glass morphism
 const Button = ({
@@ -72,7 +45,7 @@ const Button = ({
       "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-blue-500",
   
     secondary:
-      "bg-white/20 text-white font-semibold border border-white/40 backdrop-blur-md hover:bg-white/30 hover:border-white/50 shadow-sm focus:outline-none focus:ring-2 focus:ring-white/60",
+      "bg-gradient-to-r from-blue-900/50 to-purple-900/50 text-blue-100 font-semibold border border-blue-500/20 backdrop-blur-md hover:from-blue-800/50 hover:to-purple-800/50 hover:border-blue-400/30 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500/60",
   
     accent:
       "bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-orange-500",
@@ -81,7 +54,7 @@ const Button = ({
       "bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:from-emerald-600 hover:to-cyan-600 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-emerald-500",
   
     outline:
-      "border-2 border-current bg-transparent hover:bg-current hover:text-white text-current focus:outline-none focus:ring-2 focus:ring-current/50",
+      "border-2 border-blue-500/50 bg-white/5 text-blue-400 backdrop-blur-sm hover:border-blue-400 hover:bg-blue-500/20 hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50 shadow-lg hover:shadow-xl transition-all duration-300",
   };
   
 
@@ -167,6 +140,9 @@ export default function App() {
               <a onClick={() => scrollToSection("home")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
                 Home
               </a>
+              <a onClick={() => scrollToSection("pricing")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
+                Pricing
+              </a>
               <a onClick={() => scrollToSection("features")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
                 Features
               </a>
@@ -196,6 +172,9 @@ export default function App() {
               <div className="flex flex-col space-y-4 pt-4">
                 <a onClick={() => scrollToSection("home")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
                   Home
+                </a>
+                <a onClick={() => scrollToSection("pricing")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
+                  Pricing
                 </a>
                 <a onClick={() => scrollToSection("features")} className="cursor-pointer text-gray-300 hover:text-white transition-colors">
                   Features
@@ -250,7 +229,7 @@ export default function App() {
                 Start Learning Now
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="xl" variant="secondary">
+              <Button size="xl" onClick={()=>scrollToSection('demo')} variant="secondary">
                 <Play className="w-5 h-5 mr-2" />
                 Watch Demo
               </Button>
@@ -291,7 +270,7 @@ export default function App() {
       </section>
 
       {/* Pricing Section */}
-      <section className="relative py-20 px-6 bg-black/20">
+      <section id="pricing" className="relative py-20 px-6 bg-black/20">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
@@ -497,7 +476,51 @@ export default function App() {
       
     </div>
 
-    {/* Platform showcase */}
+  </div>
+</section>
+
+
+      {/* Demo Section */}
+      <section id="demo" className="relative py-20 px-6 bg-black/20">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-8">
+            See Bundai in
+            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"> Action</span>
+          </h2>
+          <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto">
+            Watch how our revolutionary approach transforms Japanese learning from boring to brilliant.
+          </p>
+
+          {/* Video player mockup */}
+          <div className="relative mx-auto max-w-2xl">
+            <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl overflow-hidden">
+              <div className="relative h-full flex items-center justify-center bg-gradient-to-br from-blue-600/20 to-purple-600/20">
+                <Button size="lg" variant="accent" className="group">
+                  <Play className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
+                  Watch Demo Video
+                </Button>
+                
+                {/* Floating UI elements */}
+                <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-white">
+                  🎌 Learning Japanese
+                </div>
+                <div className="absolute bottom-4 right-4 bg-gradient-to-r from-emerald-500 to-cyan-500 px-3 py-1 rounded-full text-sm text-white font-medium">
+                  Progress: 67%
+                </div>
+              </div>
+            </div>
+            
+            {/* Floating elements */}
+            <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center animate-bounce delay-300">
+              <Languages className="w-6 h-6 text-white" />
+            </div>
+            <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center animate-pulse">
+              <Brain className="w-6 h-6 text-white" />
+            </div>
+          </div>
+
+              {/* Platform showcase */}
+              <section id="platforms" className="mt-12">
     <div className="text-center mb-12">
       <h3 className="text-3xl font-bold mb-8">Learn Anywhere, Anytime</h3>
     </div>
@@ -553,51 +576,20 @@ export default function App() {
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-
-      {/* Demo Section */}
-      <section id="demo" className="relative py-20 px-6 bg-black/20">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-8">
-            See Bundai in
-            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"> Action</span>
-          </h2>
-          <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto">
-            Watch how our revolutionary approach transforms Japanese learning from boring to brilliant.
-          </p>
-
-          {/* Video player mockup */}
-          <div className="relative mx-auto max-w-2xl">
-            <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl overflow-hidden">
-              <div className="relative h-full flex items-center justify-center bg-gradient-to-br from-blue-600/20 to-purple-600/20">
-                <Button size="lg" variant="accent" className="group">
-                  <Play className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
-                  Watch Demo Video
-                </Button>
-                
-                {/* Floating UI elements */}
-                <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-white">
-                  🎌 Learning Japanese
-                </div>
-                <div className="absolute bottom-4 right-4 bg-gradient-to-r from-emerald-500 to-cyan-500 px-3 py-1 rounded-full text-sm text-white font-medium">
-                  Progress: 67%
-                </div>
-              </div>
-            </div>
-            
-            {/* Floating elements */}
-            <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center animate-bounce delay-300">
-              <Languages className="w-6 h-6 text-white" />
-            </div>
-            <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center animate-pulse">
-              <Brain className="w-6 h-6 text-white" />
-            </div>
-          </div>
 
           {/* App store buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12">
+            
+            <div className="bg-black rounded-2xl p-3 hover:scale-105 transition-transform cursor-pointer">
+              <div className="flex items-center space-x-3 px-4">
+                <Globe className="w-8 h-8 text-white" />
+                <div className="text-left">
+                  <div className="text-xs text-gray-400">Available in</div>
+                  <div className="text-lg font-semibold text-white">Chrome Web Store</div>
+                </div>
+              </div>
+            </div>
+
             <div className="bg-black rounded-2xl p-3 hover:scale-105 transition-transform cursor-pointer">
               <div className="flex items-center space-x-3 px-4">
                 <Download className="w-8 h-8 text-white" />
@@ -607,6 +599,7 @@ export default function App() {
                 </div>
               </div>
             </div>
+            
             <div className="bg-black rounded-2xl p-3 hover:scale-105 transition-transform cursor-pointer">
               <div className="flex items-center space-x-3 px-4">
                 <Download className="w-8 h-8 text-white" />
@@ -617,6 +610,7 @@ export default function App() {
               </div>
             </div>
           </div>
+              </section>
         </div>
       </section>
 
@@ -728,7 +722,7 @@ export default function App() {
           </form>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Button size="xl" variant="primary" className="group">
+            <Button size="xl" onClick={()=>scrollToSection("platforms")} variant="primary" className="group">
               Download Bundai Now
               <Download className="w-5 h-5 ml-2 group-hover:translate-y-1 transition-transform" />
             </Button>
