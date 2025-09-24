@@ -21,6 +21,7 @@ import {
 import { GlassCard } from "../components/GlassCard"
 import { AnimatedBackground } from "../components/AnimatedBackground"
 import { Button } from "../components/Button"
+import { Link } from "react-router-dom"
 
 
 
@@ -775,16 +776,16 @@ export default function App() {
               </ul>
             </div>
 
-            <div>
-              <h4 className="text-white font-semibold mb-4">Support</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
-                <li><a href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
-                <li><a href="/refund" className="text-gray-400 hover:text-white transition-colors">Refund Policy</a></li>
-              </ul>
-            </div>
+<div>
+  <h4 className="text-white font-semibold mb-4">Support</h4>
+  <ul className="space-y-2">
+    <li><Link to="#" className="text-gray-400 hover:text-white transition-colors">Help Center</Link></li>
+    <li><Link to="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
+    <li><Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
+    <li><Link to="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
+    <li><Link to="/refund" className="text-gray-400 hover:text-white transition-colors">Refund Policy</Link></li>
+  </ul>
+</div>
           </div>
 
           <div className="border-t border-white/10 pt-6 sm:pt-8 flex flex-col md:flex-row items-center justify-between text-center md:text-left">
