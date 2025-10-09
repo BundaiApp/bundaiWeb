@@ -10,16 +10,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@apollo/client": "^4.0.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@stripe/react-stripe-js": "^3.9.2",
     "@stripe/stripe-js": "^7.9.0",
     "@tailwindcss/vite": "^4.1.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "graphql": "^16.11.0",
+    "graphql-tag": "^2.12.6",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.515.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.9.1",
+    "rxjs": "^7.8.2",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.10"
   },

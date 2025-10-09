@@ -1,0 +1,1367 @@
+[
+  {
+    "kanjiName": "あ",
+    "meanings": [
+      "a"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "kya",
+      "do",
+      "ryo",
+      "a"
+    ]
+  },
+  {
+    "kanjiName": "い",
+    "meanings": [
+      "i"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "myu",
+      "do",
+      "mo",
+      "i"
+    ]
+  },
+  {
+    "kanjiName": "う",
+    "meanings": [
+      "u"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "tsu",
+      "ki",
+      "u",
+      "bo"
+    ]
+  },
+  {
+    "kanjiName": "え",
+    "meanings": [
+      "e"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "e",
+      "go",
+      "wo",
+      "pa"
+    ]
+  },
+  {
+    "kanjiName": "お",
+    "meanings": [
+      "o"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "o",
+      "shi",
+      "sho",
+      "shu"
+    ]
+  },
+  {
+    "kanjiName": "か",
+    "meanings": [
+      "ka"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "pya",
+      "pa",
+      "ya",
+      "ka"
+    ]
+  },
+  {
+    "kanjiName": "き",
+    "meanings": [
+      "ki"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ki",
+      "ya",
+      "nyu",
+      "(pause)"
+    ]
+  },
+  {
+    "kanjiName": "く",
+    "meanings": [
+      "ku"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ge",
+      "ku",
+      "yu",
+      "me"
+    ]
+  },
+  {
+    "kanjiName": "け",
+    "meanings": [
+      "ke"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ke",
+      "ko",
+      "a",
+      "da"
+    ]
+  },
+  {
+    "kanjiName": "こ",
+    "meanings": [
+      "ko"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ko",
+      "nya",
+      "wo",
+      "bu"
+    ]
+  },
+  {
+    "kanjiName": "さ",
+    "meanings": [
+      "sa"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "shu",
+      "hyo",
+      "cho",
+      "sa"
+    ]
+  },
+  {
+    "kanjiName": "し",
+    "meanings": [
+      "shi"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "shi",
+      "hyo",
+      "hya",
+      "mu"
+    ]
+  },
+  {
+    "kanjiName": "す",
+    "meanings": [
+      "su"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "hya",
+      "su",
+      "mo",
+      "pi"
+    ]
+  },
+  {
+    "kanjiName": "せ",
+    "meanings": [
+      "se"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "pe",
+      "se",
+      "po",
+      "ma"
+    ]
+  },
+  {
+    "kanjiName": "そ",
+    "meanings": [
+      "so"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "so",
+      "sho",
+      "nu",
+      "hyo"
+    ]
+  },
+  {
+    "kanjiName": "た",
+    "meanings": [
+      "ta"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "pu",
+      "kyu",
+      "zu",
+      "ta"
+    ]
+  },
+  {
+    "kanjiName": "ち",
+    "meanings": [
+      "chi"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "chi",
+      "he",
+      "u",
+      "kya"
+    ]
+  },
+  {
+    "kanjiName": "つ",
+    "meanings": [
+      "tsu"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "tsu",
+      "ba",
+      "pe",
+      "pyu"
+    ]
+  },
+  {
+    "kanjiName": "て",
+    "meanings": [
+      "te"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "hya",
+      "ji",
+      "te",
+      "se"
+    ]
+  },
+  {
+    "kanjiName": "と",
+    "meanings": [
+      "to"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "pe",
+      "to",
+      "so",
+      "sho"
+    ]
+  },
+  {
+    "kanjiName": "な",
+    "meanings": [
+      "na"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "byo",
+      "na",
+      "pi",
+      "ni"
+    ]
+  },
+  {
+    "kanjiName": "に",
+    "meanings": [
+      "ni"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ni",
+      "wo",
+      "kyu",
+      "o"
+    ]
+  },
+  {
+    "kanjiName": "ぬ",
+    "meanings": [
+      "nu"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "nu",
+      "i",
+      "sho",
+      "ji"
+    ]
+  },
+  {
+    "kanjiName": "ね",
+    "meanings": [
+      "ne"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "bi",
+      "ne",
+      "nyu",
+      "sa"
+    ]
+  },
+  {
+    "kanjiName": "の",
+    "meanings": [
+      "no"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "no",
+      "ro",
+      "se",
+      "gu"
+    ]
+  },
+  {
+    "kanjiName": "は",
+    "meanings": [
+      "ha"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ha",
+      "de",
+      "sa",
+      "gyo"
+    ]
+  },
+  {
+    "kanjiName": "ひ",
+    "meanings": [
+      "hi"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ze",
+      "hi",
+      "jo",
+      "nyu"
+    ]
+  },
+  {
+    "kanjiName": "ふ",
+    "meanings": [
+      "hu"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ze",
+      "to",
+      "hu",
+      "wa"
+    ]
+  },
+  {
+    "kanjiName": "へ",
+    "meanings": [
+      "he"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "hi",
+      "pe",
+      "cha",
+      "he"
+    ]
+  },
+  {
+    "kanjiName": "ほ",
+    "meanings": [
+      "ho"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ho",
+      "myo",
+      "pyu",
+      "nu"
+    ]
+  },
+  {
+    "kanjiName": "ま",
+    "meanings": [
+      "ma"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "hu",
+      "ge",
+      "i",
+      "ma"
+    ]
+  },
+  {
+    "kanjiName": "み",
+    "meanings": [
+      "mi"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "zu",
+      "mi",
+      "rya",
+      "nyo"
+    ]
+  },
+  {
+    "kanjiName": "む",
+    "meanings": [
+      "mu"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "mu",
+      "chu",
+      "so",
+      "hyu"
+    ]
+  },
+  {
+    "kanjiName": "め",
+    "meanings": [
+      "me"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "me",
+      "gi",
+      "to",
+      "pyu"
+    ]
+  },
+  {
+    "kanjiName": "も",
+    "meanings": [
+      "mo"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "u",
+      "so",
+      "mo",
+      "sa"
+    ]
+  },
+  {
+    "kanjiName": "や",
+    "meanings": [
+      "ya"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ya",
+      "ma",
+      "n",
+      "su"
+    ]
+  },
+  {
+    "kanjiName": "ゆ",
+    "meanings": [
+      "yu"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "rya",
+      "byo",
+      "yu",
+      "shu"
+    ]
+  },
+  {
+    "kanjiName": "よ",
+    "meanings": [
+      "yo"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "byo",
+      "yo",
+      "be",
+      "do"
+    ]
+  },
+  {
+    "kanjiName": "ら",
+    "meanings": [
+      "ra"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ra",
+      "pya",
+      "ma",
+      "pu"
+    ]
+  },
+  {
+    "kanjiName": "り",
+    "meanings": [
+      "ri"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "to",
+      "sha",
+      "re",
+      "ri"
+    ]
+  },
+  {
+    "kanjiName": "る",
+    "meanings": [
+      "ru"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ko",
+      "chu",
+      "ja",
+      "ru"
+    ]
+  },
+  {
+    "kanjiName": "れ",
+    "meanings": [
+      "re"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "re",
+      "hyo",
+      "ba",
+      "mo"
+    ]
+  },
+  {
+    "kanjiName": "ろ",
+    "meanings": [
+      "ro"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "to",
+      "pyo",
+      "pi",
+      "ro"
+    ]
+  },
+  {
+    "kanjiName": "わ",
+    "meanings": [
+      "wa"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "wa",
+      "zu",
+      "hyo",
+      "ya"
+    ]
+  },
+  {
+    "kanjiName": "を",
+    "meanings": [
+      "wo"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "wo",
+      "wa",
+      "ru",
+      "ko"
+    ]
+  },
+  {
+    "kanjiName": "ん",
+    "meanings": [
+      "n"
+    ],
+    "type": "gojuuon",
+    "quizAnswers": [
+      "ju",
+      "mya",
+      "gya",
+      "n"
+    ]
+  },
+  {
+    "kanjiName": "が",
+    "meanings": [
+      "ga"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "ga",
+      "ki",
+      "gyo",
+      "pu"
+    ]
+  },
+  {
+    "kanjiName": "ぎ",
+    "meanings": [
+      "gi"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "gi",
+      "myo",
+      "wa",
+      "nyu"
+    ]
+  },
+  {
+    "kanjiName": "ぐ",
+    "meanings": [
+      "gu"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "gu",
+      "na",
+      "ho",
+      "ryo"
+    ]
+  },
+  {
+    "kanjiName": "げ",
+    "meanings": [
+      "ge"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "pu",
+      "ge",
+      "ma",
+      "jo"
+    ]
+  },
+  {
+    "kanjiName": "ご",
+    "meanings": [
+      "go"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "ra",
+      "ni",
+      "jo",
+      "go"
+    ]
+  },
+  {
+    "kanjiName": "ざ",
+    "meanings": [
+      "za"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "cho",
+      "za",
+      "ba",
+      "ku"
+    ]
+  },
+  {
+    "kanjiName": "じ",
+    "meanings": [
+      "ji"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "ji",
+      "n",
+      "yu",
+      "do"
+    ]
+  },
+  {
+    "kanjiName": "ず",
+    "meanings": [
+      "zu"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "zu",
+      "sho",
+      "pu",
+      "ge"
+    ]
+  },
+  {
+    "kanjiName": "ぜ",
+    "meanings": [
+      "ze"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "ze",
+      "mi",
+      "shi",
+      "ta"
+    ]
+  },
+  {
+    "kanjiName": "ぞ",
+    "meanings": [
+      "zo"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "do",
+      "pyu",
+      "ni",
+      "zo"
+    ]
+  },
+  {
+    "kanjiName": "だ",
+    "meanings": [
+      "da"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "gu",
+      "pu",
+      "gi",
+      "da"
+    ]
+  },
+  {
+    "kanjiName": "ぢ",
+    "meanings": [
+      "ji"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "myo",
+      "gyo",
+      "ba",
+      "ji"
+    ]
+  },
+  {
+    "kanjiName": "づ",
+    "meanings": [
+      "zu"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "zu",
+      "pi",
+      "gi",
+      "cho"
+    ]
+  },
+  {
+    "kanjiName": "で",
+    "meanings": [
+      "de"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "de",
+      "(pause)",
+      "bya",
+      "do"
+    ]
+  },
+  {
+    "kanjiName": "ど",
+    "meanings": [
+      "do"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "do",
+      "gyo",
+      "bya",
+      "ki"
+    ]
+  },
+  {
+    "kanjiName": "ば",
+    "meanings": [
+      "ba"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "ba",
+      "nu",
+      "cha",
+      "pu"
+    ]
+  },
+  {
+    "kanjiName": "び",
+    "meanings": [
+      "bi"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "bi",
+      "mya",
+      "ni",
+      "su"
+    ]
+  },
+  {
+    "kanjiName": "ぶ",
+    "meanings": [
+      "bu"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "re",
+      "bu",
+      "ma",
+      "a"
+    ]
+  },
+  {
+    "kanjiName": "べ",
+    "meanings": [
+      "be"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "ne",
+      "hya",
+      "chu",
+      "be"
+    ]
+  },
+  {
+    "kanjiName": "ぼ",
+    "meanings": [
+      "bo"
+    ],
+    "type": "dakuon",
+    "quizAnswers": [
+      "bo",
+      "myo",
+      "chu",
+      "to"
+    ]
+  },
+  {
+    "kanjiName": "ぱ",
+    "meanings": [
+      "pa"
+    ],
+    "type": "handakuon",
+    "quizAnswers": [
+      "pyu",
+      "hya",
+      "jo",
+      "pa"
+    ]
+  },
+  {
+    "kanjiName": "ぴ",
+    "meanings": [
+      "pi"
+    ],
+    "type": "handakuon",
+    "quizAnswers": [
+      "bi",
+      "hyo",
+      "pi",
+      "jo"
+    ]
+  },
+  {
+    "kanjiName": "ぷ",
+    "meanings": [
+      "pu"
+    ],
+    "type": "handakuon",
+    "quizAnswers": [
+      "(pause)",
+      "pu",
+      "ha",
+      "nya"
+    ]
+  },
+  {
+    "kanjiName": "ぺ",
+    "meanings": [
+      "pe"
+    ],
+    "type": "handakuon",
+    "quizAnswers": [
+      "ya",
+      "be",
+      "yo",
+      "pe"
+    ]
+  },
+  {
+    "kanjiName": "ぽ",
+    "meanings": [
+      "po"
+    ],
+    "type": "handakuon",
+    "quizAnswers": [
+      "po",
+      "e",
+      "su",
+      "shu"
+    ]
+  },
+  {
+    "kanjiName": "っ",
+    "meanings": [
+      "(pause)"
+    ],
+    "type": "sokuon",
+    "quizAnswers": [
+      "cho",
+      "(pause)",
+      "pa",
+      "za"
+    ]
+  },
+  {
+    "kanjiName": "きゃ",
+    "meanings": [
+      "kya"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ze",
+      "ne",
+      "kya",
+      "ji"
+    ]
+  },
+  {
+    "kanjiName": "きゅ",
+    "meanings": [
+      "kyu"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "gyo",
+      "byu",
+      "te",
+      "kyu"
+    ]
+  },
+  {
+    "kanjiName": "きょ",
+    "meanings": [
+      "kyo"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "pya",
+      "he",
+      "ya",
+      "kyo"
+    ]
+  },
+  {
+    "kanjiName": "しゃ",
+    "meanings": [
+      "sha"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "sha",
+      "ri",
+      "me",
+      "su"
+    ]
+  },
+  {
+    "kanjiName": "しゅ",
+    "meanings": [
+      "shu"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "de",
+      "pyu",
+      "ku",
+      "shu"
+    ]
+  },
+  {
+    "kanjiName": "しょ",
+    "meanings": [
+      "sho"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ga",
+      "pa",
+      "hya",
+      "sho"
+    ]
+  },
+  {
+    "kanjiName": "ちゃ",
+    "meanings": [
+      "cha"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "cha",
+      "ju",
+      "pi",
+      "ga"
+    ]
+  },
+  {
+    "kanjiName": "ちゅ",
+    "meanings": [
+      "chu"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "chu",
+      "ro",
+      "pyo",
+      "byu"
+    ]
+  },
+  {
+    "kanjiName": "ちょ",
+    "meanings": [
+      "cho"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "kyo",
+      "cho",
+      "hyu",
+      "ha"
+    ]
+  },
+  {
+    "kanjiName": "にゃ",
+    "meanings": [
+      "nya"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "nya",
+      "hi",
+      "bi",
+      "sha"
+    ]
+  },
+  {
+    "kanjiName": "にゅ",
+    "meanings": [
+      "nyu"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ge",
+      "po",
+      "nyu",
+      "ma"
+    ]
+  },
+  {
+    "kanjiName": "にょ",
+    "meanings": [
+      "nyo"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "gyu",
+      "hi",
+      "sho",
+      "nyo"
+    ]
+  },
+  {
+    "kanjiName": "ひゃ",
+    "meanings": [
+      "hya"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ro",
+      "ba",
+      "hya",
+      "na"
+    ]
+  },
+  {
+    "kanjiName": "ひゅ",
+    "meanings": [
+      "hyu"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "hyu",
+      "byo",
+      "cho",
+      "ta"
+    ]
+  },
+  {
+    "kanjiName": "ひょ",
+    "meanings": [
+      "hyo"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ga",
+      "te",
+      "pyu",
+      "hyo"
+    ]
+  },
+  {
+    "kanjiName": "みゃ",
+    "meanings": [
+      "mya"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "wa",
+      "mya",
+      "ri",
+      "pu"
+    ]
+  },
+  {
+    "kanjiName": "みゅ",
+    "meanings": [
+      "myu"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "pyu",
+      "ta",
+      "myu",
+      "te"
+    ]
+  },
+  {
+    "kanjiName": "みょ",
+    "meanings": [
+      "myo"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "myo",
+      "ji",
+      "da",
+      "ryu"
+    ]
+  },
+  {
+    "kanjiName": "りゃ",
+    "meanings": [
+      "rya"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "rya",
+      "myu",
+      "hi",
+      "chu"
+    ]
+  },
+  {
+    "kanjiName": "りゅ",
+    "meanings": [
+      "ryu"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ryu",
+      "hi",
+      "ho",
+      "ji"
+    ]
+  },
+  {
+    "kanjiName": "りょ",
+    "meanings": [
+      "ryo"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ryo",
+      "to",
+      "kyu",
+      "hyo"
+    ]
+  },
+  {
+    "kanjiName": "ぎゃ",
+    "meanings": [
+      "gya"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ro",
+      "ke",
+      "byu",
+      "gya"
+    ]
+  },
+  {
+    "kanjiName": "ぎゅ",
+    "meanings": [
+      "gyu"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ro",
+      "ru",
+      "nu",
+      "gyu"
+    ]
+  },
+  {
+    "kanjiName": "ぎょ",
+    "meanings": [
+      "gyo"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "gyo",
+      "hi",
+      "ryo",
+      "hyu"
+    ]
+  },
+  {
+    "kanjiName": "じゃ",
+    "meanings": [
+      "ja"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "kyo",
+      "tsu",
+      "zo",
+      "ja"
+    ]
+  },
+  {
+    "kanjiName": "じゅ",
+    "meanings": [
+      "ju"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ju",
+      "gyu",
+      "ji",
+      "se"
+    ]
+  },
+  {
+    "kanjiName": "じょ",
+    "meanings": [
+      "jo"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "sho",
+      "mo",
+      "jo",
+      "kya"
+    ]
+  },
+  {
+    "kanjiName": "びゃ",
+    "meanings": [
+      "bya"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "shi",
+      "bya",
+      "ja",
+      "sho"
+    ]
+  },
+  {
+    "kanjiName": "びゅ",
+    "meanings": [
+      "byu"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ju",
+      "te",
+      "pe",
+      "byu"
+    ]
+  },
+  {
+    "kanjiName": "びょ",
+    "meanings": [
+      "byo"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "to",
+      "yu",
+      "nyo",
+      "byo"
+    ]
+  },
+  {
+    "kanjiName": "ぴゃ",
+    "meanings": [
+      "pya"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "pya",
+      "sho",
+      "bu",
+      "ru"
+    ]
+  },
+  {
+    "kanjiName": "ぴゅ",
+    "meanings": [
+      "pyu"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "ru",
+      "pyu",
+      "sho",
+      "ji"
+    ]
+  },
+  {
+    "kanjiName": "ぴょ",
+    "meanings": [
+      "pyo"
+    ],
+    "type": "youon",
+    "quizAnswers": [
+      "te",
+      "ji",
+      "ru",
+      "pyo"
+    ]
+  }
+]

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Menu,
   X,
@@ -21,7 +21,10 @@ import {
 import { GlassCard } from "../components/GlassCard"
 import { AnimatedBackground } from "../components/AnimatedBackground"
 import { Button } from "../components/Button"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useMutation } from "@apollo/client/react"
+import { hasAuthToken, clearAuthToken } from "../lib/auth"
+import logOutMutation from "../graphql/mutations/logOut.mutation"
 
 
 
@@ -29,6 +32,22 @@ import { Link } from "react-router-dom"
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [email, setEmail] = useState("")
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const navigate = useNavigate()
+  const [executeLogOut, { loading: logoutLoading }] = useMutation(logOutMutation)
+
+  useEffect(() => {
+    const syncAuthState = () => setIsLoggedIn(hasAuthToken())
+
+    syncAuthState()
+    window.addEventListener("storage", syncAuthState)
+    window.addEventListener("bundai:auth-change", syncAuthState)
+
+    return () => {
+      window.removeEventListener("storage", syncAuthState)
+      window.removeEventListener("bundai:auth-change", syncAuthState)
+    }
+  }, [])
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
@@ -41,6 +60,25 @@ export default function App() {
     e.preventDefault()
     alert(`Welcome to Bundai! We'll keep you updated at: ${email}`)
     setEmail("")
+  }
+
+  const handleLoginClick = () => {
+    if (!isLoggedIn) {
+      navigate("/login")
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      // Call the backend logout mutation
+      await executeLogOut()
+    } catch (error) {
+      console.error("Logout error:", error)
+    } finally {
+      // Clear local token regardless of backend response
+      clearAuthToken()
+      setIsLoggedIn(false)
+    }
   }
 
   return (
@@ -93,6 +131,24 @@ export default function App() {
               >
                 Reviews
               </a>
+              {isLoggedIn ? (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={handleLogout}
+                  disabled={logoutLoading}
+                >
+                  {logoutLoading ? "Logging Out..." : "Log Out"}
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={handleLoginClick}
+                >
+                  Log In
+                </Button>
+              )}
               <Button size="sm" variant="primary">
                 Get Started
               </Button>
@@ -141,6 +197,26 @@ export default function App() {
                 >
                   Reviews
                 </a>
+                {isLoggedIn ? (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={handleLogout}
+                    disabled={logoutLoading}
+                    className="w-fit"
+                  >
+                    {logoutLoading ? "Logging Out..." : "Log Out"}
+                  </Button>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={handleLoginClick}
+                    className="w-fit"
+                  >
+                    Log In
+                  </Button>
+                )}
                 <Button size="sm" variant="primary" className="w-fit">
                   Get Started
                 </Button>
@@ -776,16 +852,16 @@ export default function App() {
               </ul>
             </div>
 
-<div>
-  <h4 className="text-white font-semibold mb-4">Support</h4>
-  <ul className="space-y-2">
-    <li><Link to="#" className="text-gray-400 hover:text-white transition-colors">Help Center</Link></li>
-    <li><Link to="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
-    <li><Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
-    <li><Link to="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
-    <li><Link to="/refund" className="text-gray-400 hover:text-white transition-colors">Refund Policy</Link></li>
-  </ul>
-</div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Support</h4>
+              <ul className="space-y-2">
+                <li><Link to="#" className="text-gray-400 hover:text-white transition-colors">Help Center</Link></li>
+                <li><Link to="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
+                <li><Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
+                <li><Link to="/refund" className="text-gray-400 hover:text-white transition-colors">Refund Policy</Link></li>
+              </ul>
+            </div>
           </div>
 
           <div className="border-t border-white/10 pt-6 sm:pt-8 flex flex-col md:flex-row items-center justify-between text-center md:text-left">
