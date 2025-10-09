@@ -8,6 +8,7 @@ import ForgotPassword from './pages/forgotPassword.screen';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/dashboard.screen';
 import KanjiTemplate from './pages/kanjiTemplate.screen';
+import KanjiDetails from './pages/kanjiDetails.screen';
 import LocalQuiz from './pages/localQuiz.screen';
 import SRS from './pages/srs.screen';
 import Similars from './pages/similars.screen';
@@ -28,6 +29,7 @@ export default function App() {
         {/* Protected Dashboard Routes */}
         <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
         <Route path="/dashboard/kanji-template" element={<DashboardLayout><KanjiTemplate /></DashboardLayout>} />
+        <Route path="/dashboard/kanji-detail" element={<DashboardLayout><KanjiDetails /></DashboardLayout>} />
         <Route path="/dashboard/quiz" element={<DashboardLayout><LocalQuiz /></DashboardLayout>} />
         <Route path="/dashboard/srs" element={<DashboardLayout><SRS /></DashboardLayout>} />
         <Route path="/dashboard/similars" element={<DashboardLayout><Similars /></DashboardLayout>} />
