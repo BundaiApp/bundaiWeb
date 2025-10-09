@@ -77,7 +77,12 @@ export default function Dashboard() {
                 {Array.from({ length: 24 }, (_, i) => i + 1).map((stroke) => (
                     <button
                         key={stroke}
-                        onClick={() => console.log(`Navigate to ${stroke} Stroke`)}
+                        onClick={() => navigate('/dashboard/kanji-template', {
+                            state: {
+                                strokes: stroke,
+                                title: `${stroke} Stroke Kanji`
+                            }
+                        })}
                         className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
                         style={{ backgroundColor: '#dcd5ff', color: '#5632d4' }}
                         onMouseEnter={(e) => {
@@ -93,7 +98,13 @@ export default function Dashboard() {
                     </button>
                 ))}
                 <button
-                    onClick={() => console.log('Navigate to All Strokes')}
+                    onClick={() => navigate('/dashboard/all-kanji', {
+                        state: {
+                            type: 'strokes',
+                            strokes: true,
+                            title: 'All Kanji'
+                        }
+                    })}
                     className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
                     style={{ backgroundColor: '#dcd5ff', color: '#5632d4' }}
                     onMouseEnter={(e) => {
@@ -117,7 +128,12 @@ export default function Dashboard() {
                 {Array.from({ length: 9 }, (_, i) => i + 1).map((grade) => (
                     <button
                         key={grade}
-                        onClick={() => console.log(`Navigate to Grade ${grade}`)}
+                        onClick={() => navigate('/dashboard/kanji-template', {
+                            state: {
+                                grades: grade,
+                                title: `Grade ${grade}`
+                            }
+                        })}
                         className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
                         style={{ backgroundColor: '#dcd5ff', color: '#5632d4' }}
                         onMouseEnter={(e) => {
@@ -133,7 +149,13 @@ export default function Dashboard() {
                     </button>
                 ))}
                 <button
-                    onClick={() => console.log('Navigate to All Grades')}
+                    onClick={() => navigate('/dashboard/all-kanji', {
+                        state: {
+                            type: 'grades',
+                            grades: true,
+                            title: 'All Kanji'
+                        }
+                    })}
                     className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
                     style={{ backgroundColor: '#dcd5ff', color: '#5632d4' }}
                     onMouseEnter={(e) => {
