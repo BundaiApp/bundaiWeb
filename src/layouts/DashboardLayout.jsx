@@ -11,7 +11,8 @@ export default function DashboardLayout({ children }) {
 
     // Check if current page needs full screen (no sidebar)
     const isFullScreenPage = location.pathname.includes('/kanji-template') ||
-        location.pathname.includes('/kanji-detail')
+        location.pathname.includes('/kanji-detail') ||
+        location.pathname.includes('/quiz-engine')
 
     useEffect(() => {
         // Check if user is authenticated

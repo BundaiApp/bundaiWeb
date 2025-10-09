@@ -10,6 +10,7 @@ import Dashboard from './pages/dashboard.screen';
 import KanjiTemplate from './pages/kanjiTemplate.screen';
 import KanjiDetails from './pages/kanjiDetails.screen';
 import LocalQuiz from './pages/localQuiz.screen';
+import QuizEngine from './pages/quizEngine.screen';
 import SRS from './pages/srs.screen';
 import Similars from './pages/similars.screen';
 import Settings from './pages/settings.screen';
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/dashboard/kanji-template" element={<DashboardLayout><KanjiTemplate /></DashboardLayout>} />
         <Route path="/dashboard/kanji-detail" element={<DashboardLayout><KanjiDetails /></DashboardLayout>} />
         <Route path="/dashboard/quiz" element={<DashboardLayout><LocalQuiz /></DashboardLayout>} />
+        <Route path="/dashboard/quiz-engine" element={<DashboardLayout><QuizEngine /></DashboardLayout>} />
         <Route path="/dashboard/srs" element={<DashboardLayout><SRS /></DashboardLayout>} />
         <Route path="/dashboard/similars" element={<DashboardLayout><Similars /></DashboardLayout>} />
         <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
