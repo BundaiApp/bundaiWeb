@@ -139,7 +139,10 @@ export default function KanjiTemplate() {
 
             {/* Kanji Grid */}
             <div className="p-4">
-                <div className={`grid gap-3 ${isWord ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8'}`}>
+                <div className={`grid gap-3 ${isWord ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' :
+                        (hiragana || katakana) ? 'grid-cols-4 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-10' :
+                            'grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8'
+                    }`}>
                     {arr.map((item, index) => (
                         <button
                             key={index}
@@ -165,7 +168,7 @@ export default function KanjiTemplate() {
                                     {item.meanings[0]}
                                 </div>
                             )}
-                            {item.kun && (
+                            {item.kun && !hiragana && !katakana && (
                                 <div
                                     className="text-center mt-1"
                                     style={{

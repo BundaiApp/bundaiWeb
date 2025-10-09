@@ -265,7 +265,12 @@ export default function Dashboard() {
                         {kanaCategories.map((category) => (
                             <button
                                 key={category.id}
-                                onClick={() => console.log(`Navigate to ${category.label}`)}
+                                onClick={() => navigate('/dashboard/kanji-template', {
+                                    state: {
+                                        [category.id]: true,
+                                        title: category.label
+                                    }
+                                })}
                                 className="p-8 rounded-2xl transition-all duration-300 hover:scale-105 text-center"
                                 style={{ backgroundColor: '#dcd5ff', color: '#5632d4' }}
                                 onMouseEnter={(e) => {
