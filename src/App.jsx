@@ -12,6 +12,7 @@ import KanjiDetails from './pages/kanjiDetails.screen';
 import LocalQuiz from './pages/localQuiz.screen';
 import QuizEngine from './pages/quizEngine.screen';
 import SRS from './pages/srs.screen';
+import SRSEngine from './pages/srsEngine.screen';
 import Similars from './pages/similars.screen';
 import SimilarDetail from './pages/similarDetail.screen';
 import Settings from './pages/settings.screen';
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="/dashboard/quiz" element={<DashboardLayout><LocalQuiz /></DashboardLayout>} />
         <Route path="/dashboard/quiz-engine" element={<DashboardLayout><QuizEngine /></DashboardLayout>} />
         <Route path="/dashboard/srs" element={<DashboardLayout><SRS /></DashboardLayout>} />
+        <Route path="/dashboard/srs-engine" element={<DashboardLayout><SRSEngine /></DashboardLayout>} />
         <Route path="/dashboard/similars" element={<DashboardLayout><Similars /></DashboardLayout>} />
         <Route path="/dashboard/similar-detail" element={<DashboardLayout><SimilarDetail /></DashboardLayout>} />
         <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />

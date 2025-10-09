@@ -28,6 +28,7 @@ export default function Sidebar({ isOpen, onClose }) {
             console.error("Logout error:", error)
         } finally {
             clearAuthToken()
+            localStorage.removeItem("userId")
             localStorage.removeItem("userEmail")
             localStorage.removeItem("userName")
             navigate("/")

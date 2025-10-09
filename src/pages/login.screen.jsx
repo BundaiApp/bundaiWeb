@@ -41,6 +41,7 @@ export default function Login() {
         localStorage.setItem(TOKEN_STORAGE_KEY, result.token)
         // Store user info for dashboard
         if (result.user) {
+          localStorage.setItem("userId", result.user._id)
           localStorage.setItem("userEmail", result.user.email)
           localStorage.setItem("userName", result.user.name || result.user.email.split("@")[0])
         }

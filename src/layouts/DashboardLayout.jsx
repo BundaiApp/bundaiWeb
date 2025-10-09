@@ -13,6 +13,7 @@ export default function DashboardLayout({ children }) {
     const isFullScreenPage = location.pathname.includes('/kanji-template') ||
         location.pathname.includes('/kanji-detail') ||
         location.pathname.includes('/quiz-engine') ||
+        location.pathname.includes('/srs-engine') ||
         location.pathname.includes('/similar-detail')
 
     useEffect(() => {
