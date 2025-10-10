@@ -342,7 +342,7 @@ export default function SRS() {
                     Review queue
                 </div>
                 <div className="text-7xl md:text-8xl font-bold mb-4" style={{ color: COLORS.interactiveTextOnPrimary }}>
-                    {metrics.totalPending}
+                    {metrics.dueNowCount}
                 </div>
                 <div className="text-xl mb-4" style={{ color: COLORS.interactiveTextOnPrimary }}>
                     {queueIsEmpty ? 'All clear!' : metrics.dueNowCount ? 'Cards ready right now' : 'Scheduled and waiting'}

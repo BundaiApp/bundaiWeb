@@ -1,9 +1,10 @@
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { Home, FileText, RefreshCw, Eye, Settings as SettingsIcon, LogOut, X } from "lucide-react"
-import { useMutation } from "@apollo/client/react"
-import { useState, useEffect } from "react"
+import { useMutation, useQuery } from "@apollo/client/react"
+import { useState, useEffect, useMemo } from "react"
 import { clearAuthToken } from "../lib/auth"
 import logOutMutation from "../graphql/mutations/logOut.mutation"
+import FIND_PENDING_FLASHCARDS from "../graphql/queries/findPendingCards.query"
 
 export default function Sidebar({ isOpen, onClose }) {
     const location = useLocation()
@@ -14,12 +15,45 @@ export default function Sidebar({ isOpen, onClose }) {
 
     useEffect(() => {
         // Get user info from localStorage or context
-        // For now, using placeholder - you can replace with actual user data
         const email = localStorage.getItem("userEmail") || "user@bundai.com"
         const name = localStorage.getItem("userName") || "User"
         setUserEmail(email)
         setUserName(name)
     }, [])
+
+    // Fetch pending flashcards for badge count
+    const userId = localStorage.getItem("userId") || ""
+    const { data, loading: loadingCards, error: cardsError } = useQuery(FIND_PENDING_FLASHCARDS, {
+        variables: { userId },
+        skip: !userId,
+        fetchPolicy: "cache-and-network"
+    })
+
+    useEffect(() => {
+        console.log('[Sidebar] userId:', userId, 'loading:', loadingCards, 'error:', cardsError, 'data:', data)
+    }, [userId, loadingCards, cardsError, data])
+
+    // Calculate cards due now
+    const dueNowCount = useMemo(() => {
+        const pendingCards = data?.getPendingFlashCards ?? []
+        if (!pendingCards.length) {
+            console.log('[Sidebar] No pending cards found')
+            return 0
+        }
+
+        const now = new Date()
+        let count = 0
+
+        pendingCards.forEach((card) => {
+            const nextReviewDate = card.nextReview ? new Date(card.nextReview) : now
+            if (!card.nextReview || nextReviewDate <= now) {
+                count += 1
+            }
+        })
+
+        console.log('[Sidebar] Due now count:', count, 'Total pending:', pendingCards.length)
+        return count
+    }, [data])
 
     const handleLogout = async () => {
         try {
@@ -27,10 +61,8 @@ export default function Sidebar({ isOpen, onClose }) {
         } catch (error) {
             console.error("Logout error:", error)
         } finally {
+            // Clear all auth data (token, userId, userEmail, userName, verified, passed)
             clearAuthToken()
-            localStorage.removeItem("userId")
-            localStorage.removeItem("userEmail")
-            localStorage.removeItem("userName")
             navigate("/")
         }
     }
@@ -38,7 +70,7 @@ export default function Sidebar({ isOpen, onClose }) {
     const navItems = [
         { path: "/dashboard", icon: Home, label: "Dashboard" },
         { path: "/dashboard/quiz", icon: FileText, label: "Local Quiz" },
-        { path: "/dashboard/srs", icon: RefreshCw, label: "SRS", badge: 108 },
+        { path: "/dashboard/srs", icon: RefreshCw, label: "SRS", badge: dueNowCount > 0 ? dueNowCount : null },
         { path: "/dashboard/similars", icon: Eye, label: "Similars" },
         { path: "/dashboard/settings", icon: SettingsIcon, label: "Settings" },
     ]
@@ -129,7 +161,7 @@ export default function Sidebar({ isOpen, onClose }) {
                                     <span className="font-medium">{item.label}</span>
                                 </div>
 
-                                {item.badge && (
+                                {item.badge !== null && item.badge !== undefined && (
                                     <span className="text-white text-xs font-bold px-2 py-1 rounded-full min-w-[2rem] text-center" style={{ backgroundColor: '#ee5d67' }}>
                                         {item.badge}
                                     </span>

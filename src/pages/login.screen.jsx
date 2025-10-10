@@ -7,7 +7,7 @@ import { Mail, Lock, ArrowLeft } from "lucide-react"
 import { GlassCard } from "../components/GlassCard"
 import { Button } from "../components/Button"
 import logInMutation from "../graphql/mutations/logIn.mutation"
-import { TOKEN_STORAGE_KEY, hasAuthToken } from "../lib/auth"
+import { hasAuthToken, setAuthData } from "../lib/auth"
 
 export default function Login() {
   const navigate = useNavigate()
@@ -38,14 +38,8 @@ export default function Login() {
 
       const result = loginData?.logIn
       if (result?.token) {
-        localStorage.setItem(TOKEN_STORAGE_KEY, result.token)
-        // Store user info for dashboard
-        if (result.user) {
-          localStorage.setItem("userId", result.user._id)
-          localStorage.setItem("userEmail", result.user.email)
-          localStorage.setItem("userName", result.user.name || result.user.email.split("@")[0])
-        }
-        window.dispatchEvent(new Event("bundai:auth-change"))
+        // Store all auth data using centralized helper
+        setAuthData(result)
         setEmail(trimmedEmail)
         setPassword("")
         setIsLoggedIn(true)
