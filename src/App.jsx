@@ -4,6 +4,7 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Refund from './pages/Refund';
 import Login from './pages/login.screen';
+import SignUp from './pages/signup.screen';
 import ForgotPassword from './pages/forgotPassword.screen';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/dashboard.screen';
@@ -24,6 +25,7 @@ export default function App() {
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />

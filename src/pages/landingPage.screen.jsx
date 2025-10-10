@@ -68,6 +68,12 @@ export default function App() {
     }
   }
 
+  const handleSignUpClick = () => {
+    if (!isLoggedIn) {
+      navigate("/signup")
+    }
+  }
+
   const handleLogout = async () => {
     try {
       // Call the backend logout mutation
@@ -149,9 +155,6 @@ export default function App() {
                   Log In
                 </Button>
               )}
-              <Button size="sm" variant="primary">
-                Get Started
-              </Button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -217,9 +220,6 @@ export default function App() {
                     Log In
                   </Button>
                 )}
-                <Button size="sm" variant="primary" className="w-fit">
-                  Get Started
-                </Button>
               </div>
             </div>
           )}
@@ -255,7 +255,7 @@ export default function App() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-12 sm:mb-16 px-4">
-              <Button size="lg" className="w-full sm:w-auto" variant="primary">
+              <Button size="lg" className="w-full sm:w-auto" variant="primary" onClick={handleSignUpClick}>
                 Start Learning Now
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
@@ -344,7 +344,7 @@ export default function App() {
                   <span className="text-gray-300">Mobile app access</span>
                 </li>
               </ul>
-              <Button variant="outline" className="w-full bg-transparent">
+              <Button variant="outline" className="w-full bg-transparent" onClick={handleLoginClick}>
                 Get Started Free
               </Button>
             </GlassCard>
@@ -385,7 +385,7 @@ export default function App() {
                   <span className="text-gray-300">Unlimited practice sessions</span>
                 </li>
               </ul>
-              <Button variant="primary" className="w-full">
+              <Button variant="primary" className="w-full" onClick={handleLoginClick}>
                 Start Premium Trial
               </Button>
             </GlassCard>
@@ -420,7 +420,7 @@ export default function App() {
                   <span className="text-gray-300">No monthly fees ever</span>
                 </li>
               </ul>
-              <Button variant="success" className="w-full">
+              <Button variant="success" className="w-full" onClick={handleLoginClick}>
                 Get Lifetime Access
               </Button>
             </GlassCard>
@@ -765,13 +765,13 @@ export default function App() {
             <Button
               size="lg"
               className="w-full sm:w-auto"
-              onClick={() => scrollToSection("platforms")}
+              onClick={handleLoginClick}
               variant="primary"
             >
               Download Bundai Now
               <Download className="w-4 sm:w-5 h-4 sm:h-5 ml-2 group-hover:translate-y-1 transition-transform" />
             </Button>
-            <Button size="lg" className="w-full sm:w-auto" variant="secondary">
+            <Button size="lg" className="w-full sm:w-auto" variant="secondary" onClick={handleLoginClick}>
               Try Chrome Extension
             </Button>
           </div>

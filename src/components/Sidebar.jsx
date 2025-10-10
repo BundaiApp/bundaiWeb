@@ -23,23 +23,16 @@ export default function Sidebar({ isOpen, onClose }) {
 
     // Fetch pending flashcards for badge count
     const userId = localStorage.getItem("userId") || ""
-    const { data, loading: loadingCards, error: cardsError } = useQuery(FIND_PENDING_FLASHCARDS, {
+    const { data } = useQuery(FIND_PENDING_FLASHCARDS, {
         variables: { userId },
         skip: !userId,
         fetchPolicy: "cache-and-network"
     })
 
-    useEffect(() => {
-        console.log('[Sidebar] userId:', userId, 'loading:', loadingCards, 'error:', cardsError, 'data:', data)
-    }, [userId, loadingCards, cardsError, data])
-
     // Calculate cards due now
     const dueNowCount = useMemo(() => {
         const pendingCards = data?.getPendingFlashCards ?? []
-        if (!pendingCards.length) {
-            console.log('[Sidebar] No pending cards found')
-            return 0
-        }
+        if (!pendingCards.length) return 0
 
         const now = new Date()
         let count = 0
@@ -51,7 +44,6 @@ export default function Sidebar({ isOpen, onClose }) {
             }
         })
 
-        console.log('[Sidebar] Due now count:', count, 'Total pending:', pendingCards.length)
         return count
     }, [data])
 

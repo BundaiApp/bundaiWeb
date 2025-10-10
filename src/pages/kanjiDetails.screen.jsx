@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
+import { useMutation } from "@apollo/client/react"
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
 import COLORS from "../theme/colors"
+import ADD_FLASHCARD from "../graphql/mutations/addFlashCard.mutation"
 
 const ensureArray = (value) => {
     if (!value) return []
@@ -52,9 +54,51 @@ export default function KanjiDetails() {
     const [currentIndex, setCurrentIndex] = useState(itemIndex)
     const item = wholeArr[currentIndex] || {}
 
+    // Get userId from localStorage
+    const userId = localStorage.getItem("userId") || ""
+
+    // Track which indices have been added to prevent duplicates
+    const addedIndices = useRef(new Set())
+
+    // Mutation
+    const [addFlashCard] = useMutation(ADD_FLASHCARD)
+
+    // Add flashcard function
+    const addCard = useCallback(
+        async (cardItem, index) => {
+            if (!userId || !cardItem || addedIndices.current.has(index)) return
+
+            // Mark this index as added
+            addedIndices.current.add(index)
+
+            try {
+                await addFlashCard({
+                    variables: {
+                        userId,
+                        kanjiName: isWord ? cardItem.kanji : cardItem.kanjiName,
+                        hiragana: isKana ? '' : isWord ? cardItem.hiragana : cardItem.on?.[0] || '',
+                        meanings: isWord ? ensureArray(cardItem.meaning || cardItem.meanings) : ensureArray(cardItem.meanings),
+                        quizAnswers: cardItem.quizAnswers || []
+                    }
+                })
+            } catch (error) {
+                console.error("Failed to add flashcard:", error)
+            }
+        },
+        [addFlashCard, userId, isWord, isKana]
+    )
+
     useEffect(() => {
         setCurrentIndex(itemIndex)
     }, [itemIndex])
+
+    // Add flashcard only when currentIndex changes
+    useEffect(() => {
+        const currentItem = wholeArr[currentIndex]
+        if (currentItem && userId) {
+            addCard(currentItem, currentIndex)
+        }
+    }, [currentIndex, wholeArr, userId, addCard])
 
     const glyph = item?.kanjiName || item?.kanji || ''
     const meanings = ensureArray(item?.meanings || item?.meaning).slice(0, 8)
