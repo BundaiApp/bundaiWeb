@@ -15,9 +15,7 @@ export default function Terms() {
         <div className="mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">文</span>
-              </div>
+              <img src="/bundai.svg" alt="Bundai" className="w-10 h-10" />
               <span className="text-2xl font-bold">Bundai</span>
             </Link>
             <Link to="/">

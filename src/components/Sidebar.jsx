@@ -99,9 +99,7 @@ export default function Sidebar({ isOpen, onClose }) {
                 {/* Logo Section */}
                 <div className="p-6 flex items-center justify-between" style={{ borderBottom: '1px solid #e5e7eb' }}>
                     <Link to="/dashboard" className="flex items-center space-x-3 group" onClick={handleNavClick}>
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" style={{ background: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)' }}>
-                            <span className="text-white font-bold text-xl">文</span>
-                        </div>
+                        <img src="/bundai.svg" alt="Bundai" className="w-12 h-12 group-hover:scale-105 transition-transform" />
                         <div>
                             <span className="text-xl font-bold block" style={{ color: '#1f1a3d' }}>
                                 Bundai

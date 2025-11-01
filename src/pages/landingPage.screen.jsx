@@ -17,6 +17,14 @@ import {
   CheckCircle,
   ArrowRight,
   Download,
+  Twitter,
+  Youtube,
+  Facebook,
+  Instagram,
+  Heart,
+  Sparkles,
+  Users,
+  Target,
 } from "lucide-react"
 import { GlassCard } from "../components/GlassCard"
 import { AnimatedBackground } from "../components/AnimatedBackground"
@@ -87,6 +95,10 @@ export default function App() {
     }
   }
 
+  const handleDashboardClick = () => {
+    navigate("/dashboard")
+  }
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white">
       <AnimatedBackground />
@@ -97,9 +109,7 @@ export default function App() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center space-x-3 z-10">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">文</span>
-              </div>
+              <img src="/bundai.svg" alt="Bundai" className="w-10 h-10" />
               <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                 Bundai
               </span>
@@ -141,10 +151,9 @@ export default function App() {
                 <Button
                   size="sm"
                   variant="secondary"
-                  onClick={handleLogout}
-                  disabled={logoutLoading}
+                  onClick={handleDashboardClick}
                 >
-                  {logoutLoading ? "Logging Out..." : "Log Out"}
+                  Dashboard
                 </Button>
               ) : (
                 <Button
@@ -204,11 +213,10 @@ export default function App() {
                   <Button
                     size="sm"
                     variant="secondary"
-                    onClick={handleLogout}
-                    disabled={logoutLoading}
+                    onClick={handleDashboardClick}
                     className="w-fit"
                   >
-                    {logoutLoading ? "Logging Out..." : "Log Out"}
+                    Dashboard
                   </Button>
                 ) : (
                   <Button
@@ -785,9 +793,7 @@ export default function App() {
             {/* Logo and description */}
             <div className="sm:col-span-2 text-center sm:text-left">
               <div className="flex items-center justify-center sm:justify-start space-x-3 mb-4">
-                <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-base sm:text-lg">文</span>
-                </div>
+                <img src="/bundai.svg" alt="Bundai" className="w-8 sm:w-10 h-8 sm:h-10" />
                 <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                   Bundai
                 </span>
@@ -802,25 +808,25 @@ export default function App() {
                   href="#"
                   className="w-8 sm:w-10 h-8 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
                 >
-                  <span className="text-blue-400 text-sm sm:text-base">𝕏</span>
+                  <Twitter className="w-4 sm:w-5 h-4 sm:h-5 text-blue-400" />
                 </a>
                 <a
                   href="#"
                   className="w-8 sm:w-10 h-8 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
                 >
-                  <span className="text-red-400 text-sm sm:text-base">▶</span>
+                  <Youtube className="w-4 sm:w-5 h-4 sm:h-5 text-red-400" />
                 </a>
                 <a
                   href="#"
                   className="w-8 sm:w-10 h-8 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
                 >
-                  <span className="text-blue-600 text-sm sm:text-base">f</span>
+                  <Facebook className="w-4 sm:w-5 h-4 sm:h-5 text-blue-600" />
                 </a>
                 <a
                   href="#"
                   className="w-8 sm:w-10 h-8 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
                 >
-                  <span className="text-pink-400 text-sm sm:text-base">📷</span>
+                  <Instagram className="w-4 sm:w-5 h-4 sm:h-5 text-pink-400" />
                 </a>
               </div>
             </div>
@@ -865,13 +871,19 @@ export default function App() {
           </div>
 
           <div className="border-t border-white/10 pt-6 sm:pt-8 flex flex-col md:flex-row items-center justify-between text-center md:text-left">
-            <p className="text-gray-400 text-xs sm:text-sm mb-4 md:mb-0">
-              © 2025 Bundai. All rights reserved. Made with ❤️ for Japanese learners worldwide.
+            <p className="text-gray-400 text-xs sm:text-sm mb-4 md:mb-0 flex items-center justify-center md:justify-start gap-1">
+              © 2025 Bundai. All rights reserved. Made with <Heart className="w-3 sm:w-4 h-3 sm:h-4 text-red-400 fill-current" /> for Japanese learners worldwide.
             </p>
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6">
-              <span className="text-gray-400 text-xs sm:text-sm">🌟 4.9/5 rating</span>
-              <span className="text-gray-400 text-xs sm:text-sm">📱 10k+ downloads</span>
-              <span className="text-gray-400 text-xs sm:text-sm">🎯 90-day guarantee</span>
+              <span className="text-gray-400 text-xs sm:text-sm flex items-center gap-1">
+                <Sparkles className="w-3 sm:w-4 h-3 sm:h-4 text-yellow-400" /> 4.9/5 rating
+              </span>
+              <span className="text-gray-400 text-xs sm:text-sm flex items-center gap-1">
+                <Users className="w-3 sm:w-4 h-3 sm:h-4 text-blue-400" /> 10k+ downloads
+              </span>
+              <span className="text-gray-400 text-xs sm:text-sm flex items-center gap-1">
+                <Target className="w-3 sm:w-4 h-3 sm:h-4 text-green-400" /> 90-day guarantee
+              </span>
             </div>
           </div>
         </div>

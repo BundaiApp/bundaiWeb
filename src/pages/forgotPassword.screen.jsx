@@ -58,9 +58,7 @@ export default function ForgotPassword() {
                 <GlassCard className="space-y-8 p-8" hover={false}>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 shadow-lg">
-                                <span className="text-base font-bold">文</span>
-                            </div>
+                            <img src="/bundai.svg" alt="Bundai" className="h-10 w-10" />
                             <div>
                                 <div className="text-lg font-semibold">Bundai</div>
                                 <div className="text-xs uppercase tracking-wide text-white/60">Immersive Japanese Learning</div>
