@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useQuery } from "@apollo/client/react"
 import { LEVEL_SYSTEM_CONFIG } from "../util/levelSystem"
+import { RefreshCw } from "lucide-react"
 import COLORS from "../theme/colors"
+import ME_QUERY from "../graphql/queries/me.query"
 
 const SECTIONS = [
     { title: 'Levels 1-10', startLevel: 1, endLevel: 10 },
@@ -13,44 +16,27 @@ const SECTIONS = [
 
 export default function Levels() {
     const navigate = useNavigate()
-    const userId = localStorage.getItem("userId") || "defaultUser"
-    const isGuest = !userId || userId === "defaultUser"
-    const [currentLevel, setCurrentLevel] = useState(10)
+    const userId = localStorage.getItem("userId") || ""
+    const isGuest = !userId
+    const [currentLevel, setCurrentLevel] = useState(1)
+
+    const { data: userData, loading: loadingData, refetch } = useQuery(ME_QUERY, {
+        variables: { _id: userId },
+        skip: isGuest,
+        fetchPolicy: "network-only"
+    })
 
     useEffect(() => {
-        const fetchCurrentLevel = async () => {
-            try {
-                const response = await fetch('https://bundaibackend-production.up.railway.app/graphql', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        query: `
-                            query me($_id: String!) {
-                                me(_id: $_id) {
-                                    _id
-                                    currentLevel
-                                }
-                            }
-                        `,
-                        variables: { _id: userId }
-                    })
-                })
-
-                const data = await response.json()
-                if (data?.data?.me?.currentLevel) {
-                    setCurrentLevel(data.data.me.currentLevel)
-                }
-            } catch (error) {
-                console.error("Error fetching current level:", error)
-            }
+        if (userData?.me?.currentLevel) {
+            setCurrentLevel(userData.me.currentLevel)
         }
+    }, [userData])
 
+    const handleRefresh = () => {
         if (!isGuest) {
-            fetchCurrentLevel()
+            refetch()
         }
-    }, [userId, isGuest])
+    }
 
     const handleLevelPress = (level) => {
         if (level > currentLevel) {
@@ -82,13 +68,28 @@ export default function Levels() {
 
     return (
         <div className="max-w-5xl mx-auto px-4 md:px-6 py-6 space-y-8" style={{ backgroundColor: COLORS.background }}>
-            <div>
-                <h1 className="text-3xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>
-                    All Levels
-                </h1>
-                <p style={{ color: COLORS.textSecondary }}>
-                    {currentLevel} of {LEVEL_SYSTEM_CONFIG.totalLevels} levels unlocked
-                </p>
+            <div className="flex justify-between items-start">
+                <div>
+                    <h1 className="text-3xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>
+                        All Levels
+                    </h1>
+                    <p style={{ color: COLORS.textSecondary }}>
+                        {currentLevel} of {LEVEL_SYSTEM_CONFIG.totalLevels} levels unlocked
+                    </p>
+                </div>
+                {!isGuest && (
+                    <button
+                        onClick={handleRefresh}
+                        disabled={loadingData}
+                        className="p-3 rounded-xl transition-all duration-300 hover:scale-105"
+                        style={{ backgroundColor: COLORS.interactiveSurface }}
+                    >
+                        <RefreshCw
+                            className={`w-6 h-6 ${loadingData ? 'animate-spin' : ''}`}
+                            style={{ color: COLORS.brandPrimary }}
+                        />
+                    </button>
+                )}
             </div>
 
             {SECTIONS.map((section, sectionIndex) => (
