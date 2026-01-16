@@ -25,6 +25,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useMutation } from "@apollo/client/react"
 import { hasAuthToken, clearAuthToken } from "../lib/auth"
 import logOutMutation from "../graphql/mutations/logOut.mutation"
+import COLORS from "../theme/colors"
 
 
 
@@ -88,19 +89,19 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white">
+    <div className="min-h-screen w-full" style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}>
       <AnimatedBackground />
 
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 backdrop-blur-lg bg-black/20 border-b border-white/10">
+      <nav className="fixed top-0 w-full z-50 backdrop-blur-lg" style={{ backgroundColor: COLORS.surface + 'F0', borderBottom: `1px solid ${COLORS.divider}` }}>
         <div className="mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center space-x-3 z-10">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg" style={{ backgroundColor: COLORS.brandPrimary }}>
                 <span className="text-white font-bold text-lg">文</span>
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold" style={{ color: COLORS.textPrimary }}>
                 Bundai
               </span>
             </div>
@@ -109,31 +110,46 @@ export default function App() {
             <div className="hidden md:flex items-center space-x-8">
               <a
                 onClick={() => scrollToSection("home")}
-                className="cursor-pointer text-gray-300 hover:text-white transition-colors"
+                className="cursor-pointer transition-colors"
+                style={{ color: COLORS.textSecondary }}
+                onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
+                onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
               >
                 Home
               </a>
               <a
                 onClick={() => scrollToSection("pricing")}
-                className="cursor-pointer text-gray-300 hover:text-white transition-colors"
+                className="cursor-pointer transition-colors"
+                style={{ color: COLORS.textSecondary }}
+                onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
+                onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
               >
                 Pricing
               </a>
               <a
                 onClick={() => scrollToSection("features")}
-                className="cursor-pointer text-gray-300 hover:text-white transition-colors"
+                className="cursor-pointer transition-colors"
+                style={{ color: COLORS.textSecondary }}
+                onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
+                onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
               >
                 Features
               </a>
               <a
                 onClick={() => scrollToSection("demo")}
-                className="cursor-pointer text-gray-300 hover:text-white transition-colors"
+                className="cursor-pointer transition-colors"
+                style={{ color: COLORS.textSecondary }}
+                onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
+                onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
               >
                 Demo
               </a>
               <a
                 onClick={() => scrollToSection("testimonials")}
-                className="cursor-pointer text-gray-300 hover:text-white transition-colors"
+                className="cursor-pointer transition-colors"
+                style={{ color: COLORS.textSecondary }}
+                onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
+                onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
               >
                 Reviews
               </a>
@@ -160,7 +176,8 @@ export default function App() {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMenu}
-              className="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+              className="md:hidden p-2 rounded-lg transition-colors"
+              style={{ backgroundColor: COLORS.surfaceMuted, color: COLORS.textPrimary }}
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -168,35 +185,50 @@ export default function App() {
 
           {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="md:hidden mt-4 pb-6 border-t border-white/10">
+            <div className="md:hidden mt-4 pb-6 border-t" style={{ borderColor: COLORS.divider }}>
               <div className="flex flex-col space-y-4 pt-4">
                 <a
                   onClick={() => scrollToSection("home")}
-                  className="cursor-pointer text-gray-300 hover:text-white transition-colors"
+                  className="cursor-pointer transition-colors"
+                  style={{ color: COLORS.textSecondary }}
+                  onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
+                  onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
                 >
                   Home
                 </a>
                 <a
                   onClick={() => scrollToSection("pricing")}
-                  className="cursor-pointer text-gray-300 hover:text-white transition-colors"
+                  className="cursor-pointer transition-colors"
+                  style={{ color: COLORS.textSecondary }}
+                  onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
+                  onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
                 >
                   Pricing
                 </a>
                 <a
                   onClick={() => scrollToSection("features")}
-                  className="cursor-pointer text-gray-300 hover:text-white transition-colors"
+                  className="cursor-pointer transition-colors"
+                  style={{ color: COLORS.textSecondary }}
+                  onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
+                  onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
                 >
                   Features
                 </a>
                 <a
                   onClick={() => scrollToSection("demo")}
-                  className="cursor-pointer text-gray-300 hover:text-white transition-colors"
+                  className="cursor-pointer transition-colors"
+                  style={{ color: COLORS.textSecondary }}
+                  onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
+                  onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
                 >
                   Demo
                 </a>
                 <a
                   onClick={() => scrollToSection("testimonials")}
-                  className="cursor-pointer text-gray-300 hover:text-white transition-colors"
+                  className="cursor-pointer transition-colors"
+                  style={{ color: COLORS.textSecondary }}
+                  onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
+                  onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
                 >
                   Reviews
                 </a>
@@ -227,30 +259,30 @@ export default function App() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20">
+      <section id="home" className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20" style={{ backgroundColor: COLORS.background }}>
         <div className="w-full mx-auto">
           <div className="text-center relative z-10">
-            <div className="inline-flex items-center px-3 sm:px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 mb-6 sm:mb-8">
-              <span className="text-orange-300 text-xs sm:text-sm font-medium">Master Japanese in 90 Days</span>
+            <div className="inline-flex items-center px-3 sm:px-4 py-2 rounded-full mb-6 sm:mb-8" style={{ backgroundColor: COLORS.surfaceHighlight, borderColor: COLORS.brandPrimaryLight }}>
+              <span className="text-xs sm:text-sm font-medium" style={{ color: COLORS.textPrimary }}>Master Japanese in 90 Days</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black mb-6 sm:mb-8 leading-tight max-w-5xl mx-auto px-2">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black mb-6 sm:mb-8 leading-tight max-w-5xl mx-auto px-2" style={{ color: COLORS.textPrimary }}>
               Start Watching{" "}
-              <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">YouTube</span>
+              <span style={{ color: COLORS.brandPrimary }}>YouTube</span>
               <br />
               in{" "}
-              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              <span style={{ color: COLORS.brandSecondary }}>
                 Japanese
               </span>{" "}
               in{" "}
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              <span style={{ color: COLORS.accentSuccess }}>
                 3 Months
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 mb-8 sm:mb-12 max-w-4xl mx-auto leading-relaxed px-4">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-8 sm:mb-12 max-w-4xl mx-auto leading-relaxed px-4" style={{ color: COLORS.textSecondary }}>
               Stop struggling with boring textbooks and ineffective apps.
-              <span className="text-emerald-400 font-semibold"> Bundai </span>
+              <span style={{ color: COLORS.brandPrimary, fontWeight: 600 }}> Bundai </span>
               uses immersive learning with real Japanese content to get you fluent fast.
             </p>
 
@@ -271,29 +303,29 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-4xl mx-auto px-4">
-              <div className="text-center p-4 sm:p-6 bg-white/5 rounded-2xl backdrop-blur-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-emerald-400 mb-2">2000+</div>
-                <div className="text-gray-300 text-sm sm:text-base">Kanji Characters</div>
+              <div className="text-center p-4 sm:p-6 rounded-2xl" style={{ backgroundColor: COLORS.surfaceElevated }}>
+                <div className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: COLORS.accentSuccess }}>2000+</div>
+                <div className="text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>Kanji Characters</div>
               </div>
-              <div className="text-center p-4 sm:p-6 bg-white/5 rounded-2xl backdrop-blur-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-blue-400 mb-2">10,000+</div>
-                <div className="text-gray-300 text-sm sm:text-base">Happy Learners</div>
+              <div className="text-center p-4 sm:p-6 rounded-2xl" style={{ backgroundColor: COLORS.surfaceElevated }}>
+                <div className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: COLORS.brandPrimary }}>10,000+</div>
+                <div className="text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>Happy Learners</div>
               </div>
-              <div className="text-center p-4 sm:p-6 bg-white/5 rounded-2xl backdrop-blur-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-purple-400 mb-2">90 Days</div>
-                <div className="text-gray-300 text-sm sm:text-base">Average to Fluency</div>
+              <div className="text-center p-4 sm:p-6 rounded-2xl" style={{ backgroundColor: COLORS.surfaceElevated }}>
+                <div className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: COLORS.brandPrimaryDark }}>90 Days</div>
+                <div className="text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>Average to Fluency</div>
               </div>
             </div>
           </div>
 
-          <div className="absolute top-20 right-4 lg:right-10 hidden xl:block opacity-30 hover:opacity-60 transition-opacity">
+          <div className="absolute top-20 right-4 lg:right-10 hidden xl:block opacity-60 hover:opacity-100 transition-opacity">
             <div className="relative animate-float">
-              <div className="w-48 h-80 bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl border-2 border-gray-700 shadow-2xl">
-                <div className="p-3 h-full bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-3xl flex items-center justify-center">
+              <div className="w-48 h-80 rounded-3xl border-2 shadow-2xl" style={{ backgroundColor: COLORS.surfaceMuted, borderColor: COLORS.divider }}>
+                <div className="p-3 h-full rounded-3xl flex items-center justify-center" style={{ backgroundColor: COLORS.surfaceElevated }}>
                   <div className="text-center">
-                    <Languages className="w-8 h-8 text-blue-400 mx-auto mb-3" />
-                    <div className="text-white text-xs">Learning Japanese</div>
-                    <div className="text-gray-300 text-xs mt-1">漢字 Practice</div>
+                    <Languages className="w-8 h-8 mx-auto mb-3" style={{ color: COLORS.brandPrimary }} />
+                    <div className="text-xs" style={{ color: COLORS.textPrimary }}>Learning Japanese</div>
+                    <div className="text-xs mt-1" style={{ color: COLORS.textSecondary }}>漢字 Practice</div>
                   </div>
                 </div>
               </div>
@@ -303,131 +335,131 @@ export default function App() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="relative py-16 sm:py-20 px-4 sm:px-6 bg-black/20">
+      <section id="pricing" className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.surfaceMuted }}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2" style={{ color: COLORS.textPrimary }}>
               Choose Your
-              <span className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
+              <span style={{ color: COLORS.brandPrimary }}>
                 {" "}
                 Learning Path
               </span>
             </h2>
-            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto px-4">
+            <p className="text-lg sm:text-xl max-w-3xl mx-auto px-4" style={{ color: COLORS.textSecondary }}>
               Start free and upgrade when you're ready to accelerate your Japanese mastery.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto px-4">
             {/* Free Plan */}
-            <GlassCard className="p-6 sm:p-8 text-center">
+            <div className="p-6 sm:p-8 text-center rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
               <div className="mb-6">
-                <h3 className="text-xl sm:text-2xl font-bold mb-2">Free</h3>
-                <div className="text-3xl sm:text-4xl font-black mb-2">$0</div>
-                <div className="text-gray-400">Forever</div>
+                <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>Free</h3>
+                <div className="text-3xl sm:text-4xl font-black mb-2" style={{ color: COLORS.textPrimary }}>$0</div>
+                <div style={{ color: COLORS.textMuted }}>Forever</div>
               </div>
               <ul className="text-left space-y-3 mb-8 text-sm sm:text-base">
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">50 Kanji characters</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>50 Kanji characters</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">Basic vocabulary (100 words)</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Basic vocabulary (100 words)</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">Daily practice sessions</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Daily practice sessions</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">Mobile app access</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Mobile app access</span>
                 </li>
               </ul>
-              <Button variant="outline" className="w-full bg-transparent" onClick={handleLoginClick}>
+              <Button variant="outline" className="w-full" onClick={handleLoginClick} style={{ backgroundColor: 'transparent' }}>
                 Get Started Free
               </Button>
-            </GlassCard>
+            </div>
 
             {/* Premium Plan */}
-            <GlassCard className="p-6 sm:p-8 text-center relative md:scale-105 border-2 border-gradient-to-r from-blue-500 to-purple-500">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-500 to-purple-500 px-3 sm:px-4 py-1 rounded-full text-white text-xs sm:text-sm font-medium">
+            <div className="p-6 sm:p-8 text-center relative md:scale-105 rounded-2xl shadow-xl" style={{ backgroundColor: COLORS.surface, border: `2px solid ${COLORS.brandPrimary}` }}>
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-white" style={{ backgroundColor: COLORS.brandPrimary }}>
                 Most Popular
               </div>
               <div className="mb-6">
-                <h3 className="text-xl sm:text-2xl font-bold mb-2">Premium</h3>
-                <div className="text-3xl sm:text-4xl font-black mb-2">$19</div>
-                <div className="text-gray-400">per month</div>
+                <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>Premium</h3>
+                <div className="text-3xl sm:text-4xl font-black mb-2" style={{ color: COLORS.textPrimary }}>$19</div>
+                <div style={{ color: COLORS.textMuted }}>per month</div>
               </div>
               <ul className="text-left space-y-3 mb-8 text-sm sm:text-base">
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">All 2000 Kanji characters</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>All 2000 Kanji characters</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">Complete vocabulary (10,000+ words)</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Complete vocabulary (10,000+ words)</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">YouTube extension</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>YouTube extension</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">AI-powered SRS system</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>AI-powered SRS system</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">Progress analytics</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Progress analytics</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">Unlimited practice sessions</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Unlimited practice sessions</span>
                 </li>
               </ul>
               <Button variant="primary" className="w-full" onClick={handleLoginClick}>
                 Start Premium Trial
               </Button>
-            </GlassCard>
+            </div>
 
             {/* Lifetime Plan */}
-            <GlassCard className="p-6 sm:p-8 text-center">
+            <div className="p-6 sm:p-8 text-center rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
               <div className="mb-6">
-                <h3 className="text-xl sm:text-2xl font-bold mb-2">Lifetime</h3>
-                <div className="text-3xl sm:text-4xl font-black mb-2">$199</div>
-                <div className="text-gray-400">One-time payment</div>
-                <div className="text-sm text-green-400 mt-1">Save $429!</div>
+                <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>Lifetime</h3>
+                <div className="text-3xl sm:text-4xl font-black mb-2" style={{ color: COLORS.textPrimary }}>$199</div>
+                <div style={{ color: COLORS.textMuted }}>One-time payment</div>
+                <div className="text-sm mt-1" style={{ color: COLORS.accentSuccess }}>Save $429!</div>
               </div>
               <ul className="text-left space-y-3 mb-8 text-sm sm:text-base">
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">Everything in Premium</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Everything in Premium</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">Lifetime updates</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Lifetime updates</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">Priority support</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Priority support</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">Exclusive features</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Exclusive features</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">No monthly fees ever</span>
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>No monthly fees ever</span>
                 </li>
               </ul>
               <Button variant="success" className="w-full" onClick={handleLoginClick}>
                 Get Lifetime Access
               </Button>
-            </GlassCard>
+            </div>
           </div>
 
           <div className="text-center mt-8 sm:mt-12 px-4">
-            <p className="text-gray-400 mb-4 text-sm sm:text-base">
+            <p className="mb-4 text-sm sm:text-base" style={{ color: COLORS.textMuted }}>
               🎯 30-day money-back guarantee • 🔒 Secure payment • 📱 Instant access
             </p>
           </div>
@@ -435,122 +467,122 @@ export default function App() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="relative py-16 sm:py-20 px-4 sm:px-6">
+      <section id="features" className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.background }}>
         <div className="mx-auto">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2" style={{ color: COLORS.textPrimary }}>
               Revolutionary Learning
-              <span className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+              <span style={{ color: COLORS.brandPrimary }}>
                 {" "}
                 Features
               </span>
             </h2>
-            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto px-4">
+            <p className="text-lg sm:text-xl max-w-3xl mx-auto px-4" style={{ color: COLORS.textSecondary }}>
               Powered by AI and designed for real-world fluency, not just test scores.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-20 px-4">
             {/* Highlighted (most important) card */}
-            <GlassCard className="p-6 sm:p-8 text-center transform transition-all hover:scale-105 hover:shadow-xl bg-gradient-to-br from-blue-500 to-purple-500 hover:bg-gradient-to-br hover:from-blue-600 hover:to-purple-600 sm:col-span-2 lg:col-span-1">
-              <div className="w-12 sm:w-16 h-12 sm:h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <div className="p-6 sm:p-8 text-center transform transition-all hover:scale-105 hover:shadow-xl rounded-2xl sm:col-span-2 lg:col-span-1" style={{ backgroundColor: COLORS.surface, border: `2px solid ${COLORS.brandPrimary}` }}>
+              <div className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6" style={{ backgroundColor: COLORS.brandPrimary }}>
                 <MonitorSmartphone className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Cross-Platform Sync</h3>
-              <p className="text-white leading-relaxed text-sm sm:text-base">
+              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style={{ color: COLORS.textPrimary }}>Cross-Platform Sync</h3>
+              <p className="leading-relaxed text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
                 Learn seamlessly across desktop, mobile, and browser extension. Your progress syncs everywhere
                 instantly.
               </p>
-            </GlassCard>
+            </div>
 
             {/* Other cards */}
-            <GlassCard className="p-6 sm:p-8 text-center">
-              <div className="w-12 sm:w-16 h-12 sm:h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <div className="p-6 sm:p-8 text-center rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
+              <div className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6" style={{ backgroundColor: COLORS.accentDanger }}>
                 <Languages className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">2000 Essential Kanji</h3>
-              <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style={{ color: COLORS.textPrimary }}>2000 Essential Kanji</h3>
+              <p className="leading-relaxed text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
                 Master every kanji you need with our scientifically-ordered curriculum and visual memory techniques.
               </p>
-            </GlassCard>
+            </div>
 
-            <GlassCard className="p-6 sm:p-8 text-center">
-              <div className="w-12 sm:w-16 h-12 sm:h-16 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <div className="p-6 sm:p-8 text-center rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
+              <div className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6" style={{ backgroundColor: COLORS.accentSuccess }}>
                 <Brain className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">AI-Powered SRS</h3>
-              <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style={{ color: COLORS.textPrimary }}>AI-Powered SRS</h3>
+              <p className="leading-relaxed text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
                 Our intelligent spaced repetition adapts to your learning speed and optimizes retention automatically.
               </p>
-            </GlassCard>
+            </div>
 
-            <GlassCard className="p-6 sm:p-8 text-center">
-              <div className="w-12 sm:w-16 h-12 sm:h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <div className="p-6 sm:p-8 text-center rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
+              <div className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6" style={{ backgroundColor: COLORS.brandSecondary }}>
                 <Globe className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">YouTube Integration</h3>
-              <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style={{ color: COLORS.textPrimary }}>YouTube Integration</h3>
+              <p className="leading-relaxed text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
                 Learn from real Japanese content. Our extension provides instant translations and vocabulary building.
               </p>
-            </GlassCard>
+            </div>
 
-            <GlassCard className="p-6 sm:p-8 text-center">
-              <div className="w-12 sm:w-16 h-12 sm:h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <div className="p-6 sm:p-8 text-center rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
+              <div className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6" style={{ backgroundColor: COLORS.accentWarning }}>
                 <BookOpen className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">1000 Core Words</h3>
-              <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style={{ color: COLORS.textPrimary }}>1000 Core Words</h3>
+              <p className="leading-relaxed text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
                 Immersive vocabulary learning with audio-first approach and contextual understanding.
               </p>
-            </GlassCard>
+            </div>
 
-            <GlassCard className="p-6 sm:p-8 text-center">
-              <div className="w-12 sm:w-16 h-12 sm:h-16 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <div className="p-6 sm:p-8 text-center rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
+              <div className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6" style={{ backgroundColor: COLORS.brandPrimaryLight }}>
                 <Eye className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Similar Kanji Training</h3>
-              <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style={{ color: COLORS.textPrimary }}>Similar Kanji Training</h3>
+              <p className="leading-relaxed text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
                 Never confuse similar-looking characters again with our specialized recognition training system.
               </p>
-            </GlassCard>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Demo Section */}
-      <section id="demo" className="relative py-16 sm:py-20 px-4 sm:px-6 bg-black/20">
+      <section id="demo" className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.surfaceMuted }}>
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 px-2">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 px-2" style={{ color: COLORS.textPrimary }}>
             See Bundai in
-            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"> Action</span>
+            <span style={{ color: COLORS.accentSuccess }}> Action</span>
           </h2>
-          <p className="text-lg sm:text-xl text-gray-300 mb-8 sm:mb-12 max-w-3xl mx-auto px-4">
+          <p className="text-lg sm:text-xl mb-8 sm:mb-12 max-w-3xl mx-auto px-4" style={{ color: COLORS.textSecondary }}>
             Watch how our revolutionary approach transforms Japanese learning from boring to brilliant.
           </p>
 
           {/* Video player mockup */}
           <div className="relative mx-auto max-w-2xl px-4">
-            <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl overflow-hidden">
-              <div className="relative h-full flex items-center justify-center bg-gradient-to-br from-blue-600/20 to-purple-600/20">
+            <div className="aspect-video rounded-2xl shadow-2xl overflow-hidden" style={{ backgroundColor: COLORS.surfaceMuted }}>
+              <div className="relative h-full flex items-center justify-center" style={{ backgroundColor: COLORS.surfaceElevated }}>
                 <Button size="md" className="sm:size-lg" variant="accent">
                   <Play className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3 group-hover:scale-110 transition-transform" />
                   <span className="text-sm sm:text-base">Watch Demo Video</span>
                 </Button>
 
                 {/* Floating UI elements */}
-                <div className="absolute top-2 sm:top-4 left-2 sm:left-4 bg-black/40 backdrop-blur-sm px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm text-white">
+                <div className="absolute top-2 sm:top-4 left-2 sm:left-4 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm" style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}>
                   🎌 Learning Japanese
                 </div>
-                <div className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 bg-gradient-to-r from-emerald-500 to-cyan-500 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm text-white font-medium">
+                <div className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm text-white font-medium" style={{ backgroundColor: COLORS.accentSuccess }}>
                   Progress: 67%
                 </div>
               </div>
             </div>
 
-            <div className="absolute -top-4 sm:-top-6 -right-4 sm:-right-6 w-8 sm:w-12 h-8 sm:h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center animate-bounce delay-300">
+            <div className="absolute -top-4 sm:-top-6 -right-4 sm:-right-6 w-8 sm:w-12 h-8 sm:h-12 rounded-full flex items-center justify-center animate-bounce delay-300" style={{ backgroundColor: COLORS.accentWarning }}>
               <Languages className="w-4 sm:w-6 h-4 sm:h-6 text-white" />
             </div>
-            <div className="absolute -bottom-4 sm:-bottom-6 -left-4 sm:-left-6 w-8 sm:w-12 h-8 sm:h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center animate-pulse">
+            <div className="absolute -bottom-4 sm:-bottom-6 -left-4 sm:-left-6 w-8 sm:w-12 h-8 sm:h-12 rounded-full flex items-center justify-center animate-pulse" style={{ backgroundColor: COLORS.brandSecondary }}>
               <Brain className="w-4 sm:w-6 h-4 sm:h-6 text-white" />
             </div>
           </div>
@@ -558,31 +590,31 @@ export default function App() {
           {/* Platform showcase */}
           <section id="platforms" className="mt-8 sm:mt-12">
             <div className="text-center mb-8 sm:mb-12">
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 px-2">Learn Anywhere, Anytime</h3>
+              <h3 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 px-2" style={{ color: COLORS.textPrimary }}>Learn Anywhere, Anytime</h3>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-16 items-center px-4">
               {/* Desktop mockup */}
               <div className="relative order-2 lg:order-1">
                 <div className="relative mx-auto w-full max-w-md sm:max-w-lg" style={{ aspectRatio: "5/3" }}>
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl">
+                  <div className="absolute inset-0 rounded-2xl shadow-2xl" style={{ backgroundColor: COLORS.surfaceMuted, border: `1px solid ${COLORS.divider}` }}>
                     <div className="p-4 sm:p-6 h-full">
-                      <div className="bg-gradient-to-br from-blue-600/20 to-purple-600/20 h-full rounded-xl flex items-center justify-center relative overflow-hidden">
+                      <div className="h-full rounded-xl flex items-center justify-center relative overflow-hidden" style={{ backgroundColor: COLORS.surfaceElevated }}>
                         <div className="absolute top-2 sm:top-4 left-2 sm:left-4 flex space-x-1 sm:space-x-2">
-                          <div className="w-2 sm:w-3 h-2 sm:h-3 bg-red-500 rounded-full"></div>
-                          <div className="w-2 sm:w-3 h-2 sm:h-3 bg-yellow-500 rounded-full"></div>
-                          <div className="w-2 sm:w-3 h-2 sm:h-3 bg-green-500 rounded-full"></div>
+                          <div className="w-2 sm:w-3 h-2 sm:h-3 rounded-full" style={{ backgroundColor: COLORS.accentDanger }}></div>
+                          <div className="w-2 sm:w-3 h-2 sm:h-3 rounded-full" style={{ backgroundColor: COLORS.accentWarning }}></div>
+                          <div className="w-2 sm:w-3 h-2 sm:h-3 rounded-full" style={{ backgroundColor: COLORS.accentSuccess }}></div>
                         </div>
                         <div className="text-center">
-                          <Monitor className="w-8 sm:w-16 h-8 sm:h-16 text-blue-400 mx-auto mb-2 sm:mb-4" />
-                          <div className="text-white font-semibold text-sm sm:text-base">Chrome Extension Active</div>
-                          <div className="text-gray-300 text-xs sm:text-sm mt-1 sm:mt-2">Learning from YouTube</div>
+                          <Monitor className="w-8 sm:w-16 h-8 sm:h-16 mx-auto mb-2 sm:mb-4" style={{ color: COLORS.brandPrimary }} />
+                          <div className="font-semibold text-sm sm:text-base" style={{ color: COLORS.textPrimary }}>Chrome Extension Active</div>
+                          <div className="text-xs sm:text-sm mt-1 sm:mt-2" style={{ color: COLORS.textSecondary }}>Learning from YouTube</div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="absolute -bottom-2 sm:-bottom-4 -right-2 sm:-right-4 w-8 sm:w-12 h-8 sm:h-12 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center animate-bounce">
+                <div className="absolute -bottom-2 sm:-bottom-4 -right-2 sm:-right-4 w-8 sm:w-12 h-8 sm:h-12 rounded-full flex items-center justify-center animate-bounce" style={{ backgroundColor: COLORS.accentSuccess }}>
                   <Globe className="w-4 sm:w-6 h-4 sm:h-6 text-white" />
                 </div>
               </div>
@@ -590,23 +622,23 @@ export default function App() {
               {/* Mobile mockups */}
               <div className="flex justify-center space-x-4 sm:space-x-8 order-1 lg:order-2">
                 <div className="relative">
-                  <div className="w-32 sm:w-48 h-56 sm:h-96 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-gray-700 shadow-2xl">
+                  <div className="w-32 sm:w-48 h-56 sm:h-96 rounded-2xl sm:rounded-3xl border-2 sm:border-4 shadow-2xl" style={{ backgroundColor: COLORS.surfaceMuted, borderColor: COLORS.divider }}>
                     <div className="p-2 sm:p-4 h-full">
-                      <div className="bg-gradient-to-br from-orange-600/20 to-red-600/20 h-full rounded-xl sm:rounded-2xl flex items-center justify-center">
+                      <div className="h-full rounded-xl sm:rounded-2xl flex items-center justify-center" style={{ backgroundColor: COLORS.surfaceElevated }}>
                         <div className="text-center">
-                          <Smartphone className="w-6 sm:w-12 h-6 sm:h-12 text-orange-400 mx-auto mb-2 sm:mb-4" />
-                          <div className="text-white text-xs sm:text-sm font-semibold">Quiz Mode</div>
-                          <div className="text-gray-300 text-xs mt-1 sm:mt-2">漢字: 学習</div>
+                          <Smartphone className="w-6 sm:w-12 h-6 sm:h-12 mx-auto mb-2 sm:mb-4" style={{ color: COLORS.accentDanger }} />
+                          <div className="text-xs sm:text-sm font-semibold" style={{ color: COLORS.textPrimary }}>Quiz Mode</div>
+                          <div className="text-xs mt-1 sm:mt-2" style={{ color: COLORS.textSecondary }}>漢字: 学習</div>
                           <div className="mt-2 sm:mt-4 space-y-1 sm:space-y-2">
-                            <div className="w-12 sm:w-20 h-1 sm:h-2 bg-white/20 rounded mx-auto"></div>
-                            <div className="w-10 sm:w-16 h-1 sm:h-2 bg-white/20 rounded mx-auto"></div>
-                            <div className="w-14 sm:w-24 h-1 sm:h-2 bg-orange-400 rounded mx-auto"></div>
+                            <div className="w-12 sm:w-20 h-1 sm:h-2 rounded mx-auto" style={{ backgroundColor: COLORS.surfaceMuted }}></div>
+                            <div className="w-10 sm:w-16 h-1 sm:h-2 rounded mx-auto" style={{ backgroundColor: COLORS.surfaceMuted }}></div>
+                            <div className="w-14 sm:w-24 h-1 sm:h-2 rounded mx-auto" style={{ backgroundColor: COLORS.accentDanger }}></div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-6 sm:w-8 h-6 sm:h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center animate-pulse">
+                  <div className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center animate-pulse" style={{ backgroundColor: COLORS.brandSecondary }}>
                     <Star className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
                   </div>
                 </div>
@@ -614,32 +646,32 @@ export default function App() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8 sm:mt-12 px-4">
-              <div className="bg-black rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto">
+              <div className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto" style={{ backgroundColor: COLORS.textPrimary }}>
                 <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
-                  <Globe className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
+                  <Globe className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.surface }} />
                   <div className="text-left">
-                    <div className="text-xs text-gray-400">Available in</div>
-                    <div className="text-sm sm:text-lg font-semibold text-white">Chrome Web Store</div>
+                    <div className="text-xs" style={{ color: COLORS.textMuted }}>Available in</div>
+                    <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.surface }}>Chrome Web Store</div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-black rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto">
+              <div className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto" style={{ backgroundColor: COLORS.textPrimary }}>
                 <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
-                  <Download className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
+                  <Download className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.surface }} />
                   <div className="text-left">
-                    <div className="text-xs text-gray-400">Download on the</div>
-                    <div className="text-sm sm:text-lg font-semibold text-white">App Store</div>
+                    <div className="text-xs" style={{ color: COLORS.textMuted }}>Download on the</div>
+                    <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.surface }}>App Store</div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-black rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto">
+              <div className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto" style={{ backgroundColor: COLORS.textPrimary }}>
                 <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
-                  <Download className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
+                  <Download className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.surface }} />
                   <div className="text-left">
-                    <div className="text-xs text-gray-400">Get it on</div>
-                    <div className="text-sm sm:text-lg font-semibold text-white">Google Play</div>
+                    <div className="text-xs" style={{ color: COLORS.textMuted }}>Get it on</div>
+                    <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.surface }}>Google Play</div>
                   </div>
                 </div>
               </div>
@@ -649,99 +681,99 @@ export default function App() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="relative py-16 sm:py-20 px-4 sm:px-6">
+      <section id="testimonials" className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.background }}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2" style={{ color: COLORS.textPrimary }}>
               What Learners
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"> Say</span>
+              <span style={{ color: COLORS.brandPrimary }}> Say</span>
             </h2>
             <div className="flex items-center justify-center space-x-2 mb-4">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 sm:w-6 h-5 sm:h-6 text-yellow-400 fill-current" />
+                <Star key={i} className="w-5 sm:w-6 h-5 sm:h-6 fill-current" style={{ color: COLORS.accentWarning }} />
               ))}
-              <span className="text-gray-300 ml-2 text-sm sm:text-base">4.9/5 from 2,847 reviews</span>
+              <span className="ml-2 text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>4.9/5 from 2,847 reviews</span>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            <GlassCard className="p-4 sm:p-6">
+            <div className="p-4 sm:p-6 rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
               <div className="flex items-center space-x-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3 sm:w-4 h-3 sm:h-4 text-yellow-400 fill-current" />
+                  <Star key={i} className="w-3 sm:w-4 h-3 sm:h-4 fill-current" style={{ color: COLORS.accentWarning }} />
                 ))}
               </div>
-              <p className="text-gray-300 mb-4 italic text-sm sm:text-base">
+              <p className="mb-4 italic text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
                 "I went from zero Japanese to watching anime without subtitles in just 4 months. Bundai's approach
                 actually works!"
               </p>
               <div className="flex items-center space-x-3">
-                <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: COLORS.brandPrimary }}>
                   <span className="text-white font-semibold text-xs sm:text-sm">SK</span>
                 </div>
                 <div>
-                  <div className="text-white font-medium text-sm sm:text-base">Sarah Kim</div>
-                  <div className="text-gray-400 text-xs sm:text-sm">Software Engineer</div>
+                  <div className="font-medium text-sm sm:text-base" style={{ color: COLORS.textPrimary }}>Sarah Kim</div>
+                  <div className="text-xs sm:text-sm" style={{ color: COLORS.textMuted }}>Software Engineer</div>
                 </div>
               </div>
-            </GlassCard>
+            </div>
 
-            <GlassCard className="p-4 sm:p-6">
+            <div className="p-4 sm:p-6 rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
               <div className="flex items-center space-x-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3 sm:w-4 h-3 sm:h-4 text-yellow-400 fill-current" />
+                  <Star key={i} className="w-3 sm:w-4 h-3 sm:h-4 fill-current" style={{ color: COLORS.accentWarning }} />
                 ))}
               </div>
-              <p className="text-gray-300 mb-4 italic text-sm sm:text-base">
+              <p className="mb-4 italic text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
                 "The YouTube integration is genius. I'm learning from real Japanese content instead of boring textbook
                 examples."
               </p>
               <div className="flex items-center space-x-3">
-                <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center">
+                <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: COLORS.accentSuccess }}>
                   <span className="text-white font-semibold text-xs sm:text-sm">MR</span>
                 </div>
                 <div>
-                  <div className="text-white font-medium text-sm sm:text-base">Mike Rodriguez</div>
-                  <div className="text-gray-400 text-xs sm:text-sm">Marketing Manager</div>
+                  <div className="font-medium text-sm sm:text-base" style={{ color: COLORS.textPrimary }}>Mike Rodriguez</div>
+                  <div className="text-xs sm:text-sm" style={{ color: COLORS.textMuted }}>Marketing Manager</div>
                 </div>
               </div>
-            </GlassCard>
+            </div>
 
-            <GlassCard className="p-4 sm:p-6">
+            <div className="p-4 sm:p-6 rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
               <div className="flex items-center space-x-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3 sm:w-4 h-3 sm:h-4 text-yellow-400 fill-current" />
+                  <Star key={i} className="w-3 sm:w-4 h-3 sm:h-4 fill-current" style={{ color: COLORS.accentWarning }} />
                 ))}
               </div>
-              <p className="text-gray-300 mb-4 italic text-sm sm:text-base">
+              <p className="mb-4 italic text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
                 "Finally passed JLPT N2 after struggling for years with other apps. The kanji recognition training is
                 incredible."
               </p>
               <div className="flex items-center space-x-3">
-                <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: COLORS.accentDanger }}>
                   <span className="text-white font-semibold text-xs sm:text-sm">AL</span>
                 </div>
                 <div>
-                  <div className="text-white font-medium text-sm sm:text-base">Alex Liu</div>
-                  <div className="text-gray-400 text-xs sm:text-sm">College Student</div>
+                  <div className="font-medium text-sm sm:text-base" style={{ color: COLORS.textPrimary }}>Alex Liu</div>
+                  <div className="text-xs sm:text-sm" style={{ color: COLORS.textMuted }}>College Student</div>
                 </div>
               </div>
-            </GlassCard>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Newsletter Section */}
-      <section className="relative py-16 sm:py-20 px-4 sm:px-6">
+      <section className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.surfaceMuted }}>
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2" style={{ color: COLORS.textPrimary }}>
             Ready to Master
-            <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+            <span style={{ color: COLORS.brandPrimary }}>
               {" "}
               Japanese?
             </span>
           </h2>
-          <p className="text-lg sm:text-xl text-gray-300 mb-8 sm:mb-12 px-4">
+          <p className="text-lg sm:text-xl mb-8 sm:mb-12 px-4" style={{ color: COLORS.textSecondary }}>
             Join thousands of learners who chose the fast track to fluency. Start your journey today!
           </p>
 
@@ -752,9 +784,23 @@ export default function App() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="flex-1 px-4 sm:px-6 py-3 sm:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm text-sm sm:text-base"
+                className="flex-1 px-4 sm:px-6 py-3 sm:py-4 rounded-xl text-sm sm:text-base focus:outline-none focus:ring-2"
+                style={{
+                  backgroundColor: COLORS.surface,
+                  border: `1px solid ${COLORS.divider}`,
+                  color: COLORS.textPrimary,
+                }}
                 required
               />
+              <style jsx>{`
+                input::placeholder {
+                  color: ${COLORS.textMuted};
+                }
+                input:focus {
+                  ring-color: ${COLORS.brandPrimary};
+                  border-color: ${COLORS.brandPrimary};
+                }
+              `}</style>
               <Button type="submit" size="md" className="sm:size-lg w-full sm:w-auto" variant="primary">
                 Start Free
               </Button>
@@ -779,20 +825,20 @@ export default function App() {
       </section>
 
       {/* Footer */}
-      <footer className="relative border-t border-white/10 py-8 sm:py-12 px-4 sm:px-6 bg-black/30">
+      <footer className="relative border-t py-8 sm:py-12 px-4 sm:px-6" style={{ borderColor: COLORS.divider, backgroundColor: COLORS.surfaceMuted }}>
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
             {/* Logo and description */}
             <div className="sm:col-span-2 text-center sm:text-left">
               <div className="flex items-center justify-center sm:justify-start space-x-3 mb-4">
-                <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-xl flex items-center justify-center shadow-lg" style={{ backgroundColor: COLORS.brandPrimary }}>
                   <span className="text-white font-bold text-base sm:text-lg">文</span>
                 </div>
-                <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                <span className="text-xl sm:text-2xl font-bold" style={{ color: COLORS.textPrimary }}>
                   Bundai
                 </span>
               </div>
-              <p className="text-gray-400 max-w-md leading-relaxed text-sm sm:text-base mx-auto sm:mx-0">
+              <p className="max-w-md leading-relaxed text-sm sm:text-base mx-auto sm:mx-0" style={{ color: COLORS.textSecondary }}>
                 The fastest way to learn Japanese through immersive, real-world content. Join thousands of learners
                 mastering Japanese in record time.
               </p>
@@ -800,52 +846,56 @@ export default function App() {
                 {/* Social media icons */}
                 <a
                   href="#"
-                  className="w-8 sm:w-10 h-8 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+                  className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center hover:transition-colors"
+                  style={{ backgroundColor: COLORS.surfaceElevated, color: COLORS.brandPrimary }}
                 >
-                  <span className="text-blue-400 text-sm sm:text-base">𝕏</span>
+                  <span className="text-sm sm:text-base">𝕏</span>
                 </a>
                 <a
                   href="#"
-                  className="w-8 sm:w-10 h-8 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+                  className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center hover:transition-colors"
+                  style={{ backgroundColor: COLORS.surfaceElevated, color: COLORS.accentDanger }}
                 >
-                  <span className="text-red-400 text-sm sm:text-base">▶</span>
+                  <span className="text-sm sm:text-base">▶</span>
                 </a>
                 <a
                   href="#"
-                  className="w-8 sm:w-10 h-8 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+                  className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center hover:transition-colors"
+                  style={{ backgroundColor: COLORS.surfaceElevated, color: COLORS.brandPrimary }}
                 >
-                  <span className="text-blue-600 text-sm sm:text-base">f</span>
+                  <span className="text-sm sm:text-base">f</span>
                 </a>
                 <a
                   href="#"
-                  className="w-8 sm:w-10 h-8 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+                  className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center hover:transition-colors"
+                  style={{ backgroundColor: COLORS.surfaceElevated, color: COLORS.brandSecondary }}
                 >
-                  <span className="text-pink-400 text-sm sm:text-base">📷</span>
+                  <span className="text-sm sm:text-base">📷</span>
                 </a>
               </div>
             </div>
 
             {/* Links */}
             <div className="text-center sm:text-left">
-              <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Product</h4>
+              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base" style={{ color: COLORS.textPrimary }}>Product</h4>
               <ul className="space-y-2 text-sm sm:text-base">
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
                     Features
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
                     Pricing
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
                     Mobile App
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
                     Chrome Extension
                   </a>
                 </li>
@@ -853,25 +903,25 @@ export default function App() {
             </div>
 
             <div>
-              <h4 className="text-white font-semibold mb-4">Support</h4>
+              <h4 className="font-semibold mb-4" style={{ color: COLORS.textPrimary }}>Support</h4>
               <ul className="space-y-2">
-                <li><Link to="#" className="text-gray-400 hover:text-white transition-colors">Help Center</Link></li>
-                <li><Link to="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
-                <li><Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
-                <li><Link to="/refund" className="text-gray-400 hover:text-white transition-colors">Refund Policy</Link></li>
+                <li><Link to="#" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>Help Center</Link></li>
+                <li><Link to="#" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>Contact Us</Link></li>
+                <li><Link to="/privacy" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>Terms of Service</Link></li>
+                <li><Link to="/refund" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>Refund Policy</Link></li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-white/10 pt-6 sm:pt-8 flex flex-col md:flex-row items-center justify-between text-center md:text-left">
-            <p className="text-gray-400 text-xs sm:text-sm mb-4 md:mb-0">
+          <div className="border-t pt-6 sm:pt-8 flex flex-col md:flex-row items-center justify-between text-center md:text-left" style={{ borderColor: COLORS.divider }}>
+            <p className="text-xs sm:text-sm mb-4 md:mb-0" style={{ color: COLORS.textMuted }}>
               © 2025 Bundai. All rights reserved. Made with ❤️ for Japanese learners worldwide.
             </p>
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6">
-              <span className="text-gray-400 text-xs sm:text-sm">🌟 4.9/5 rating</span>
-              <span className="text-gray-400 text-xs sm:text-sm">📱 10k+ downloads</span>
-              <span className="text-gray-400 text-xs sm:text-sm">🎯 90-day guarantee</span>
+              <span className="text-xs sm:text-sm" style={{ color: COLORS.textMuted }}>🌟 4.9/5 rating</span>
+              <span className="text-xs sm:text-sm" style={{ color: COLORS.textMuted }}>📱 10k+ downloads</span>
+              <span className="text-xs sm:text-sm" style={{ color: COLORS.textMuted }}>🎯 90-day guarantee</span>
             </div>
           </div>
         </div>
@@ -882,36 +932,36 @@ export default function App() {
           0%, 100% { transform: translateY(0px) rotate(0deg); }
           50% { transform: translateY(-20px) rotate(3deg); }
         }
-        
+
         .animate-float {
           animation: float 6s ease-in-out infinite;
         }
-        
+
         /* Custom scrollbar */
         ::-webkit-scrollbar {
           width: 8px;
         }
-        
+
         ::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.1);
+          background: #f7f5ff;
         }
-        
+
         ::-webkit-scrollbar-thumb {
-          background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+          background: linear-gradient(45deg, #7f53f5, #5632d4);
           border-radius: 4px;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(45deg, #2563eb, #7c3aed);
+          background: linear-gradient(45deg, #5632d4, #7f53f5);
         }
-        
+
         /* Smooth scroll behavior */
         html {
           scroll-behavior: smooth;
         }
           .text-shadow {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
+ }
       `}</style>
     </div>
   )
