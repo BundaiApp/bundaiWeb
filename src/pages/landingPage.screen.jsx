@@ -533,7 +533,10 @@ export default function App() {
         </div>
       </section>
 
-      {/* Demo Section */}
+      {/* Footer Section */}
+      <footer className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.background }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Logo and description */}
             <div className="sm:col-span-2 text-center sm:text-left">
               <div className="flex items-center justify-center sm:justify-start space-x-3 mb-4">
@@ -660,5 +663,5 @@ export default function App() {
  }
       `}</style>
     </div>
-    </>)
+  )
 }
