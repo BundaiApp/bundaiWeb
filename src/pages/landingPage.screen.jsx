@@ -328,7 +328,6 @@ export default function App() {
                 </div>
               </div>
             </div>
-          </section>
         </div>
       </section>
 
