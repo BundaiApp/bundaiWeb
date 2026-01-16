@@ -546,21 +546,12 @@ export default function App() {
               {/* Mobile mockup */}
               <div className="flex justify-center order-2">
                 <div className="relative">
-                  <div className="w-48 sm:w-56 h-80 sm:h-96 rounded-2xl sm:rounded-3xl border-2 sm:border-4 shadow-2xl" style={{ backgroundColor: COLORS.surfaceMuted, borderColor: COLORS.divider }}>
-                    <div className="p-3 sm:p-4 h-full">
-                      <div className="h-full rounded-xl sm:rounded-2xl flex items-center justify-center" style={{ backgroundColor: COLORS.surfaceElevated }}>
-                        <div className="text-center">
-                          <Smartphone className="w-8 sm:w-12 h-8 sm:h-12 mx-auto mb-3 sm:mb-4" style={{ color: COLORS.accentDanger }} />
-                          <div className="text-xs sm:text-sm font-semibold" style={{ color: COLORS.textPrimary }}>Quiz Mode</div>
-                          <div className="text-xs mt-2 sm:mt-3" style={{ color: COLORS.textSecondary }}>漢字: 学習</div>
-                          <div className="mt-3 sm:mt-4 space-y-1 sm:space-y-2">
-                            <div className="w-16 sm:w-24 h-1 sm:h-2 rounded mx-auto" style={{ backgroundColor: COLORS.surfaceMuted }}></div>
-                            <div className="w-12 sm:w-20 h-1 sm:h-2 rounded mx-auto" style={{ backgroundColor: COLORS.surfaceMuted }}></div>
-                            <div className="w-20 sm:w-28 h-1 sm:h-2 rounded mx-auto" style={{ backgroundColor: COLORS.accentDanger }}></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div className="rounded-2xl shadow-2xl overflow-hidden" style={{ backgroundColor: COLORS.surface }}>
+                    <img
+                      src="/quiz.png"
+                      alt="Bundai Mobile App"
+                      className="w-auto h-80 sm:h-96 object-cover"
+                    />
                   </div>
                   <div className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center animate-pulse" style={{ backgroundColor: COLORS.brandSecondary }}>
                     <Star className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
