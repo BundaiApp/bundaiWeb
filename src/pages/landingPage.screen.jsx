@@ -522,33 +522,6 @@ export default function App() {
             Watch how our revolutionary approach transforms Japanese learning from boring to brilliant.
           </p>
 
-          {/* Video player mockup */}
-          <div className="relative mx-auto max-w-2xl px-4">
-            <div className="aspect-video rounded-2xl shadow-2xl overflow-hidden" style={{ backgroundColor: COLORS.surfaceMuted }}>
-              <div className="relative h-full flex items-center justify-center" style={{ backgroundColor: COLORS.surfaceElevated }}>
-                <Button size="md" className="sm:size-lg" variant="accent">
-                  <Play className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3 group-hover:scale-110 transition-transform" />
-                  <span className="text-sm sm:text-base">Watch Demo Video</span>
-                </Button>
-
-                {/* Floating UI elements */}
-                <div className="absolute top-2 sm:top-4 left-2 sm:left-4 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm" style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}>
-                  🎌 Learning Japanese
-                </div>
-                <div className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm text-white font-medium" style={{ backgroundColor: COLORS.accentSuccess }}>
-                  Progress: 67%
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute -top-4 sm:-top-6 -right-4 sm:-right-6 w-8 sm:w-12 h-8 sm:h-12 rounded-full flex items-center justify-center animate-bounce delay-300" style={{ backgroundColor: COLORS.accentWarning }}>
-              <Languages className="w-4 sm:w-6 h-4 sm:h-6 text-white" />
-            </div>
-            <div className="absolute -bottom-4 sm:-bottom-6 -left-4 sm:-left-6 w-8 sm:w-12 h-8 sm:h-12 rounded-full flex items-center justify-center animate-pulse" style={{ backgroundColor: COLORS.brandSecondary }}>
-              <Brain className="w-4 sm:w-6 h-4 sm:h-6 text-white" />
-            </div>
-          </div>
-
           {/* Platform showcase */}
           <section id="platforms" className="mt-8 sm:mt-12">
             <div className="text-center mb-8 sm:mb-12">
@@ -556,45 +529,34 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-16 items-center px-4">
-              {/* Desktop mockup */}
-              <div className="relative order-2 lg:order-1">
-                <div className="relative mx-auto w-full max-w-md sm:max-w-lg" style={{ aspectRatio: "5/3" }}>
-                  <div className="absolute inset-0 rounded-2xl shadow-2xl" style={{ backgroundColor: COLORS.surfaceMuted, border: `1px solid ${COLORS.divider}` }}>
-                    <div className="p-4 sm:p-6 h-full">
-                      <div className="h-full rounded-xl flex items-center justify-center relative overflow-hidden" style={{ backgroundColor: COLORS.surfaceElevated }}>
-                        <div className="absolute top-2 sm:top-4 left-2 sm:left-4 flex space-x-1 sm:space-x-2">
-                          <div className="w-2 sm:w-3 h-2 sm:h-3 rounded-full" style={{ backgroundColor: COLORS.accentDanger }}></div>
-                          <div className="w-2 sm:w-3 h-2 sm:h-3 rounded-full" style={{ backgroundColor: COLORS.accentWarning }}></div>
-                          <div className="w-2 sm:w-3 h-2 sm:h-3 rounded-full" style={{ backgroundColor: COLORS.accentSuccess }}></div>
-                        </div>
-                        <div className="text-center">
-                          <Monitor className="w-8 sm:w-16 h-8 sm:h-16 mx-auto mb-2 sm:mb-4" style={{ color: COLORS.brandPrimary }} />
-                          <div className="font-semibold text-sm sm:text-base" style={{ color: COLORS.textPrimary }}>Chrome Extension Active</div>
-                          <div className="text-xs sm:text-sm mt-1 sm:mt-2" style={{ color: COLORS.textSecondary }}>Learning from YouTube</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              {/* Chrome Extension */}
+              <div className="relative order-1">
+                <div className="rounded-2xl shadow-2xl overflow-hidden" style={{ backgroundColor: COLORS.surface }}>
+                  <img
+                    src="/hell.png"
+                    alt="Bundai Chrome Extension"
+                    className="w-full h-auto"
+                  />
                 </div>
                 <div className="absolute -bottom-2 sm:-bottom-4 -right-2 sm:-right-4 w-8 sm:w-12 h-8 sm:h-12 rounded-full flex items-center justify-center animate-bounce" style={{ backgroundColor: COLORS.accentSuccess }}>
                   <Globe className="w-4 sm:w-6 h-4 sm:h-6 text-white" />
                 </div>
               </div>
 
-              {/* Mobile mockups */}
-              <div className="flex justify-center space-x-4 sm:space-x-8 order-1 lg:order-2">
+              {/* Mobile mockup */}
+              <div className="flex justify-center order-2">
                 <div className="relative">
-                  <div className="w-32 sm:w-48 h-56 sm:h-96 rounded-2xl sm:rounded-3xl border-2 sm:border-4 shadow-2xl" style={{ backgroundColor: COLORS.surfaceMuted, borderColor: COLORS.divider }}>
-                    <div className="p-2 sm:p-4 h-full">
+                  <div className="w-48 sm:w-56 h-80 sm:h-96 rounded-2xl sm:rounded-3xl border-2 sm:border-4 shadow-2xl" style={{ backgroundColor: COLORS.surfaceMuted, borderColor: COLORS.divider }}>
+                    <div className="p-3 sm:p-4 h-full">
                       <div className="h-full rounded-xl sm:rounded-2xl flex items-center justify-center" style={{ backgroundColor: COLORS.surfaceElevated }}>
                         <div className="text-center">
-                          <Smartphone className="w-6 sm:w-12 h-6 sm:h-12 mx-auto mb-2 sm:mb-4" style={{ color: COLORS.accentDanger }} />
+                          <Smartphone className="w-8 sm:w-12 h-8 sm:h-12 mx-auto mb-3 sm:mb-4" style={{ color: COLORS.accentDanger }} />
                           <div className="text-xs sm:text-sm font-semibold" style={{ color: COLORS.textPrimary }}>Quiz Mode</div>
-                          <div className="text-xs mt-1 sm:mt-2" style={{ color: COLORS.textSecondary }}>漢字: 学習</div>
-                          <div className="mt-2 sm:mt-4 space-y-1 sm:space-y-2">
+                          <div className="text-xs mt-2 sm:mt-3" style={{ color: COLORS.textSecondary }}>漢字: 学習</div>
+                          <div className="mt-3 sm:mt-4 space-y-1 sm:space-y-2">
+                            <div className="w-16 sm:w-24 h-1 sm:h-2 rounded mx-auto" style={{ backgroundColor: COLORS.surfaceMuted }}></div>
                             <div className="w-12 sm:w-20 h-1 sm:h-2 rounded mx-auto" style={{ backgroundColor: COLORS.surfaceMuted }}></div>
-                            <div className="w-10 sm:w-16 h-1 sm:h-2 rounded mx-auto" style={{ backgroundColor: COLORS.surfaceMuted }}></div>
-                            <div className="w-14 sm:w-24 h-1 sm:h-2 rounded mx-auto" style={{ backgroundColor: COLORS.accentDanger }}></div>
+                            <div className="w-20 sm:w-28 h-1 sm:h-2 rounded mx-auto" style={{ backgroundColor: COLORS.accentDanger }}></div>
                           </div>
                         </div>
                       </div>
