@@ -232,6 +232,106 @@ export default function App() {
         </div>
       </nav>
 
+      {/* Demo Section */}
+      <section id="home" className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.surfaceMuted }}>
+        <div className="max-w-5xl mx-auto text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black mb-6 sm:mb-8 leading-tight max-w-5xl mx-auto px-2" style={{ color: COLORS.textPrimary }}>
+            Start Watching{" "}
+            <span style={{ color: COLORS.brandPrimary }}>YouTube</span>
+            <br />
+            in{" "}
+            <span style={{ color: COLORS.brandSecondary }}>
+              Japanese
+            </span>{" "}
+            in{" "}
+            <span style={{ color: COLORS.accentSuccess }}>
+              3 Months
+            </span>
+          </h1>
+          <p className="text-lg sm:text-xl mb-8 sm:mb-12 max-w-3xl mx-auto px-4" style={{ color: COLORS.textSecondary }}>
+            Watch how our revolutionary approach transforms Japanese learning from boring to brilliant.
+          </p>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-16 items-center px-4 mt-12">
+              {/* Chrome Extension */}
+              <div className="relative order-1">
+                <div className="rounded-2xl shadow-2xl overflow-hidden" style={{ backgroundColor: COLORS.surface }}>
+                  <img
+                    src="/hell.png"
+                    alt="Bundai Chrome Extension"
+                    className="w-full h-auto"
+                  />
+                </div>
+                <div className="absolute -bottom-2 sm:-bottom-4 -right-2 sm:-right-4 w-8 sm:w-12 h-8 sm:h-12 rounded-full flex items-center justify-center animate-bounce" style={{ backgroundColor: COLORS.accentSuccess }}>
+                  <Globe className="w-4 sm:w-6 h-4 sm:h-6 text-white" />
+                </div>
+              </div>
+
+              {/* Mobile mockup */}
+              <div className="flex justify-center order-2">
+                <div className="relative">
+                  <div className="rounded-2xl shadow-2xl overflow-hidden" style={{ backgroundColor: COLORS.surface }}>
+                    <img
+                      src="/quiz.png"
+                      alt="Bundai Mobile App"
+                      className="w-auto h-80 sm:h-96 object-cover"
+                    />
+                  </div>
+                  <div className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center animate-pulse" style={{ backgroundColor: COLORS.brandSecondary }}>
+                    <Star className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8 sm:mt-12 px-4">
+              <a
+                href="https://chromewebstore.google.com/detail/bundai-extension-plasmo/aoencglmiihcheldbcpjlnlfnemcglfe?authuser=1&hl=en"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto"
+                style={{ backgroundColor: COLORS.textPrimary }}
+              >
+                <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
+                  <Globe className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.surface }} />
+                  <div className="text-left">
+                    <div className="text-xs" style={{ color: COLORS.textMuted }}>Available in</div>
+                    <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.surface }}>Chrome Web Store</div>
+                  </div>
+                </div>
+              </a>
+
+              <a
+                href="https://apps.apple.com/gb/app/bundai/id6751961361"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto"
+                style={{ backgroundColor: COLORS.textPrimary }}
+              >
+                <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
+                  <Download className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.surface }} />
+                  <div className="text-left">
+                    <div className="text-xs" style={{ color: COLORS.textMuted }}>Download on</div>
+                    <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.surface }}>App Store</div>
+                  </div>
+                </div>
+              </a>
+
+              <div className="rounded-2xl p-2 sm:p-3 w-full sm:w-auto opacity-70 cursor-not-allowed" style={{ backgroundColor: COLORS.surfaceElevated }}>
+                <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
+                  <Download className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.textMuted }} />
+                  <div className="text-left">
+                    <div className="text-xs" style={{ color: COLORS.textMuted }}>Get it on</div>
+                    <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.textMuted }}>Google Play</div>
+                    <div className="text-xs font-semibold" style={{ color: COLORS.brandPrimary }}>Coming Soon!</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
       {/* Pricing Section */}
       <section id="pricing" className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.surfaceMuted }}>
         <div className="max-w-5xl mx-auto">
@@ -435,119 +535,6 @@ export default function App() {
       </section>
 
       {/* Demo Section */}
-      <section id="home" className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.surfaceMuted }}>
-        <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black mb-6 sm:mb-8 leading-tight max-w-5xl mx-auto px-2" style={{ color: COLORS.textPrimary }}>
-            Start Watching{" "}
-            <span style={{ color: COLORS.brandPrimary }}>YouTube</span>
-            <br />
-            in{" "}
-            <span style={{ color: COLORS.brandSecondary }}>
-              Japanese
-            </span>{" "}
-            in{" "}
-            <span style={{ color: COLORS.accentSuccess }}>
-              3 Months
-            </span>
-          </h1>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 mt-8 sm:mt-12 px-2" style={{ color: COLORS.textPrimary }}>
-            See Bundai in
-            <span style={{ color: COLORS.accentSuccess }}> Action</span>
-          </h2>
-          <p className="text-lg sm:text-xl mb-8 sm:mb-12 max-w-3xl mx-auto px-4" style={{ color: COLORS.textSecondary }}>
-            Watch how our revolutionary approach transforms Japanese learning from boring to brilliant.
-          </p>
-
-          {/* Platform showcase */}
-          <section id="platforms" className="mt-8 sm:mt-12">
-            <div className="text-center mb-8 sm:mb-12">
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 px-2" style={{ color: COLORS.textPrimary }}>Learn Anywhere, Anytime</h3>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-16 items-center px-4">
-              {/* Chrome Extension */}
-              <div className="relative order-1">
-                <div className="rounded-2xl shadow-2xl overflow-hidden" style={{ backgroundColor: COLORS.surface }}>
-                  <img
-                    src="/hell.png"
-                    alt="Bundai Chrome Extension"
-                    className="w-full h-auto"
-                  />
-                </div>
-                <div className="absolute -bottom-2 sm:-bottom-4 -right-2 sm:-right-4 w-8 sm:w-12 h-8 sm:h-12 rounded-full flex items-center justify-center animate-bounce" style={{ backgroundColor: COLORS.accentSuccess }}>
-                  <Globe className="w-4 sm:w-6 h-4 sm:h-6 text-white" />
-                </div>
-              </div>
-
-              {/* Mobile mockup */}
-              <div className="flex justify-center order-2">
-                <div className="relative">
-                  <div className="rounded-2xl shadow-2xl overflow-hidden" style={{ backgroundColor: COLORS.surface }}>
-                    <img
-                      src="/quiz.png"
-                      alt="Bundai Mobile App"
-                      className="w-auto h-80 sm:h-96 object-cover"
-                    />
-                  </div>
-                  <div className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center animate-pulse" style={{ backgroundColor: COLORS.brandSecondary }}>
-                    <Star className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8 sm:mt-12 px-4">
-              <a
-                href="https://chromewebstore.google.com/detail/bundai-extension-plasmo/aoencglmiihcheldbcpjlnlfnemcglfe?authuser=1&hl=en"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto"
-                style={{ backgroundColor: COLORS.textPrimary }}
-              >
-                <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
-                  <Globe className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.surface }} />
-                  <div className="text-left">
-                    <div className="text-xs" style={{ color: COLORS.textMuted }}>Available in</div>
-                    <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.surface }}>Chrome Web Store</div>
-                  </div>
-                </div>
-              </a>
-
-              <a
-                href="https://apps.apple.com/gb/app/bundai/id6751961361"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto"
-                style={{ backgroundColor: COLORS.textPrimary }}
-              >
-                <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
-                  <Download className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.surface }} />
-                  <div className="text-left">
-                    <div className="text-xs" style={{ color: COLORS.textMuted }}>Download on the</div>
-                    <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.surface }}>App Store</div>
-                  </div>
-                </div>
-              </a>
-
-              <div className="rounded-2xl p-2 sm:p-3 w-full sm:w-auto opacity-70 cursor-not-allowed" style={{ backgroundColor: COLORS.surfaceElevated }}>
-                <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
-                  <Download className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.textMuted }} />
-                  <div className="text-left">
-                    <div className="text-xs" style={{ color: COLORS.textMuted }}>Get it on</div>
-                    <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.textMuted }}>Google Play</div>
-                    <div className="text-xs font-semibold" style={{ color: COLORS.brandPrimary }}>Coming Soon!</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="relative border-t py-8 sm:py-12 px-4 sm:px-6" style={{ borderColor: COLORS.divider, backgroundColor: COLORS.surfaceMuted }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
             {/* Logo and description */}
             <div className="sm:col-span-2 text-center sm:text-left">
               <div className="flex items-center justify-center sm:justify-start space-x-3 mb-4">
