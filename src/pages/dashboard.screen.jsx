@@ -1,7 +1,5 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { GlassCard } from "../components/GlassCard"
-import { topics, words as wordsConstants } from "../util/constants"
 
 export default function Dashboard() {
     const [selectedTopic, setSelectedTopic] = useState("jlpt")
@@ -12,8 +10,6 @@ export default function Dashboard() {
         { id: "strokes", label: "Stroke", subtitle: "1-24", primary: false },
         { id: "grades", label: "Grade", subtitle: "1-9", primary: false },
     ]
-
-    const wordCategories = wordsConstants
 
     const kanaCategories = [
         { id: "hiragana", label: "Hiragana", subtitle: "Japanese letters" },
@@ -219,38 +215,28 @@ export default function Dashboard() {
                 </div>
             </section>
 
-            {/* Words Section */}
+            {/* Anime Words Section */}
             <section>
-                <div className="p-4 md:p-8 rounded-2xl shadow-md" style={{ backgroundColor: '#ffffff' }}>
-                    <div className="mb-6">
+                <button
+                    onClick={() => navigate('/dashboard/anime-words')}
+                    className="w-full p-6 md:p-8 rounded-2xl shadow-md transition-all duration-300 hover:scale-[1.02] text-left"
+                    style={{ backgroundColor: '#ffffff' }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.02)'
+                        e.currentTarget.style.boxShadow = '0 10px 20px rgba(127, 83, 245, 0.2)'
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)'
+                        e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)'
+                    }}
+                >
+                    <div>
                         <h2 className="text-2xl md:text-3xl font-bold mb-2 break-words" style={{ color: '#1f1a3d' }}>
-                            Words <span className="text-xl md:text-2xl">文甫</span>
+                            Anime Words
                         </h2>
-                        <p className="text-sm md:text-base break-words" style={{ color: '#5b6070' }}>Words with Hiragana</p>
+                        <p className="text-sm md:text-base break-words" style={{ color: '#5b6070' }}>Top 1000 Anime Words</p>
                     </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {wordCategories.map((category) => (
-                            <button
-                                key={category.topicName}
-                                onClick={() => console.log(`Navigate to ${category.topicName}`)}
-                                className="p-6 rounded-2xl transition-all duration-300 hover:scale-105 text-center"
-                                style={{ backgroundColor: '#dcd5ff', color: '#5632d4' }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#8c7bfa'
-                                    e.currentTarget.style.color = '#ffffff'
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#dcd5ff'
-                                    e.currentTarget.style.color = '#5632d4'
-                                }}
-                            >
-                                <div className="text-xl font-bold mb-2">{category.header}</div>
-                                <div className="text-sm opacity-70">{category.subtitle}</div>
-                            </button>
-                        ))}
-                    </div>
-                </div>
+                </button>
             </section>
 
             {/* Hiragana & Katakana Section */}

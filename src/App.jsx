@@ -17,6 +17,7 @@ import SRSEngine from './pages/srsEngine.screen';
 import StudyEngine from './pages/studyEngine.screen';
 import Levels from './pages/levels.screen';
 import LevelDetails from './pages/levelDetails.screen';
+import AnimeWords from './pages/animeWords.screen';
 import Similars from './pages/similars.screen';
 import SimilarDetail from './pages/similarDetail.screen';
 import Settings from './pages/settings.screen';
@@ -45,6 +46,7 @@ export default function App() {
         <Route path="/dashboard/study-engine" element={<DashboardLayout><StudyEngine /></DashboardLayout>} />
         <Route path="/dashboard/levels" element={<DashboardLayout><Levels /></DashboardLayout>} />
         <Route path="/dashboard/level-details" element={<DashboardLayout><LevelDetails /></DashboardLayout>} />
+        <Route path="/dashboard/anime-words" element={<DashboardLayout><AnimeWords /></DashboardLayout>} />
         <Route path="/dashboard/similars" element={<DashboardLayout><Similars /></DashboardLayout>} />
         <Route path="/dashboard/similar-detail" element={<DashboardLayout><SimilarDetail /></DashboardLayout>} />
         <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />

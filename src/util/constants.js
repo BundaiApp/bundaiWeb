@@ -16,29 +16,6 @@ export const topics = [
     },
 ];
 
-export const words = [
-    {
-        topicName: "verbs",
-        header: "Verbs",
-        subtitle: "300 verbs",
-    },
-    {
-        topicName: "nouns",
-        header: "Nouns",
-        subtitle: "350 nouns",
-    },
-    {
-        topicName: "adjectives",
-        header: "Adj",
-        subtitle: "adjectives",
-    },
-    {
-        topicName: "adverbs",
-        header: "Adverbs",
-        subtitle: "100 Adverbs",
-    },
-];
-
 export const kana = [
     {
         topicName: "katakana",
