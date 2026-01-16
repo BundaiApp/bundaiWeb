@@ -338,6 +338,11 @@ export default function App() {
       <section id="pricing" className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.surfaceMuted }}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
+            <div className="inline-block px-4 sm:px-6 py-2 sm:py-3 rounded-full mb-6 sm:mb-8" style={{ backgroundColor: COLORS.successSoft, border: `1px solid ${COLORS.accentSuccess}` }}>
+              <span className="text-sm sm:text-base font-semibold" style={{ color: COLORS.accentSuccess }}>
+                🔥 Lifetime free for first 100 users
+              </span>
+            </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2" style={{ color: COLORS.textPrimary }}>
               Choose Your
               <span style={{ color: COLORS.brandPrimary }}>
@@ -350,46 +355,13 @@ export default function App() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto px-4">
-            {/* Free Plan */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto px-4">
+            {/* Weekly Plan */}
             <div className="p-6 sm:p-8 text-center rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
               <div className="mb-6">
-                <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>Free</h3>
-                <div className="text-3xl sm:text-4xl font-black mb-2" style={{ color: COLORS.textPrimary }}>$0</div>
-                <div style={{ color: COLORS.textMuted }}>Forever</div>
-              </div>
-              <ul className="text-left space-y-3 mb-8 text-sm sm:text-base">
-                <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
-                  <span style={{ color: COLORS.textSecondary }}>50 Kanji characters</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
-                  <span style={{ color: COLORS.textSecondary }}>Basic vocabulary (100 words)</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
-                  <span style={{ color: COLORS.textSecondary }}>Daily practice sessions</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
-                  <span style={{ color: COLORS.textSecondary }}>Mobile app access</span>
-                </li>
-              </ul>
-              <Button variant="outline" className="w-full" onClick={handleLoginClick} style={{ backgroundColor: 'transparent' }}>
-                Get Started Free
-              </Button>
-            </div>
-
-            {/* Premium Plan */}
-            <div className="p-6 sm:p-8 text-center relative md:scale-105 rounded-2xl shadow-xl" style={{ backgroundColor: COLORS.surface, border: `2px solid ${COLORS.brandPrimary}` }}>
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-white" style={{ backgroundColor: COLORS.brandPrimary }}>
-                Most Popular
-              </div>
-              <div className="mb-6">
-                <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>Premium</h3>
-                <div className="text-3xl sm:text-4xl font-black mb-2" style={{ color: COLORS.textPrimary }}>$19</div>
-                <div style={{ color: COLORS.textMuted }}>per month</div>
+                <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>Weekly</h3>
+                <div className="text-3xl sm:text-4xl font-black mb-2" style={{ color: COLORS.textPrimary }}>$2.99</div>
+                <div style={{ color: COLORS.textMuted }}>per week</div>
               </div>
               <ul className="text-left space-y-3 mb-8 text-sm sm:text-base">
                 <li className="flex items-center">
@@ -417,27 +389,46 @@ export default function App() {
                   <span style={{ color: COLORS.textSecondary }}>Unlimited practice sessions</span>
                 </li>
               </ul>
-              <Button variant="primary" className="w-full" onClick={handleLoginClick}>
-                Start Premium Trial
+              <Button variant="outline" className="w-full" onClick={handleLoginClick} style={{ backgroundColor: 'transparent' }}>
+                Start Weekly
               </Button>
             </div>
 
-            {/* Lifetime Plan */}
-            <div className="p-6 sm:p-8 text-center rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
+            {/* Yearly Plan */}
+            <div className="p-6 sm:p-8 text-center relative md:scale-105 rounded-2xl shadow-xl" style={{ backgroundColor: COLORS.surface, border: `2px solid ${COLORS.brandPrimary}` }}>
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-white" style={{ backgroundColor: COLORS.brandPrimary }}>
+                Best Value
+              </div>
               <div className="mb-6">
-                <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>Lifetime</h3>
-                <div className="text-3xl sm:text-4xl font-black mb-2" style={{ color: COLORS.textPrimary }}>$199</div>
-                <div style={{ color: COLORS.textMuted }}>One-time payment</div>
-                <div className="text-sm mt-1" style={{ color: COLORS.accentSuccess }}>Save $429!</div>
+                <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>Yearly</h3>
+                <div className="text-3xl sm:text-4xl font-black mb-2" style={{ color: COLORS.textPrimary }}>$29.99</div>
+                <div style={{ color: COLORS.textMuted }}>per year</div>
+                <div className="text-sm mt-1" style={{ color: COLORS.accentSuccess }}>Save $125!</div>
               </div>
               <ul className="text-left space-y-3 mb-8 text-sm sm:text-base">
                 <li className="flex items-center">
                   <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
-                  <span style={{ color: COLORS.textSecondary }}>Everything in Premium</span>
+                  <span style={{ color: COLORS.textSecondary }}>All 2000 Kanji characters</span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
-                  <span style={{ color: COLORS.textSecondary }}>Lifetime updates</span>
+                  <span style={{ color: COLORS.textSecondary }}>Complete vocabulary (10,000+ words)</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>YouTube extension</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>AI-powered SRS system</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Progress analytics</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
+                  <span style={{ color: COLORS.textSecondary }}>Unlimited practice sessions</span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
@@ -447,13 +438,9 @@ export default function App() {
                   <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
                   <span style={{ color: COLORS.textSecondary }}>Exclusive features</span>
                 </li>
-                <li className="flex items-center">
-                  <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0" style={{ color: COLORS.accentSuccess }} />
-                  <span style={{ color: COLORS.textSecondary }}>No monthly fees ever</span>
-                </li>
               </ul>
-              <Button variant="success" className="w-full" onClick={handleLoginClick}>
-                Get Lifetime Access
+              <Button variant="primary" className="w-full" onClick={handleLoginClick}>
+                Start Yearly
               </Button>
             </div>
           </div>
