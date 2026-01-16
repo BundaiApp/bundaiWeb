@@ -1,429 +1,315 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useQuery } from "@apollo/client/react"
 import { useNavigate } from "react-router-dom"
-import { RefreshCw } from "lucide-react"
+import { RefreshCw, Play, Book, MessageSquare, Volume2 } from "lucide-react"
 import COLORS from "../theme/colors"
-import { getLevelContent } from "../util/levelSystem"
+import { LEVEL_SYSTEM_CONFIG } from "../util/levelSystem"
 import FIND_PENDING_FLASHCARDS from "../graphql/queries/findPendingCards.query"
-
-const ONE_HOUR_MS = 60 * 60 * 1000
-const ONE_DAY_MS = 24 * ONE_HOUR_MS
-const LEVEL_PROGRESS_DOTS = new Array(6).fill(null)
-const CURRENT_LEVEL = 10 // Static for now, will be dynamic later
-
-const KANA_ONLY_REGEX = /^[\u3040-\u309F\u30A0-\u30FFー・\s]+$/
-
-const isKanaOnly = (value) => {
-    if (!value || typeof value !== 'string') return false
-    const trimmed = value.trim()
-    if (!trimmed) return false
-    return KANA_ONLY_REGEX.test(trimmed)
-}
-
-const parseDate = (value) => {
-    if (!value) return null
-    const date = new Date(value)
-    return Number.isNaN(date.getTime()) ? null : date
-}
-
-const formatRelative = (target, now = new Date()) => {
-    if (!target) return null
-    const diff = target.getTime() - now.getTime()
-    const abs = Math.abs(diff)
-
-    if (abs < 60 * 1000) return diff >= 0 ? 'in <1m' : '<1m ago'
-    if (abs < ONE_HOUR_MS) {
-        const minutes = Math.round(abs / (60 * 1000))
-        return diff >= 0 ? `in ${minutes}m` : `${minutes}m ago`
-    }
-    if (abs < ONE_DAY_MS) {
-        const hours = Math.round(abs / ONE_HOUR_MS)
-        return diff >= 0 ? `in ${hours}h` : `${hours}h ago`
-    }
-    const days = Math.round(abs / ONE_DAY_MS)
-    return diff >= 0 ? `in ${days}d` : `${days}d ago`
-}
+import GET_FLASHCARDS_BY_LEVEL from "../graphql/queries/getFlashCardsByLevel.query"
+import ME_QUERY from "../graphql/queries/me.query"
 
 export default function SRS() {
     const navigate = useNavigate()
-    const userId = localStorage.getItem("userId") || "defaultUser"
     const [refreshing, setRefreshing] = useState(false)
+    const [currentLevel, setCurrentLevel] = useState(10)
+    const userId = localStorage.getItem("userId") || "defaultUser"
 
-    const { data, loading, error, refetch } = useQuery(FIND_PENDING_FLASHCARDS, {
-        variables: { userId }
+    const isGuest = !userId || userId === "defaultUser"
+
+    const { data: userData, refetch: refetchUser } = useQuery(ME_QUERY, {
+        variables: { _id: userId },
+        skip: isGuest,
+        fetchPolicy: "network-only"
     })
 
-    const pendingCards = data?.getPendingFlashCards ?? []
-
-    // Calculate metrics from pending cards
-    const metrics = useMemo(() => {
-        if (!pendingCards.length) {
-            return {
-                totalPending: 0,
-                dueNowCount: 0,
-                dueSoonCount: 0,
-                nextDueDate: null,
-                lastReviewDate: null
-            }
+    useEffect(() => {
+        if (userData?.me?.currentLevel) {
+            setCurrentLevel(userData.me.currentLevel)
         }
+    }, [userData])
 
-        const now = new Date()
-        let dueNowCount = 0
-        let dueSoonCount = 0
-        let nextDueDate = null
-        let lastReviewDate = null
+    const { data: pendingData, loading: pendingLoading, error: pendingError, refetch: refetchPending } = useQuery(FIND_PENDING_FLASHCARDS, {
+        variables: { userId },
+        skip: isGuest,
+        fetchPolicy: "network-only"
+    })
 
-        pendingCards.forEach((card) => {
-            const nextReviewDate = parseDate(card.nextReview) || now
-            const lastSeenDate = parseDate(card.lastSeen)
+    const { data: levelCardsData, loading: levelLoading, refetch: refetchLevelCards } = useQuery(GET_FLASHCARDS_BY_LEVEL, {
+        variables: { userId, level: currentLevel },
+        skip: isGuest,
+        fetchPolicy: "network-only"
+    })
 
-            if (!card.nextReview || nextReviewDate <= now) {
-                dueNowCount += 1
-            } else if (nextReviewDate.getTime() - now.getTime() <= ONE_DAY_MS) {
-                dueSoonCount += 1
-            }
+    const displayKanji = useMemo(() => {
+        if (!levelCardsData?.getFlashCardsByLevel) return []
+        return levelCardsData.getFlashCardsByLevel.filter(
+            (card) => card.kanjiName && card.kanjiName.length === 1
+        )
+    }, [levelCardsData])
 
-            if (!nextDueDate || nextReviewDate < nextDueDate) {
-                nextDueDate = nextReviewDate
-            }
+    const displayWords = useMemo(() => {
+        if (!levelCardsData?.getFlashCardsByLevel) return []
+        return levelCardsData.getFlashCardsByLevel.filter(
+            (card) => card.kanjiName && card.kanjiName.length > 1
+        )
+    }, [levelCardsData])
 
-            if (lastSeenDate && (!lastReviewDate || lastSeenDate > lastReviewDate)) {
-                lastReviewDate = lastSeenDate
-            }
-        })
+    const studyQueueCards = useMemo(() => {
+        const allCurrentLevelCards = [...displayKanji, ...displayWords]
+        return allCurrentLevelCards.filter((card) => (card.rating || 0) === 0)
+    }, [displayKanji, displayWords])
 
-        return {
-            totalPending: pendingCards.length,
-            dueNowCount,
-            dueSoonCount,
-            nextDueDate,
-            lastReviewDate
-        }
-    }, [pendingCards])
+    const reviewQueueCards = useMemo(() => {
+        if (!pendingData?.getPendingFlashCards) return []
+        return pendingData.getPendingFlashCards.filter(
+            (card) => (card.rating || 0) > 0
+        )
+    }, [pendingData])
 
-    // Get learned set
-    const learnedSet = useMemo(() => {
-        if (!pendingCards.length) return new Set()
+    const studyCount = studyQueueCards.length
+    const reviewCount = reviewQueueCards.length
 
-        const collection = new Set()
-        pendingCards.forEach((card) => {
-            if (card?.kanjiName) collection.add(card.kanjiName)
-            if (Array.isArray(card?.hiragana)) {
-                card.hiragana.forEach((reading) => {
-                    if (reading) collection.add(reading)
-                })
-            } else if (card?.hiragana) {
-                collection.add(card.hiragana)
-            }
-        })
-        return collection
-    }, [pendingCards])
+    const levelProgress = useMemo(() => {
+        const allCards = [...displayKanji, ...displayWords]
+        const totalRating = allCards.reduce((sum, card) => {
+            const rating = card.rating || 0
+            return sum + rating
+        }, 0)
 
-    // Get level content
-    const levelData = useMemo(() => {
-        try {
-            const data = getLevelContent(CURRENT_LEVEL)
-            const kanjiList = Array.isArray(data?.kanji) ? data.kanji : []
-            const rawWordList = Array.isArray(data?.words) ? data.words : []
-            const soundList = rawWordList.filter((word) => isKanaOnly(word.word))
-            const wordList = rawWordList.filter((word) => !isKanaOnly(word.word))
-
-            const learnedKanji = kanjiList.filter((item) => learnedSet.has(item.kanji)).length
-            const learnedWords = wordList.filter((item) => learnedSet.has(item.word)).length
-            const learnedSounds = soundList.filter((item) => learnedSet.has(item.word)).length
-
-            const totalItems = kanjiList.length + wordList.length + soundList.length
-            const learnedItems = learnedKanji + learnedWords + learnedSounds
-            const progress = totalItems > 0 ? Math.min(1, learnedItems / totalItems) : 0
-
-            return {
-                progress,
-                totals: {
-                    kanji: kanjiList.length,
-                    words: wordList.length,
-                    sound: soundList.length,
-                    total: totalItems
-                },
-                learned: {
-                    kanji: learnedKanji,
-                    words: learnedWords,
-                    sound: learnedSounds,
-                    total: learnedItems
-                },
-                kanjiList,
-                wordList,
-                soundList
-            }
-        } catch (err) {
-            console.warn(`Unable to load level ${CURRENT_LEVEL} data`, err)
-            return {
-                progress: 0,
-                totals: { kanji: 0, words: 0, sound: 0, total: 0 },
-                learned: { kanji: 0, words: 0, sound: 0, total: 0 },
-                kanjiList: [],
-                wordList: [],
-                soundList: []
-            }
-        }
-    }, [learnedSet])
+        const maxPossibleRating = allCards.length * 7
+        const progressPercentage =
+            maxPossibleRating > 0 ? (totalRating / maxPossibleRating) * 100 : 0
+        return Math.round(progressPercentage)
+    }, [displayKanji, displayWords])
 
     const handleRefresh = async () => {
         try {
             setRefreshing(true)
-            await refetch()
+            await Promise.all([refetchUser(), refetchPending(), refetchLevelCards()])
         } finally {
             setRefreshing(false)
         }
     }
 
-    const handleStartReview = () => {
-        if (!pendingCards.length || metrics.dueNowCount === 0) {
-            alert('No cards to review right now')
+    const handleStartStudy = () => {
+        if (isGuest) {
+            alert("Please sign in to use this feature")
             return
         }
-        // Filter only cards that are due now
-        const dueCards = pendingCards.filter(card => {
-            const nextReviewDate = parseDate(card.nextReview)
-            return !card.nextReview || !nextReviewDate || nextReviewDate <= new Date()
-        })
-        navigate('/dashboard/srs-engine', { state: { questionsArray: dueCards } })
+        if (studyQueueCards.length === 0) {
+            alert("No cards to study!")
+            return
+        }
+        navigate("/dashboard/study-engine", { state: { questionsArray: studyQueueCards } })
+    }
+
+    const handleStartReview = () => {
+        if (isGuest) {
+            alert("Please sign in to use this feature")
+            return
+        }
+        if (reviewQueueCards.length === 0) {
+            alert("No cards due for review!")
+            return
+        }
+        navigate("/dashboard/srs-engine", { state: { questionsArray: reviewQueueCards } })
+    }
+
+    const handleViewAllLevels = () => {
+        navigate("/dashboard/levels")
     }
 
     const handleKanjiClick = (item, index) => {
-        navigate('/dashboard/kanji-detail', {
+        navigate("/dashboard/kanji-detail", {
             state: {
                 paramsData: item,
-                wholeArr: levelData.kanjiList,
+                wholeArr: displayKanji,
                 itemIndex: index,
-                title: item.kanji
+                title: item.kanjiName
             }
         })
     }
 
+    const loading = pendingLoading || levelLoading
+    const error = pendingError
+
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: COLORS.background }}>
-                <div className="text-center">
-                    <RefreshCw className="w-12 h-12 animate-spin mx-auto mb-4" style={{ color: COLORS.brandPrimary }} />
-                    <p style={{ color: COLORS.textPrimary }}>Loading your review queue...</p>
-                </div>
+                <RefreshCw className="w-12 h-12 animate-spin" style={{ color: COLORS.interactivePrimary }} />
             </div>
         )
     }
 
     if (error) {
         return (
-            <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: COLORS.background }}>
-                <div className="text-center">
-                    <p className="text-xl font-bold mb-4" style={{ color: COLORS.textPrimary }}>
-                        Unable to load your queue
-                    </p>
-                    <p className="mb-4" style={{ color: COLORS.textSecondary }}>
-                        Tap below to try again.
-                    </p>
-                    <button
-                        onClick={() => refetch()}
-                        className="px-6 py-3 rounded-xl font-bold"
-                        style={{ backgroundColor: COLORS.brandPrimary, color: COLORS.interactiveTextOnPrimary }}
-                    >
-                        Retry
-                    </button>
-                </div>
+            <div className="flex flex-col items-center justify-center min-h-screen p-4" style={{ backgroundColor: COLORS.background }}>
+                <h2 className="text-xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>
+                    Unable to load your queue
+                </h2>
+                <p className="text-sm mb-4" style={{ color: COLORS.interactiveTextInactive }}>
+                    Tap below to try again.
+                </p>
+                <button
+                    onClick={() => refetchPending()}
+                    className="px-6 py-3 rounded-xl font-bold"
+                    style={{ backgroundColor: COLORS.interactivePrimary, color: COLORS.interactiveTextOnPrimary }}
+                >
+                    Retry
+                </button>
             </div>
         )
     }
 
-    const queueIsEmpty = metrics.totalPending === 0
-    const nextDueLabel = metrics.nextDueDate
-        ? (metrics.nextDueDate.getTime() - Date.now() <= 0 ? 'Due now' : formatRelative(metrics.nextDueDate))
-        : 'Ready now'
-
-    const lastReviewLabel = metrics.lastReviewDate ? formatRelative(metrics.lastReviewDate)?.replace(/^in\s*/, '').trim() : null
-
-    const startButtonLabel = queueIsEmpty
-        ? 'No cards to review'
-        : metrics.dueNowCount
-            ? `Review ${metrics.dueNowCount} due`
-            : 'Review queue'
-
-    const progressPercent = Math.round(levelData.progress * 100)
-
     return (
-        <div className="max-w-7xl mx-auto space-y-8">
-            {/* Header with refresh */}
-            <div className="flex items-center justify-between mb-8">
-                <div>
-                    <h1 className="text-3xl md:text-4xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>
-                        SRS Review
-                    </h1>
-                    <p style={{ color: COLORS.textSecondary }}>
-                        Spaced repetition system for long-term retention
-                    </p>
-                </div>
-                <button
-                    onClick={handleRefresh}
-                    disabled={refreshing}
-                    className="p-3 rounded-xl transition-all duration-300 hover:scale-105"
-                    style={{ backgroundColor: COLORS.interactiveSurface }}
-                >
-                    <RefreshCw
-                        className={`w-6 h-6 ${refreshing ? 'animate-spin' : ''}`}
-                        style={{ color: COLORS.brandPrimary }}
-                    />
-                </button>
-            </div>
-
+        <div className="max-w-5xl mx-auto p-4 md:p-6 space-y-6" style={{ backgroundColor: COLORS.background }}>
             {/* Level Progress Card */}
-            <div className="p-6 md:p-8 rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
-                <div className="flex items-center justify-between mb-4">
+            <div className="rounded-2xl p-6 shadow-lg" style={{ backgroundColor: COLORS.surface }}>
+                <div className="flex justify-between items-center mb-4">
                     <div>
-                        <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>
-                            Level {CURRENT_LEVEL}
+                        <h2 className="text-xl font-bold" style={{ color: COLORS.textPrimary }}>
+                            Level {currentLevel}
                         </h2>
-                        <p style={{ color: COLORS.textSecondary }}>
-                            {levelData.learned.total} of {levelData.totals.total} items learned
+                        <p className="text-sm" style={{ color: COLORS.interactiveTextInactive }}>
+                            {levelProgress}% complete
                         </p>
                     </div>
-                    <div
-                        className="px-6 py-3 rounded-full text-2xl font-bold"
-                        style={{ backgroundColor: COLORS.brandPrimary, color: COLORS.interactiveTextOnPrimary }}
-                    >
-                        {progressPercent}%
+                    <div className="px-4 py-2 rounded-full" style={{ backgroundColor: COLORS.brandPrimary }}>
+                        <span className="font-bold text-sm" style={{ color: COLORS.interactiveTextOnPrimary }}>
+                            {levelProgress}%
+                        </span>
                     </div>
                 </div>
 
-                <div className="w-full rounded-full h-3 mb-6" style={{ backgroundColor: COLORS.interactiveSurface }}>
+                {/* Progress Bar */}
+                <div className="h-2 rounded-full mb-4" style={{ backgroundColor: COLORS.interactiveSurface }}>
                     <div
-                        className="h-3 rounded-full transition-all duration-500"
-                        style={{
-                            width: `${progressPercent}%`,
-                            background: `linear-gradient(90deg, ${COLORS.brandPrimary} 0%, ${COLORS.brandSecondary} 100%)`
-                        }}
+                        className="h-full rounded-full transition-all duration-300"
+                        style={{ backgroundColor: COLORS.brandPrimary, width: `${levelProgress}%` }}
                     />
                 </div>
-
-                <div className="grid grid-cols-3 gap-6 mb-6">
-                    <div className="text-center">
-                        <div className="text-sm font-medium mb-1" style={{ color: COLORS.kanjiHighlight }}>
-                            KANJI
-                        </div>
-                        <div className="text-2xl font-bold" style={{ color: COLORS.textPrimary }}>
-                            {levelData.learned.kanji}/{levelData.totals.kanji}
-                        </div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-sm font-medium mb-1" style={{ color: COLORS.cardWord }}>
-                            WORDS
-                        </div>
-                        <div className="text-2xl font-bold" style={{ color: COLORS.textPrimary }}>
-                            {levelData.learned.words}/{levelData.totals.words}
-                        </div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-sm font-medium mb-1" style={{ color: COLORS.cardSupport }}>
-                            SOUNDS
-                        </div>
-                        <div className="text-2xl font-bold" style={{ color: COLORS.textPrimary }}>
-                            {levelData.learned.sound}/{levelData.totals.sound || '—'}
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            {/* Review Queue Card */}
-            <div
-                className="p-6 md:p-8 rounded-2xl shadow-lg text-center"
-                style={{
-                    backgroundColor: COLORS.brandPrimary,
-                    border: `2px solid ${COLORS.brandPrimaryDark}`
-                }}
+            {/* View All Levels Button */}
+            <button
+                onClick={handleViewAllLevels}
+                className="w-full py-3 rounded-xl font-bold transition-all duration-300"
+                style={{ backgroundColor: COLORS.cardWord, color: COLORS.surface }}
             >
-                <div className="text-lg mb-2" style={{ color: COLORS.interactiveTextOnPrimary, opacity: 0.9 }}>
-                    Review queue
-                </div>
-                <div className="text-7xl md:text-8xl font-bold mb-4" style={{ color: COLORS.interactiveTextOnPrimary }}>
-                    {metrics.dueNowCount}
-                </div>
-                <div className="text-xl mb-4" style={{ color: COLORS.interactiveTextOnPrimary }}>
-                    {queueIsEmpty ? 'All clear!' : metrics.dueNowCount ? 'Cards ready right now' : 'Scheduled and waiting'}
-                </div>
+                View all levels
+            </button>
 
-                <div className="flex items-center justify-center gap-3 mb-8 flex-wrap">
-                    <div
-                        className="px-4 py-2 rounded-full text-sm"
-                        style={{ backgroundColor: COLORS.brandPrimaryDark, color: COLORS.interactiveTextOnPrimary }}
+            {isGuest ? (
+                <div className="rounded-2xl p-6 text-center shadow-lg" style={{ backgroundColor: COLORS.surface }}>
+                    <h2 className="text-xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>
+                        Track Your Progress
+                    </h2>
+                    <p className="text-sm mb-4" style={{ color: COLORS.textSecondary }}>
+                        Sign up to use spaced repetition and master kanji & vocabulary
+                    </p>
+                    <button
+                        onClick={() => navigate("/login")}
+                        className="px-8 py-3 rounded-xl font-bold"
+                        style={{ backgroundColor: COLORS.brandPrimary, color: COLORS.interactiveTextOnPrimary }}
                     >
-                        {nextDueLabel}
-                    </div>
-                    {lastReviewLabel && (
-                        <div className="text-sm" style={{ color: COLORS.interactiveTextOnPrimary, opacity: 0.8 }}>
-                            Last session {lastReviewLabel}
-                        </div>
-                    )}
+                        Sign Up
+                    </button>
                 </div>
-
-                <button
-                    onClick={handleStartReview}
-                    disabled={queueIsEmpty || metrics.dueNowCount === 0}
-                    className="w-full max-w-md mx-auto py-4 rounded-xl text-lg font-bold transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{
-                        backgroundColor: COLORS.surface,
-                        color: COLORS.brandPrimary
-                    }}
-                >
-                    {startButtonLabel}
-                </button>
-            </div>
-
-            {/* Kanji Preview Section */}
-            {levelData.kanjiList.length > 0 && (
-                <div>
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-3">
-                            <h2 className="text-2xl font-bold" style={{ color: COLORS.textPrimary }}>
-                                Kanji
-                            </h2>
-                            <span
-                                className="text-sm font-bold px-3 py-1 rounded-full"
-                                style={{ backgroundColor: COLORS.brandPrimary, color: COLORS.interactiveTextOnPrimary }}
+            ) : (
+                <>
+                    {/* Queue Cards Row */}
+                    <div className="grid grid-cols-2 gap-4">
+                        {/* Study Queue */}
+                        <div
+                            className="rounded-2xl p-6 shadow-lg text-center"
+                            style={{ backgroundColor: COLORS.surface, opacity: studyCount === 0 ? 0.9 : 1 }}
+                        >
+                            <div className="text-5xl font-bold mb-2" style={{ color: COLORS.brandPrimary }}>
+                                {studyCount}
+                            </div>
+                            <div className="text-base font-bold mb-4" style={{ color: COLORS.textPrimary }}>
+                                Study queue
+                            </div>
+                            <button
+                                onClick={handleStartStudy}
+                                className="w-full py-3 rounded-xl font-bold transition-all duration-300"
+                                style={{ backgroundColor: COLORS.cardKanji, color: COLORS.surface }}
                             >
-                                {levelData.totals.kanji}
-                            </span>
+                                Study
+                            </button>
                         </div>
+
+                        {/* Review Queue */}
+                        <div className="rounded-2xl p-6 shadow-lg text-center" style={{ backgroundColor: COLORS.surface }}>
+                            <div className="text-5xl font-bold mb-2" style={{ color: COLORS.brandPrimary }}>
+                                {reviewCount}
+                            </div>
+                            <div className="text-base font-bold mb-4" style={{ color: COLORS.textPrimary }}>
+                                Review queue
+                            </div>
+                            <button
+                                onClick={handleStartReview}
+                                className="w-full py-3 rounded-xl font-bold transition-all duration-300"
+                                style={{ backgroundColor: COLORS.cardKanji, color: COLORS.surface }}
+                            >
+                                Review
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {/* Kanji Section */}
+            {displayKanji.length > 0 && (
+                <div>
+                    <div className="flex items-center space-x-3 mb-4">
+                        <h2 className="text-xl font-bold" style={{ color: COLORS.textPrimary }}>
+                            Kanji
+                        </h2>
+                        <span
+                            className="text-sm font-bold px-3 py-1 rounded-full"
+                            style={{ backgroundColor: COLORS.brandPrimary, color: COLORS.interactiveTextOnPrimary }}
+                        >
+                            {displayKanji.length}
+                        </span>
                     </div>
 
                     <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-3">
-                        {levelData.kanjiList.map((item, index) => {
-                            const isLearned = learnedSet.has(item.kanji)
-                            const activeDots = isLearned ? LEVEL_PROGRESS_DOTS.length : 0
+                        {displayKanji.map((card, index) => {
+                            const rating = card.rating || 0
+                            const isBurned = card.burned
+                            const activeDots = isBurned ? 7 : rating
 
                             return (
                                 <button
-                                    key={index}
-                                    onClick={() => handleKanjiClick(item, index)}
+                                    key={`${card.kanjiName}-${index}`}
+                                    onClick={() => handleKanjiClick(card, index)}
                                     className="flex flex-col items-center"
                                 >
                                     <div
                                         className="aspect-square w-full rounded-xl flex items-center justify-center text-2xl md:text-3xl font-bold transition-all duration-300 hover:scale-105 shadow-lg mb-2 p-2"
                                         style={{
-                                            backgroundColor: COLORS.kanjiHighlight,
-                                            color: COLORS.surface
+                                            backgroundColor: isBurned ? COLORS.interactiveTextInactive : 'transparent',
+                                            border: `2px solid ${COLORS.cardKanji}`,
+                                            color: isBurned ? COLORS.surface : COLORS.textPrimary
                                         }}
                                     >
-                                        {item.kanji}
+                                        {card.kanjiName}
                                     </div>
-                                    <div className="flex space-x-1">
-                                        {LEVEL_PROGRESS_DOTS.map((_, dotIndex) => (
-                                            <div
-                                                key={dotIndex}
-                                                className="w-1 h-1 rounded-full"
-                                                style={{
-                                                    border: `1px solid ${COLORS.kanjiHighlight}`,
-                                                    backgroundColor: dotIndex < activeDots ? COLORS.kanjiHighlight : 'transparent'
-                                                }}
-                                            />
-                                        ))}
-                                    </div>
+                                    {!isBurned && (
+                                        <div className="flex space-x-1">
+                                            {Array.from({ length: 7 }).map((_, dotIndex) => (
+                                                <div
+                                                    key={dotIndex}
+                                                    className="w-1 h-1 rounded-full"
+                                                    style={{
+                                                        border: `1px solid ${COLORS.cardKanji}`,
+                                                        backgroundColor: dotIndex < activeDots ? COLORS.cardKanji : 'transparent'
+                                                    }}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
                                 </button>
                             )
                         })}
@@ -431,61 +317,77 @@ export default function SRS() {
                 </div>
             )}
 
-            {/* Words Preview Section */}
-            {levelData.wordList.length > 0 && (
+            {/* Words Section */}
+            {displayWords.length > 0 && (
                 <div>
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-3">
-                            <h2 className="text-2xl font-bold" style={{ color: COLORS.textPrimary }}>
-                                Words
-                            </h2>
-                            <span
-                                className="text-sm font-bold px-3 py-1 rounded-full"
-                                style={{ backgroundColor: COLORS.brandPrimary, color: COLORS.interactiveTextOnPrimary }}
-                            >
-                                {levelData.totals.words}
-                            </span>
-                        </div>
+                    <div className="flex items-center space-x-3 mb-4">
+                        <h2 className="text-xl font-bold" style={{ color: COLORS.textPrimary }}>
+                            Words
+                        </h2>
+                        <span
+                            className="text-sm font-bold px-3 py-1 rounded-full"
+                            style={{ backgroundColor: COLORS.brandPrimary, color: COLORS.interactiveTextOnPrimary }}
+                        >
+                            {displayWords.length}
+                        </span>
                     </div>
 
                     <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-3">
-                        {levelData.wordList.map((item, index) => {
-                            const isLearned = learnedSet.has(item.word)
-                            const activeDots = isLearned ? LEVEL_PROGRESS_DOTS.length : 0
+                        {displayWords.map((card, index) => {
+                            const rating = card.rating || 0
+                            const isBurned = card.burned
+                            const activeDots = isBurned ? 7 : rating
+                            const isLongWord = (card.kanjiName?.length ?? 0) > 4
 
                             return (
                                 <button
-                                    key={index}
+                                    key={`${card.kanjiName}-${index}`}
                                     className="flex flex-col items-center"
                                 >
                                     <div
                                         className="aspect-square w-full rounded-xl flex items-center justify-center text-2xl md:text-3xl font-bold transition-all duration-300 hover:scale-105 shadow-lg mb-2 p-2"
                                         style={{
-                                            backgroundColor: COLORS.cardWord,
-                                            color: COLORS.surface
+                                            backgroundColor: isBurned ? COLORS.interactiveTextInactive : 'transparent',
+                                            border: `2px solid ${COLORS.cardWord}`,
+                                            color: isBurned ? COLORS.surface : COLORS.textPrimary
                                         }}
                                     >
-                                        <span className={item.word.length > 3 ? 'text-lg md:text-xl' : ''}>
-                                            {item.word}
+                                        <span className={isLongWord ? 'text-lg md:text-xl' : ''}>
+                                            {card.kanjiName}
                                         </span>
                                     </div>
-                                    <div className="flex space-x-1">
-                                        {LEVEL_PROGRESS_DOTS.map((_, dotIndex) => (
-                                            <div
-                                                key={dotIndex}
-                                                className="w-1 h-1 rounded-full"
-                                                style={{
-                                                    border: `1px solid ${COLORS.cardWord}`,
-                                                    backgroundColor: dotIndex < activeDots ? COLORS.cardWord : 'transparent'
-                                                }}
-                                            />
-                                        ))}
-                                    </div>
+                                    {!isBurned && (
+                                        <div className="flex space-x-1">
+                                            {Array.from({ length: 7 }).map((_, dotIndex) => (
+                                                <div
+                                                    key={dotIndex}
+                                                    className="w-1 h-1 rounded-full"
+                                                    style={{
+                                                        border: `1px solid ${COLORS.cardWord}`,
+                                                        backgroundColor: dotIndex < activeDots ? COLORS.cardWord : 'transparent'
+                                                    }}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
                                 </button>
                             )
                         })}
                     </div>
                 </div>
+            )}
+
+            {/* Refresh Button */}
+            {!isGuest && (
+                <button
+                    onClick={handleRefresh}
+                    disabled={refreshing}
+                    className="w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all duration-300"
+                    style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}
+                >
+                    <RefreshCw className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`} />
+                    {refreshing ? 'Refreshing...' : 'Refresh Queue'}
+                </button>
             )}
         </div>
     )

@@ -42,32 +42,30 @@ export default function SRSEngine() {
     const moveToNextQuestion = async (answer) => {
         setSelectedAns(answer)
 
+        const rating = Number(currentQuestion.rating) || 0
         const isCorrect = meanings.includes(answer)
-        let rating = currentQuestion.rating || 0
+        const nextRating = Math.max(
+            1,
+            Math.min(8, isCorrect ? rating + 1 : rating - 1),
+        )
 
-        // Adjust rating based on answer
-        const newRating = isCorrect ? rating + 1 : Math.max(0, rating - 1)
-
-        // Call mutation to update next review date
         try {
             await calculateNextReviewDate({
                 variables: {
                     userId: userId,
-                    kanjiName: currentQuestion.kanjiName,
-                    rating: newRating
+                    id: currentQuestion._id,
+                    rating: nextRating
                 }
             })
         } catch (error) {
             console.error("Error updating review date:", error)
         }
 
-        // Move to next question after delay
         setTimeout(() => {
-            if (number < questionsArray.length - 1) {
+            if (number !== questionsArray.length - 1) {
                 setNumber(number + 1)
                 setSelectedAns(null)
             } else {
-                // Quiz completed, go back to SRS home
                 navigate('/dashboard/srs')
             }
         }, 500)
@@ -132,4 +130,3 @@ export default function SRSEngine() {
         </div>
     )
 }
-
