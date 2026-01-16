@@ -32,7 +32,6 @@ import COLORS from "../theme/colors"
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [email, setEmail] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const navigate = useNavigate()
   const [executeLogOut, { loading: logoutLoading }] = useMutation(logOutMutation)
@@ -55,12 +54,6 @@ export default function App() {
   const scrollToSection = (sectionId) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" })
     setIsMenuOpen(false)
-  }
-
-  const handleSubscribe = (e) => {
-    e.preventDefault()
-    alert(`Welcome to Bundai! We'll keep you updated at: ${email}`)
-    setEmail("")
   }
 
   const handleLoginClick = () => {
@@ -144,15 +137,6 @@ export default function App() {
               >
                 Demo
               </a>
-              <a
-                onClick={() => scrollToSection("testimonials")}
-                className="cursor-pointer transition-colors"
-                style={{ color: COLORS.textSecondary }}
-                onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
-                onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
-              >
-                Reviews
-              </a>
               {isLoggedIn ? (
                 <Button
                   size="sm"
@@ -222,15 +206,6 @@ export default function App() {
                   onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
                 >
                   Demo
-                </a>
-                <a
-                  onClick={() => scrollToSection("testimonials")}
-                  className="cursor-pointer transition-colors"
-                  style={{ color: COLORS.textSecondary }}
-                  onMouseEnter={(e) => e.target.style.color = COLORS.brandPrimary}
-                  onMouseLeave={(e) => e.target.style.color = COLORS.textSecondary}
-                >
-                  Reviews
                 </a>
                 {isLoggedIn ? (
                   <Button
@@ -633,7 +608,13 @@ export default function App() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8 sm:mt-12 px-4">
-              <div className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto" style={{ backgroundColor: COLORS.textPrimary }}>
+              <a
+                href="https://chromewebstore.google.com/detail/bundai-extension-plasmo/aoencglmiihcheldbcpjlnlfnemcglfe?authuser=1&hl=en"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto"
+                style={{ backgroundColor: COLORS.textPrimary }}
+              >
                 <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
                   <Globe className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.surface }} />
                   <div className="text-left">
@@ -641,9 +622,15 @@ export default function App() {
                     <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.surface }}>Chrome Web Store</div>
                   </div>
                 </div>
-              </div>
+              </a>
 
-              <div className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto" style={{ backgroundColor: COLORS.textPrimary }}>
+              <a
+                href="https://apps.apple.com/gb/app/bundai/id6751961361"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto"
+                style={{ backgroundColor: COLORS.textPrimary }}
+              >
                 <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
                   <Download className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.surface }} />
                   <div className="text-left">
@@ -651,163 +638,20 @@ export default function App() {
                     <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.surface }}>App Store</div>
                   </div>
                 </div>
-              </div>
+              </a>
 
-              <div className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto" style={{ backgroundColor: COLORS.textPrimary }}>
+              <div className="rounded-2xl p-2 sm:p-3 w-full sm:w-auto opacity-70 cursor-not-allowed" style={{ backgroundColor: COLORS.surfaceElevated }}>
                 <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
-                  <Download className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.surface }} />
+                  <Download className="w-6 sm:w-8 h-6 sm:h-8" style={{ color: COLORS.textMuted }} />
                   <div className="text-left">
                     <div className="text-xs" style={{ color: COLORS.textMuted }}>Get it on</div>
-                    <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.surface }}>Google Play</div>
+                    <div className="text-sm sm:text-lg font-semibold" style={{ color: COLORS.textMuted }}>Google Play</div>
+                    <div className="text-xs font-semibold" style={{ color: COLORS.brandPrimary }}>Coming Soon!</div>
                   </div>
                 </div>
               </div>
             </div>
           </section>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section id="testimonials" className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.background }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2" style={{ color: COLORS.textPrimary }}>
-              What Learners
-              <span style={{ color: COLORS.brandPrimary }}> Say</span>
-            </h2>
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 sm:w-6 h-5 sm:h-6 fill-current" style={{ color: COLORS.accentWarning }} />
-              ))}
-              <span className="ml-2 text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>4.9/5 from 2,847 reviews</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            <div className="p-4 sm:p-6 rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
-              <div className="flex items-center space-x-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3 sm:w-4 h-3 sm:h-4 fill-current" style={{ color: COLORS.accentWarning }} />
-                ))}
-              </div>
-              <p className="mb-4 italic text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
-                "I went from zero Japanese to watching anime without subtitles in just 4 months. Bundai's approach
-                actually works!"
-              </p>
-              <div className="flex items-center space-x-3">
-                <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: COLORS.brandPrimary }}>
-                  <span className="text-white font-semibold text-xs sm:text-sm">SK</span>
-                </div>
-                <div>
-                  <div className="font-medium text-sm sm:text-base" style={{ color: COLORS.textPrimary }}>Sarah Kim</div>
-                  <div className="text-xs sm:text-sm" style={{ color: COLORS.textMuted }}>Software Engineer</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 sm:p-6 rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
-              <div className="flex items-center space-x-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3 sm:w-4 h-3 sm:h-4 fill-current" style={{ color: COLORS.accentWarning }} />
-                ))}
-              </div>
-              <p className="mb-4 italic text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
-                "The YouTube integration is genius. I'm learning from real Japanese content instead of boring textbook
-                examples."
-              </p>
-              <div className="flex items-center space-x-3">
-                <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: COLORS.accentSuccess }}>
-                  <span className="text-white font-semibold text-xs sm:text-sm">MR</span>
-                </div>
-                <div>
-                  <div className="font-medium text-sm sm:text-base" style={{ color: COLORS.textPrimary }}>Mike Rodriguez</div>
-                  <div className="text-xs sm:text-sm" style={{ color: COLORS.textMuted }}>Marketing Manager</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 sm:p-6 rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
-              <div className="flex items-center space-x-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3 sm:w-4 h-3 sm:h-4 fill-current" style={{ color: COLORS.accentWarning }} />
-                ))}
-              </div>
-              <p className="mb-4 italic text-sm sm:text-base" style={{ color: COLORS.textSecondary }}>
-                "Finally passed JLPT N2 after struggling for years with other apps. The kanji recognition training is
-                incredible."
-              </p>
-              <div className="flex items-center space-x-3">
-                <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: COLORS.accentDanger }}>
-                  <span className="text-white font-semibold text-xs sm:text-sm">AL</span>
-                </div>
-                <div>
-                  <div className="font-medium text-sm sm:text-base" style={{ color: COLORS.textPrimary }}>Alex Liu</div>
-                  <div className="text-xs sm:text-sm" style={{ color: COLORS.textMuted }}>College Student</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter Section */}
-      <section className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.surfaceMuted }}>
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2" style={{ color: COLORS.textPrimary }}>
-            Ready to Master
-            <span style={{ color: COLORS.brandPrimary }}>
-              {" "}
-              Japanese?
-            </span>
-          </h2>
-          <p className="text-lg sm:text-xl mb-8 sm:mb-12 px-4" style={{ color: COLORS.textSecondary }}>
-            Join thousands of learners who chose the fast track to fluency. Start your journey today!
-          </p>
-
-          <form onSubmit={handleSubscribe} className="max-w-md mx-auto mb-6 sm:mb-8 px-4">
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="flex-1 px-4 sm:px-6 py-3 sm:py-4 rounded-xl text-sm sm:text-base focus:outline-none focus:ring-2"
-                style={{
-                  backgroundColor: COLORS.surface,
-                  border: `1px solid ${COLORS.divider}`,
-                  color: COLORS.textPrimary,
-                }}
-                required
-              />
-              <style jsx>{`
-                input::placeholder {
-                  color: ${COLORS.textMuted};
-                }
-                input:focus {
-                  ring-color: ${COLORS.brandPrimary};
-                  border-color: ${COLORS.brandPrimary};
-                }
-              `}</style>
-              <Button type="submit" size="md" className="sm:size-lg w-full sm:w-auto" variant="primary">
-                Start Free
-              </Button>
-            </div>
-          </form>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 px-4">
-            <Button
-              size="lg"
-              className="w-full sm:w-auto"
-              onClick={handleLoginClick}
-              variant="primary"
-            >
-              Download Bundai Now
-              <Download className="w-4 sm:w-5 h-4 sm:h-5 ml-2 group-hover:translate-y-1 transition-transform" />
-            </Button>
-            <Button size="lg" className="w-full sm:w-auto" variant="secondary" onClick={handleLoginClick}>
-              Try Chrome Extension
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -832,32 +676,22 @@ export default function App() {
               <div className="flex justify-center sm:justify-start space-x-4 mt-4 sm:mt-6">
                 {/* Social media icons */}
                 <a
-                  href="#"
+                  href="https://x.com/bundaiapp"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center hover:transition-colors"
                   style={{ backgroundColor: COLORS.surfaceElevated, color: COLORS.brandPrimary }}
                 >
                   <span className="text-sm sm:text-base">𝕏</span>
                 </a>
                 <a
-                  href="#"
+                  href="https://www.youtube.com/channel/UChZ7BBgEhuDs7PhcxcwMYcQ"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center hover:transition-colors"
                   style={{ backgroundColor: COLORS.surfaceElevated, color: COLORS.accentDanger }}
                 >
                   <span className="text-sm sm:text-base">▶</span>
-                </a>
-                <a
-                  href="#"
-                  className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center hover:transition-colors"
-                  style={{ backgroundColor: COLORS.surfaceElevated, color: COLORS.brandPrimary }}
-                >
-                  <span className="text-sm sm:text-base">f</span>
-                </a>
-                <a
-                  href="#"
-                  className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center hover:transition-colors"
-                  style={{ backgroundColor: COLORS.surfaceElevated, color: COLORS.brandSecondary }}
-                >
-                  <span className="text-sm sm:text-base">📷</span>
                 </a>
               </div>
             </div>
@@ -867,22 +701,22 @@ export default function App() {
               <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base" style={{ color: COLORS.textPrimary }}>Product</h4>
               <ul className="space-y-2 text-sm sm:text-base">
                 <li>
-                  <a href="#" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
+                  <a href="#features" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
                     Features
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
+                  <a href="#pricing" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
                     Pricing
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
-                    Mobile App
+                  <a href="https://apps.apple.com/gb/app/bundai/id6751961361" target="_blank" rel="noopener noreferrer" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
+                    iOS App
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
+                  <a href="https://chromewebstore.google.com/detail/bundai-extension-plasmo/aoencglmiihcheldbcpjlnlfnemcglfe?authuser=1&hl=en" target="_blank" rel="noopener noreferrer" className="hover:transition-colors" style={{ color: COLORS.textSecondary }}>
                     Chrome Extension
                   </a>
                 </li>
