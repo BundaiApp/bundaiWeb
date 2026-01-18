@@ -89,7 +89,7 @@ export default function ImageQuizEngine() {
     }
 
     const playAudio = () => {
-        const audioPath = `/audio/words/word_${currentQuestion.reading}.mp3`
+        const audioPath = `/bundaiAudio/words/word_${currentQuestion.reading}.mp3`
         console.log("Playing audio:", audioPath)
 
         const audio = new Audio(audioPath)
