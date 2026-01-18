@@ -21,6 +21,8 @@ import SoundWords from './pages/soundWords.screen';
 import WordCategory from './pages/wordCategory.screen';
 import ImageQuizEngine from './pages/imageQuizEngine.screen';
 import AnimeWords from './pages/animeWords.screen';
+import AnimeList from './pages/animeList.screen';
+import AnimeDetail from './pages/animeDetail.screen';
 import Similars from './pages/similars.screen';
 import SimilarDetail from './pages/similarDetail.screen';
 import Settings from './pages/settings.screen';
@@ -53,9 +55,11 @@ export default function App() {
         <Route path="/dashboard/levels" element={<DashboardLayout><Levels /></DashboardLayout>} />
         <Route path="/dashboard/level-details" element={<DashboardLayout><LevelDetails /></DashboardLayout>} />
         <Route path="/dashboard/anime-words" element={<DashboardLayout><AnimeWords /></DashboardLayout>} />
-        <Route path="/dashboard/similars" element={<DashboardLayout><Similars /></DashboardLayout>} />
-        <Route path="/dashboard/similar-detail" element={<DashboardLayout><SimilarDetail /></DashboardLayout>} />
-        <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
+         <Route path="/dashboard/similars" element={<DashboardLayout><Similars /></DashboardLayout>} />
+         <Route path="/dashboard/similar-detail" element={<DashboardLayout><SimilarDetail /></DashboardLayout>} />
+         <Route path="/dashboard/anime-list" element={<DashboardLayout><AnimeList /></DashboardLayout>} />
+         <Route path="/dashboard/anime-detail" element={<DashboardLayout><AnimeDetail /></DashboardLayout>} />
+         <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
       </Routes>
     </Router>
   );

@@ -36,25 +36,15 @@ export default function Sidebar({ isOpen, onClose }) {
         fetchPolicy: "cache-and-network"
     })
 
-    // Calculate cards due now for kanji SRS
+    // Count ALL kanji cards with rating > 0 (for SRS - matches React Native app)
     const kanjiDueCount = useMemo(() => {
         const pendingCards = kanjiData?.getPendingFlashCards ?? []
         if (!pendingCards.length) return 0
 
-        const now = new Date()
-        let count = 0
-
-        pendingCards.forEach((card) => {
-            const nextReviewDate = card.nextReview ? new Date(card.nextReview) : now
-            if (!card.nextReview || nextReviewDate <= now) {
-                count += 1
-            }
-        })
-
-        return count
+        return pendingCards.filter((card) => (card.rating || 0) > 0).length
     }, [kanjiData])
 
-    // Get sound cards due count
+    // Get ALL sound cards due count
     const soundDueCount = soundData?.getPendingSoundFlashCards?.length || 0
 
     const totalDueCount = kanjiDueCount + soundDueCount

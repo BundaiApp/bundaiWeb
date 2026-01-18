@@ -162,9 +162,9 @@ export default function Dashboard() {
             </section>
 
             {/* Anime Words Section */}
-            <section>
+            <section className="space-y-4">
                 <button
-                    onClick={() => navigate('/dashboard/anime-words')}
+                    onClick={() => navigate('/dashboard/anime-list')}
                     className="w-full p-6 md:p-8 rounded-2xl shadow-md transition-all duration-300 hover:scale-[1.02] text-left"
                     style={{ backgroundColor: COLORS.surface }}
                     onMouseEnter={(e) => {
@@ -181,7 +181,30 @@ export default function Dashboard() {
                             Anime Words
                         </h2>
                         <p className="text-sm md:text-base" style={{ color: COLORS.textSecondary }}>
+                            Browse anime vocabulary by show
+                        </p>
+                    </div>
+                </button>
+
+                <button
+                    onClick={() => navigate('/dashboard/anime-words')}
+                    className="w-full p-6 md:p-8 rounded-2xl shadow-md transition-all duration-300 hover:scale-[1.02] text-left"
+                    style={{ backgroundColor: COLORS.surface }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.02)'
+                        e.currentTarget.style.boxShadow = `0 10px 20px ${COLORS.brandPrimary}20`
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)'
+                        e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)'
+                    }}
+                >
+                    <div>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>
                             Top 1000 Anime Words
+                        </h2>
+                        <p className="text-sm md:text-base" style={{ color: COLORS.textSecondary }}>
+                            Most common anime vocabulary
                         </p>
                     </div>
                 </button>
