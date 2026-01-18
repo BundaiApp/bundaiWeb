@@ -109,8 +109,8 @@ export default function AnimeWords() {
                                     </div>
                                     <p
                                         className="text-sm leading-relaxed"
-                                        style={{ color: COLORS.textSecondary }}
                                         style={{
+                                            color: COLORS.textSecondary,
                                             display: '-webkit-box',
                                             '-webkit-line-clamp': 2,
                                             '-webkit-box-orient': 'vertical',

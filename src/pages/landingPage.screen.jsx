@@ -678,7 +678,7 @@ export default function App() {
                   className="text-3xl sm:text-4xl font-black mb-2"
                   style={{ color: COLORS.textPrimary }}
                 >
-                  $2.99
+                  $1.99
                 </div>
                 <div style={{ color: COLORS.textMuted }}>per week</div>
               </div>

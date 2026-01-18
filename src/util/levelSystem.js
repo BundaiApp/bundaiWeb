@@ -1,10 +1,18 @@
 // Level System for 2000 Kanji + Associated Words
-import { provideData } from './jlptArray';
-
 export const LEVEL_SYSTEM_CONFIG = {
     totalLevels: 50,
-    unlockThreshold: 0.7, // 70% accuracy required to unlock next level
+    unlockThreshold: 0.5, // 50% mastery required to unlock next level
     maxReviewsBeforeUnlock: 3 // Maximum reviews needed per item
+};
+
+const ensureArray = (value) => {
+    if (Array.isArray(value)) {
+        return value.filter(Boolean).map(String);
+    }
+    if (value === null || value === undefined) {
+        return [];
+    }
+    return [String(value)].filter(Boolean);
 };
 
 // Calculate kanji distribution across levels with gradual difficulty progression
@@ -70,7 +78,7 @@ const KANJI_PER_LEVEL = {
     50: { jlptLevel: 1, startIndex: 970, kanjiCount: 50, targetWordCount: 65 },
 };
 
-export const getLevelContent = (level) => {
+export const getLevelContent = (level, jlptDataMap) => {
     const config = KANJI_PER_LEVEL[level];
 
     if (!config) {
@@ -78,23 +86,19 @@ export const getLevelContent = (level) => {
     }
 
     try {
-        // Get JLPT data for the specific level
-        const jlptData = provideData('jlpt', config.jlptLevel, true);
-        const levelKanji = jlptData[config.jlptLevel];
+        const jlptData = jlptDataMap[config.jlptLevel];
 
-        if (!levelKanji || levelKanji.length === 0) {
+        if (!jlptData || jlptData.length === 0) {
             throw new Error(`No kanji data found for JLPT level ${config.jlptLevel}`);
         }
 
-        // Get the kanji for this specific level
-        const kanjiForLevel = levelKanji.slice(config.startIndex, config.startIndex + config.kanjiCount);
+        const kanjiForLevel = jlptData.slice(config.startIndex, config.startIndex + config.kanjiCount);
 
         const levelData = {
             kanji: [],
             words: []
         };
 
-        // Collect all kanji characters first to avoid duplicates in words
         const kanjiCharacters = new Set();
         kanjiForLevel.forEach(kanjiItem => {
             if (kanjiItem && kanjiItem.kanjiName) {
@@ -102,22 +106,31 @@ export const getLevelContent = (level) => {
             }
         });
 
-        // Get all known kanji for easiness factor (from current and previous levels)
-        const knownKanji = getAllKnownKanji(level);
+        const knownKanji = getAllKnownKanji(level, jlptDataMap);
 
-        // Process each kanji to add to kanji section
         kanjiForLevel.forEach(kanjiItem => {
             if (kanjiItem && kanjiItem.kanjiName) {
-                // Add the kanji itself
                 levelData.kanji.push({
                     kanji: kanjiItem.kanjiName,
+                    kanjiName: kanjiItem.kanjiName,
                     reading: kanjiItem.kun?.[0] || kanjiItem.on?.[0] || '',
-                    meaning: kanjiItem.meanings?.[0] || ''
+                    meaning: kanjiItem.meanings?.[0] || '',
+                    meanings: ensureArray(kanjiItem.meanings),
+                    quizAnswers: ensureArray(kanjiItem.quizAnswers),
+                    on: ensureArray(kanjiItem.on),
+                    kun: ensureArray(kanjiItem.kun),
+                    usedIn: kanjiItem.usedIn || [],
+                    similars: kanjiItem.similars || [],
+                    jlptLevel: kanjiItem.jlpt,
+                    jlpt: kanjiItem.jlpt,
+                    grade: kanjiItem.grade,
+                    strokes: kanjiItem.strokes,
+                    frequency: kanjiItem.freq,
+                    freq: kanjiItem.freq
                 });
             }
         });
 
-        // Collect all possible words from all kanji for target-based selection
         const allCandidateWords = [];
         kanjiForLevel.forEach(kanjiItem => {
             if (kanjiItem && kanjiItem.kanjiName && kanjiItem.usedIn && Array.isArray(kanjiItem.usedIn)) {
@@ -129,21 +142,26 @@ export const getLevelContent = (level) => {
             }
         });
 
-        // Process and select words based on target count
         const targetWordCount = config.targetWordCount || 50;
-        const selectedWords = allCandidateWords
-            .filter(word => !kanjiCharacters.has(word.kanji)) // Exclude standalone kanji
-            .sort((a, b) => a.frequency - b.frequency) // Sort by frequency ascending (lower = more common)
-            .slice(0, targetWordCount * 3) // Take top candidates for filtering (3x target for better selection)
-            .filter(word => isWordAppropriateForLevel(word, level, knownKanji)) // Apply easiness factor
-            .slice(0, targetWordCount); // Take final target amount
 
-        // Add selected words to levelData
+        const uniqueWords = Array.from(
+            new Map(allCandidateWords.map(word => [word.kanji, word])).values()
+        );
+
+        const selectedWords = uniqueWords
+            .filter(word => !kanjiCharacters.has(word.kanji))
+            .sort((a, b) => a.frequency - b.frequency)
+            .slice(0, targetWordCount * 3)
+            .filter(word => isWordAppropriateForLevel(word, level, knownKanji))
+            .slice(0, targetWordCount);
+
         selectedWords.forEach(wordItem => {
             levelData.words.push({
                 word: wordItem.kanji,
                 reading: wordItem.reading || wordItem.hiragana || '',
-                meaning: wordItem.meaning || ''
+                meaning: wordItem.meaning || '',
+                meanings: ensureArray(wordItem.meanings || wordItem.meaning),
+                quizAnswers: ensureArray(wordItem.quizAnswers)
             });
         });
 
@@ -154,19 +172,17 @@ export const getLevelContent = (level) => {
     }
 };
 
-// Helper function to get all kanji from previous levels (including current level)
-const getAllKnownKanji = (currentLevel) => {
+const getAllKnownKanji = (currentLevel, jlptDataMap) => {
     const knownKanji = new Set();
 
     for (let lvl = 1; lvl <= currentLevel; lvl++) {
         const config = KANJI_PER_LEVEL[lvl];
         if (config) {
             try {
-                const jlptData = provideData('jlpt', config.jlptLevel, true);
-                const levelKanji = jlptData[config.jlptLevel];
+                const jlptData = jlptDataMap[config.jlptLevel];
 
-                if (levelKanji && levelKanji.length > 0) {
-                    const kanjiForLevel = levelKanji.slice(config.startIndex, config.startIndex + config.kanjiCount);
+                if (jlptData && jlptData.length > 0) {
+                    const kanjiForLevel = jlptData.slice(config.startIndex, config.startIndex + config.kanjiCount);
                     kanjiForLevel.forEach(kanjiItem => {
                         if (kanjiItem && kanjiItem.kanjiName) {
                             knownKanji.add(kanjiItem.kanjiName);
@@ -182,28 +198,21 @@ const getAllKnownKanji = (currentLevel) => {
     return knownKanji;
 };
 
-// Helper function to check if a word is appropriate for the current level
 const isWordAppropriateForLevel = (word, currentLevel, knownKanji) => {
     const wordText = word.kanji;
 
-    // Skip if word is empty or null
     if (!wordText) return false;
 
-    // Get word length (number of kanji characters)
     const wordLength = wordText.length;
 
-    // Level-based word length restrictions
-    if (currentLevel <= 5 && wordLength > 2) return false;  // Levels 1-5: max 2 kanji
-    if (currentLevel <= 10 && wordLength > 3) return false; // Levels 6-10: max 3 kanji
+    if (currentLevel <= 5 && wordLength > 2) return false;
+    if (currentLevel <= 10 && wordLength > 3) return false;
 
-    // Check if all kanji in the word are known (from current or previous levels)
     for (const char of wordText) {
-        // Skip non-kanji characters (hiragana, katakana, punctuation)
         if (char.match(/[\u3040-\u309F\u30A0-\u30FF\u3000-\u303F\uFF00-\uFFEF]/)) {
             continue;
         }
 
-        // If it's a kanji character and not known, reject the word
         if (!knownKanji.has(char)) {
             return false;
         }
@@ -238,4 +247,3 @@ export const getLevelInfo = (level) => {
         difficulty: getDifficultyLabel(config.jlptLevel)
     };
 };
-

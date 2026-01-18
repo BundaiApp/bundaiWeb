@@ -1,12 +1,15 @@
-import { useMutation } from '@apollo/client/react'
+import { useMutation, useQuery } from '@apollo/client/react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import COLORS from '../theme/colors'
 import { topics, kana } from '../util/constants'
 import Hiragana from '../util/hiragana.json'
 import Katakana from '../util/katakana.json'
-import { provideData, provideTopWordsData } from '../util/jlptArray'
 import ADD_BULK_FLASHCARD from '../graphql/mutations/addBulkFlashCard.mutation'
+import getKanjiByJLPT from '../graphql/queries/getKanjiByJLPT.query'
+import getKanjiByStrokes from '../graphql/queries/getKanjiByStrokes.query'
+import getKanjiByGrade from '../graphql/queries/getKanjiByGrade.query'
+import getTopWordsByType from '../graphql/queries/getTopWordsByType.query'
 
 export default function LocalQuiz() {
     const navigate = useNavigate()
@@ -20,10 +23,47 @@ export default function LocalQuiz() {
 
     const [addBulk, { loading }] = useMutation(ADD_BULK_FLASHCARD)
 
+    const count = itemCount === "All" ? 1000 : itemCount
+
+    const { data: jlptData } = useQuery(getKanjiByJLPT, {
+        variables: { level },
+        skip: type !== 'jlpt'
+    })
+
+    const { data: strokesData } = useQuery(getKanjiByStrokes, {
+        variables: { strokes: level },
+        skip: type !== 'strokes'
+    })
+
+    const { data: gradesData } = useQuery(getKanjiByGrade, {
+        variables: { grade: level },
+        skip: type !== 'grades'
+    })
+
+    const { data: verbsData } = useQuery(getTopWordsByType, {
+        variables: { type: 'verbs', jlptLevel: `n${level}`, count },
+        skip: type !== 'verbs'
+    })
+
+    const { data: nounsData } = useQuery(getTopWordsByType, {
+        variables: { type: 'nouns', jlptLevel: `n${level}`, count },
+        skip: type !== 'nouns'
+    })
+
+    const { data: adjectivesData } = useQuery(getTopWordsByType, {
+        variables: { type: 'adjectives', jlptLevel: `n${level}`, count },
+        skip: type !== 'adjectives'
+    })
+
+    const { data: adverbsData } = useQuery(getTopWordsByType, {
+        variables: { type: 'adverbs', jlptLevel: `n${level}`, count },
+        skip: type !== 'adverbs'
+    })
+
     const addCardsInBulk = async () => {
         const modifiedSelected = selected.map((item) => ({
-            kanjiName: item.kanjiName,
-            meanings: item.meanings,
+            kanjiName: item.kanjiName || item.kanji,
+            meanings: item.meanings || [item.meaning],
             quizAnswers: item.quizAnswers
         }))
         await addBulk({
@@ -42,8 +82,8 @@ export default function LocalQuiz() {
 
     const selectAll = () => {
         return type === 'jlpt' || type === 'strokes' || type === 'grades'
-            ? setSelected([...selected, ...dataTypes[type][level]])
-            : setSelected([...selected, ...dataTypes[type]])
+            ? setSelected([...selected, ...currentData])
+            : setSelected([...selected, ...currentData])
     }
 
     const checkThenNavigate = () => {
@@ -54,23 +94,27 @@ export default function LocalQuiz() {
             })
     }
 
-    const dataTypes = {
-        jlpt: provideData('jlpt', level, true),
-        strokes: provideData('strokes', level, true),
-        grades: provideData('grade', level, true),
-        verbs: provideTopWordsData('verbs', `n${level}`, itemCount),
-        adjectives: provideTopWordsData('adjectives', `n${level}`, itemCount),
-        adverbs: provideTopWordsData('adverbs', `n${level}`, itemCount),
-        nouns: provideTopWordsData('nouns', `n${level}`, itemCount),
-        hiragana: Hiragana,
-        katakana: Katakana
-    }
+    const currentData = type === 'jlpt'
+        ? (jlptData?.getKanjiByJLPT || [])
+        : type === 'strokes'
+        ? (strokesData?.getKanjiByStrokes || [])
+        : type === 'grades'
+        ? (gradesData?.getKanjiByGrade || [])
+        : type === 'verbs'
+        ? (verbsData?.getTopWordsByType || [])
+        : type === 'nouns'
+        ? (nounsData?.getTopWordsByType || [])
+        : type === 'adjectives'
+        ? (adjectivesData?.getTopWordsByType || [])
+        : type === 'adverbs'
+        ? (adverbsData?.getTopWordsByType || [])
+        : type === 'hiragana'
+        ? Hiragana
+        : type === 'katakana'
+        ? Katakana
+        : []
 
     const ITEM_COUNTS = [10, 20, 50, 100, 'All']
-
-    const currentData = type === 'jlpt' || type === 'strokes' || type === 'grades'
-        ? (dataTypes[type][level] || [])
-        : (dataTypes[type] || [])
 
     return (
         <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-4" style={{ backgroundColor: COLORS.background }}>
@@ -198,7 +242,7 @@ export default function LocalQuiz() {
                         const isActive = selected.includes(item)
                         const displayText = (type === 'jlpt' || type === 'strokes' || type === 'grades' || type === 'hiragana' || type === 'katakana')
                             ? item.kanjiName
-                            : item.kanji
+                            : item.kanji || item.kanjiName
 
                         return (
                             <button

@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { provideData, provideTopWordsData } from "../util/jlptArray"
+import { useQuery } from "@apollo/client/react"
 import Hiragana from "../util/hiragana.json"
 import Katakana from "../util/katakana.json"
 import COLORS from "../theme/colors"
 import { ArrowLeft } from "lucide-react"
+import getKanjiByJLPT from "../graphql/queries/getKanjiByJLPT.query"
+import getKanjiByStrokes from "../graphql/queries/getKanjiByStrokes.query"
+import getKanjiByGrade from "../graphql/queries/getKanjiByGrade.query"
+import getTopWordsByType from "../graphql/queries/getTopWordsByType.query"
 
 const JLPT_LEVELS = ["N5", "N4", "N3", "N2", "N1"]
 const ITEM_COUNTS = [20, 50, 100, 200, 300, "All"]
@@ -28,9 +32,60 @@ export default function KanjiTemplate() {
         title
     } = params
 
-    const [arr, setArr] = useState([])
     const [selectedLevel, setSelectedLevel] = useState("N5")
     const [itemCount, setItemCount] = useState(20)
+
+    const jlptLevelNum = parseInt(jlptLevel) || 0
+    const strokesNum = parseInt(strokes) || 0
+    const gradesNum = parseInt(grades) || 0
+
+    const { data: jlptData } = useQuery(getKanjiByJLPT, {
+        variables: { level: jlptLevelNum },
+        skip: !jlptLevel
+    })
+
+    const { data: strokesData } = useQuery(getKanjiByStrokes, {
+        variables: { strokes: strokesNum },
+        skip: !strokes
+    })
+
+    const { data: gradesData } = useQuery(getKanjiByGrade, {
+        variables: { grade: gradesNum },
+        skip: !grades
+    })
+
+    const count = itemCount === "All" ? 1000 : itemCount
+    const jlptLevelStr = selectedLevel.toLowerCase()
+
+    const { data: verbsData } = useQuery(getTopWordsByType, {
+        variables: { type: "verbs", jlptLevel: jlptLevelStr, count },
+        skip: !verbs
+    })
+
+    const { data: nounsData } = useQuery(getTopWordsByType, {
+        variables: { type: "nouns", jlptLevel: jlptLevelStr, count },
+        skip: !nouns
+    })
+
+    const { data: adjectivesData } = useQuery(getTopWordsByType, {
+        variables: { type: "adjectives", jlptLevel: jlptLevelStr, count },
+        skip: !adjectives
+    })
+
+    const { data: adverbsData } = useQuery(getTopWordsByType, {
+        variables: { type: "adverbs", jlptLevel: jlptLevelStr, count },
+        skip: !adverbs
+    })
+
+    const arr = jlptLevel ? jlptData?.getKanjiByJLPT || [] :
+        strokes ? strokesData?.getKanjiByStrokes || [] :
+        grades ? gradesData?.getKanjiByGrade || [] :
+        verbs ? verbsData?.getTopWordsByType || [] :
+        nouns ? nounsData?.getTopWordsByType || [] :
+        adjectives ? adjectivesData?.getTopWordsByType || [] :
+        adverbs ? adverbsData?.getTopWordsByType || [] :
+        hiragana ? Hiragana :
+        katakana ? Katakana : []
 
     const navigateToDetailScreen = (item, index) => {
         navigate("/dashboard/kanji-detail", {
@@ -43,23 +98,6 @@ export default function KanjiTemplate() {
                 title: item.kanjiName || item.kanji,
             }
         })
-    }
-
-    useEffect(() => {
-        loadData()
-    }, [selectedLevel, itemCount, jlptLevel, strokes, grades])
-
-    const loadData = () => {
-        const count = itemCount === "All" ? 1000 : itemCount
-        if (jlptLevel) setArr(provideData("jlpt", jlptLevel))
-        if (strokes) setArr(provideData("strokes", strokes))
-        if (grades) setArr(provideData("grade", grades))
-        if (verbs) setArr(provideTopWordsData("verbs", selectedLevel.toLowerCase(), count))
-        if (nouns) setArr(provideTopWordsData("nouns", selectedLevel.toLowerCase(), count))
-        if (adjectives) setArr(provideTopWordsData("adjectives", selectedLevel.toLowerCase(), count))
-        if (adverbs) setArr(provideTopWordsData("adverbs", selectedLevel.toLowerCase(), count))
-        if (hiragana) setArr(Hiragana)
-        if (katakana) setArr(Katakana)
     }
 
     const renderJLPTFilter = () => (
@@ -157,18 +195,18 @@ export default function KanjiTemplate() {
                             <div className="text-3xl font-medium mb-1" style={{ color: COLORS.textPrimary }}>
                                 {isWord ? item.kanji : item.kanjiName}
                             </div>
-                            {item.meanings && (
+                            {(item.meanings || item.meaning) && (
                                 <div
                                     className="text-center"
                                     style={{
                                         color: COLORS.textSecondary,
-                                        fontSize: getFontSize(item.meanings[0])
+                                        fontSize: getFontSize(item.meanings ? item.meanings[0] : item.meaning)
                                     }}
                                 >
-                                    {item.meanings[0]}
+                                    {item.meanings ? item.meanings[0] : item.meaning}
                                 </div>
                             )}
-                            {item.kun && !hiragana && !katakana && (
+                            {item.kun && !hiragana && !katakana && !isWord && (
                                 <div
                                     className="text-center mt-1"
                                     style={{

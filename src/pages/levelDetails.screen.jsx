@@ -5,6 +5,7 @@ import { X } from "lucide-react"
 import COLORS from "../theme/colors"
 import { getLevelContent } from "../util/levelSystem"
 import GET_FLASHCARDS_BY_LEVEL from "../graphql/queries/getFlashCardsByLevel.query"
+import getKanjiByJLPT from "../graphql/queries/getKanjiByJLPT.query"
 
 const LONG_WORD_LENGTH_THRESHOLD = 4
 
@@ -30,6 +31,22 @@ export default function LevelDetails() {
         skip: isGuest || !isLevelUnlocked,
         fetchPolicy: "network-only"
     })
+
+    const { data: n5Data, loading: loadingN5 } = useQuery(getKanjiByJLPT, { variables: { level: 5 }, skip: false })
+    const { data: n4Data, loading: loadingN4 } = useQuery(getKanjiByJLPT, { variables: { level: 4 }, skip: false })
+    const { data: n3Data, loading: loadingN3 } = useQuery(getKanjiByJLPT, { variables: { level: 3 }, skip: false })
+    const { data: n2Data, loading: loadingN2 } = useQuery(getKanjiByJLPT, { variables: { level: 2 }, skip: false })
+    const { data: n1Data, loading: loadingN1 } = useQuery(getKanjiByJLPT, { variables: { level: 1 }, skip: false })
+
+    const jlptDataMap = useMemo(() => ({
+        1: n1Data?.getKanjiByJLPT || [],
+        2: n2Data?.getKanjiByJLPT || [],
+        3: n3Data?.getKanjiByJLPT || [],
+        4: n4Data?.getKanjiByJLPT || [],
+        5: n5Data?.getKanjiByJLPT || []
+    }), [n1Data, n2Data, n3Data, n4Data, n5Data])
+
+    const jlptLoading = loadingN1 || loadingN2 || loadingN3 || loadingN4 || loadingN5
 
     useEffect(() => {
         const fetchUserLevel = async () => {
@@ -65,7 +82,20 @@ export default function LevelDetails() {
         const fetchLocalData = async () => {
             try {
                 setLoading(true)
-                const data = await getLevelContent(level)
+
+                if (jlptLoading) {
+                    setLoading(false)
+                    return
+                }
+
+                const hasJLPTData = Object.values(jlptDataMap).every(data => Array.isArray(data) && data.length > 0)
+
+                if (!hasJLPTData) {
+                    setLoading(false)
+                    return
+                }
+
+                const data = getLevelContent(level, jlptDataMap)
 
                 const kanjiSet = new Set(data.kanji.map(k => k.kanji))
                 const wordsByKanji = {}
@@ -90,7 +120,7 @@ export default function LevelDetails() {
         }
 
         fetchLocalData()
-    }, [level])
+    }, [level, jlptDataMap, jlptLoading])
 
     const levelData = useMemo(() => {
         if (!localLevelData) return null
