@@ -43,26 +43,6 @@ export default function Dashboard() {
                         N{level}
                     </button>
                 ))}
-                <button
-                    onClick={() => navigate('/dashboard/kanji-template', {
-                        state: {
-                            jlptLevel: 'all',
-                            title: 'All Kanji'
-                        }
-                    })}
-                    className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
-                    style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = COLORS.brandPrimary
-                        e.currentTarget.style.color = COLORS.interactiveTextOnPrimary
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = COLORS.surface
-                        e.currentTarget.style.color = COLORS.textPrimary
-                    }}
-                >
-                    All
-                </button>
             </>
         )
     }
@@ -80,39 +60,19 @@ export default function Dashboard() {
                             }
                         })}
                         className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
-                        style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}
+                        style={{ backgroundColor: COLORS.interactiveSurface, color: COLORS.textPrimary }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor = COLORS.brandPrimary
                             e.currentTarget.style.color = COLORS.interactiveTextOnPrimary
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = COLORS.surface
+                            e.currentTarget.style.backgroundColor = COLORS.interactiveSurface
                             e.currentTarget.style.color = COLORS.textPrimary
                         }}
                     >
                         {stroke}
                     </button>
                 ))}
-                <button
-                    onClick={() => navigate('/dashboard/kanji-template', {
-                        state: {
-                            strokes: 'all',
-                            title: 'All Kanji'
-                        }
-                    })}
-                    className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
-                    style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = COLORS.brandPrimary
-                        e.currentTarget.style.color = COLORS.interactiveTextOnPrimary
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = COLORS.surface
-                        e.currentTarget.style.color = COLORS.textPrimary
-                    }}
-                >
-                    All
-                </button>
             </>
         )
     }
@@ -130,39 +90,19 @@ export default function Dashboard() {
                             }
                         })}
                         className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
-                        style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}
+                        style={{ backgroundColor: COLORS.interactiveSurface, color: COLORS.textPrimary }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor = COLORS.brandPrimary
                             e.currentTarget.style.color = COLORS.interactiveTextOnPrimary
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = COLORS.surface
+                            e.currentTarget.style.backgroundColor = COLORS.interactiveSurface
                             e.currentTarget.style.color = COLORS.textPrimary
                         }}
                     >
                         {grade}
                     </button>
                 ))}
-                <button
-                    onClick={() => navigate('/dashboard/kanji-template', {
-                        state: {
-                            grades: 'all',
-                            title: 'All Kanji'
-                        }
-                    })}
-                    className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
-                    style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = COLORS.brandPrimary
-                        e.currentTarget.style.color = COLORS.interactiveTextOnPrimary
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = COLORS.surface
-                        e.currentTarget.style.color = COLORS.textPrimary
-                    }}
-                >
-                    All
-                </button>
             </>
         )
     }

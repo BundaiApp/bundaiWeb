@@ -111,8 +111,8 @@ export default function KanjiTemplate() {
                     onClick={() => setSelectedLevel(level)}
                     className="px-4 py-2 rounded-full transition-all duration-300"
                     style={{
-                        backgroundColor: selectedLevel === level ? COLORS.brandPrimary : COLORS.surface,
-                        color: selectedLevel === level ? COLORS.interactiveTextOnPrimary : COLORS.textPrimary,
+                        backgroundColor: COLORS.interactiveSurface,
+                        color: COLORS.textPrimary,
                         border: `1px solid ${COLORS.outline}`
                     }}
                 >
@@ -130,8 +130,8 @@ export default function KanjiTemplate() {
                     onClick={() => setItemCount(count)}
                     className="px-4 py-2 rounded-full transition-all duration-300"
                     style={{
-                        backgroundColor: itemCount === count ? COLORS.brandPrimary : COLORS.surface,
-                        color: itemCount === count ? COLORS.interactiveTextOnPrimary : COLORS.textPrimary,
+                        backgroundColor: COLORS.interactiveSurface,
+                        color: COLORS.textPrimary,
                         border: `1px solid ${COLORS.outline}`
                     }}
                 >
