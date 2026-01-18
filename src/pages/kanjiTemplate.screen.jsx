@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useQuery } from "@apollo/client/react"
+import { ArrowLeft, RefreshCw } from "lucide-react"
 import Hiragana from "../util/hiragana.json"
 import Katakana from "../util/katakana.json"
 import COLORS from "../theme/colors"
-import { ArrowLeft } from "lucide-react"
 import getKanjiByJLPT from "../graphql/queries/getKanjiByJLPT.query"
 import getKanjiByStrokes from "../graphql/queries/getKanjiByStrokes.query"
 import getKanjiByGrade from "../graphql/queries/getKanjiByGrade.query"
@@ -39,17 +39,17 @@ export default function KanjiTemplate() {
     const strokesNum = parseInt(strokes) || 0
     const gradesNum = parseInt(grades) || 0
 
-    const { data: jlptData } = useQuery(getKanjiByJLPT, {
+    const { data: jlptData, loading: loadingJLPT } = useQuery(getKanjiByJLPT, {
         variables: { level: jlptLevelNum },
         skip: !jlptLevel
     })
 
-    const { data: strokesData } = useQuery(getKanjiByStrokes, {
+    const { data: strokesData, loading: loadingStrokes } = useQuery(getKanjiByStrokes, {
         variables: { strokes: strokesNum },
         skip: !strokes
     })
 
-    const { data: gradesData } = useQuery(getKanjiByGrade, {
+    const { data: gradesData, loading: loadingGrades } = useQuery(getKanjiByGrade, {
         variables: { grade: gradesNum },
         skip: !grades
     })
@@ -57,22 +57,22 @@ export default function KanjiTemplate() {
     const count = itemCount === "All" ? 1000 : itemCount
     const jlptLevelStr = selectedLevel.toLowerCase()
 
-    const { data: verbsData } = useQuery(getTopWordsByType, {
+    const { data: verbsData, loading: loadingVerbs } = useQuery(getTopWordsByType, {
         variables: { type: "verbs", jlptLevel: jlptLevelStr, count },
         skip: !verbs
     })
 
-    const { data: nounsData } = useQuery(getTopWordsByType, {
+    const { data: nounsData, loading: loadingNouns } = useQuery(getTopWordsByType, {
         variables: { type: "nouns", jlptLevel: jlptLevelStr, count },
         skip: !nouns
     })
 
-    const { data: adjectivesData } = useQuery(getTopWordsByType, {
+    const { data: adjectivesData, loading: loadingAdjectives } = useQuery(getTopWordsByType, {
         variables: { type: "adjectives", jlptLevel: jlptLevelStr, count },
         skip: !adjectives
     })
 
-    const { data: adverbsData } = useQuery(getTopWordsByType, {
+    const { data: adverbsData, loading: loadingAdverbs } = useQuery(getTopWordsByType, {
         variables: { type: "adverbs", jlptLevel: jlptLevelStr, count },
         skip: !adverbs
     })
@@ -86,6 +86,9 @@ export default function KanjiTemplate() {
         adverbs ? adverbsData?.getTopWordsByType || [] :
         hiragana ? Hiragana :
         katakana ? Katakana : []
+
+    const isLoading = loadingJLPT || loadingStrokes || loadingGrades ||
+        loadingVerbs || loadingNouns || loadingAdjectives || loadingAdverbs
 
     const navigateToDetailScreen = (item, index) => {
         navigate("/dashboard/kanji-detail", {
@@ -165,62 +168,76 @@ export default function KanjiTemplate() {
                 </h1>
             </div>
 
+            {/* Loading */}
+            {isLoading && (
+                <div className="flex flex-col items-center justify-center min-h-[50vh]">
+                    <RefreshCw className="w-12 h-12 animate-spin" style={{ color: COLORS.brandPrimary }} />
+                    <p className="mt-4" style={{ color: COLORS.textSecondary }}>
+                        Loading...
+                    </p>
+                </div>
+            )}
+
             {/* Filters */}
-            <div className="pt-4">
-                {(nouns || verbs || adjectives || adverbs) && (
-                    <>
-                        {renderJLPTFilter()}
-                        {renderItemCountFilter()}
-                    </>
-                )}
-            </div>
+            {!isLoading && (
+                <div className="pt-4">
+                    {(nouns || verbs || adjectives || adverbs) && (
+                        <>
+                            {renderJLPTFilter()}
+                            {renderItemCountFilter()}
+                        </>
+                    )}
+                </div>
+            )}
 
             {/* Kanji Grid */}
-            <div className="p-4">
-                <div className={`grid gap-3 ${isWord ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' :
-                    (hiragana || katakana) ? 'grid-cols-4 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-10' :
+            {!isLoading && (
+                <div className="p-4">
+                    <div className={`grid gap-3 ${isWord ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' :
+                        (hiragana || katakana) ? 'grid-cols-4 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-10' :
                         'grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8'
                     }`}>
-                    {arr.map((item, index) => (
-                        <button
-                            key={index}
-                            onClick={() => navigateToDetailScreen(item, index)}
-                            className="p-4 rounded-xl transition-all duration-300 hover:scale-105 flex flex-col items-center justify-center"
-                            style={{
-                                backgroundColor: COLORS.surface,
-                                border: `3px solid ${COLORS.brandPrimary}`,
-                                boxShadow: `0 4px 8px ${COLORS.brandPrimaryDark}1A`
-                            }}
-                        >
-                            <div className="text-3xl font-medium mb-1" style={{ color: COLORS.textPrimary }}>
-                                {isWord ? item.kanji : item.kanjiName}
-                            </div>
-                            {(item.meanings || item.meaning) && (
-                                <div
-                                    className="text-center"
-                                    style={{
-                                        color: COLORS.textSecondary,
-                                        fontSize: getFontSize(item.meanings ? item.meanings[0] : item.meaning)
-                                    }}
-                                >
-                                    {item.meanings ? item.meanings[0] : item.meaning}
+                        {arr.map((item, index) => (
+                            <button
+                                key={index}
+                                onClick={() => navigateToDetailScreen(item, index)}
+                                className="p-4 rounded-xl transition-all duration-300 hover:scale-105 flex flex-col items-center justify-center"
+                                style={{
+                                    backgroundColor: COLORS.surface,
+                                    border: `3px solid ${COLORS.brandPrimary}`,
+                                    boxShadow: `0 4px 8px ${COLORS.brandPrimaryDark}1A`
+                                }}
+                            >
+                                <div className="text-3xl font-medium mb-1" style={{ color: COLORS.textPrimary }}>
+                                    {isWord ? item.kanji : item.kanjiName}
                                 </div>
-                            )}
-                            {item.kun && !hiragana && !katakana && !isWord && (
-                                <div
-                                    className="text-center mt-1"
-                                    style={{
-                                        color: COLORS.textPrimary,
-                                        fontSize: getFontSize(toRomaji(item.kun[0]))
-                                    }}
-                                >
-                                    {toRomaji(item.kun[0])}
-                                </div>
-                            )}
-                        </button>
-                    ))}
+                                {(item.meanings || item.meaning) && (
+                                    <div
+                                        className="text-center"
+                                        style={{
+                                            color: COLORS.textSecondary,
+                                            fontSize: getFontSize(item.meanings ? item.meanings[0] : item.meaning)
+                                        }}
+                                    >
+                                        {item.meanings ? item.meanings[0] : item.meaning}
+                                    </div>
+                                )}
+                                {item.kun && !hiragana && !katakana && !isWord && (
+                                    <div
+                                        className="text-center mt-1"
+                                        style={{
+                                            color: COLORS.textPrimary,
+                                            fontSize: getFontSize(toRomaji(item.kun[0]))
+                                        }}
+                                    >
+                                        {toRomaji(item.kun[0])}
+                                    </div>
+                                )}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     )
 }
