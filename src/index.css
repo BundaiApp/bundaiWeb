@@ -1,106 +1,177 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --radius: 0.75rem;
+  --font-body: "Space Grotesk", "Noto Sans JP", ui-sans-serif, system-ui;
+  --font-display: "Space Grotesk", "Noto Sans JP", ui-sans-serif, system-ui;
+  --app-bg: #f7f5ff;
+  --app-surface: #ffffff;
+  --app-ink: #1f1a3d;
+  --app-ink-muted: #5b6070;
+  --app-ink-soft: #8f93a3;
+  --app-accent: #7f53f5;
+  --app-accent-strong: #5632d4;
+  --app-accent-soft: #b79cff;
+  --app-gold: #ffb020;
+  --app-signal: #ee5d67;
+  --app-grid: rgba(127, 83, 245, 0.08);
+
+  font-family: var(--font-body);
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  --background: #f7f5ff;
+  --foreground: #1f1a3d;
+  --card: #ffffff;
+  --card-foreground: #1f1a3d;
+  --popover: #ffffff;
+  --popover-foreground: #1f1a3d;
+  --primary: #7f53f5;
+  --primary-foreground: #ffffff;
+  --secondary: #f1ecff;
+  --secondary-foreground: #1f1a3d;
+  --muted: #f1ecff;
+  --muted-foreground: #8f93a3;
+  --accent: #f1ecff;
+  --accent-foreground: #1f1a3d;
+  --destructive: #ee5d67;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #7f53f5;
+  --chart-1: #7f53f5;
+  --chart-2: #ffb020;
+  --chart-3: #ee5d67;
+  --chart-4: #43b581;
+  --chart-5: #5632d4;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1f1a3d;
+  --sidebar-primary: #7f53f5;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1ecff;
+  --sidebar-accent-foreground: #1f1a3d;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #7f53f5;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: var(--app-bg);
+  color: var(--app-ink);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+#root {
+  min-height: 100vh;
+  width: 100%;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
   }
-  a:hover {
-    color: #747bff;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes float-slow {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-12px) translateX(8px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.8s ease both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease both;
+}
+
+.animate-float-slow {
+  animation: float-slow 12s ease-in-out infinite;
+}
+
+.animate-delay-150 {
+  animation-delay: 150ms;
+}
+
+.animate-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animate-delay-450 {
+  animation-delay: 450ms;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--app-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--app-accent) 0%, var(--app-accent-strong) 100%);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--app-accent-strong) 0%, var(--app-accent) 100%);
 }
 
 @theme inline {

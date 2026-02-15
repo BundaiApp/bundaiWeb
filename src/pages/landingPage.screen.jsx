@@ -22,11 +22,12 @@ import { AnimatedBackground } from '../components/AnimatedBackground';
 import { Button } from '../components/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client/react';
-import { hasAuthToken, clearAuthToken } from '../lib/auth';
+import { hasAuthToken, clearAuthToken, redirectToDashboard } from '../lib/auth';
 import logOutMutation from '../graphql/mutations/logOut.mutation';
 import COLORS from '../theme/colors';
 
 export default function App() {
+  const isDevMode = Boolean(import.meta?.env?.DEV);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -34,7 +35,13 @@ export default function App() {
     useMutation(logOutMutation);
 
   useEffect(() => {
-    const syncAuthState = () => setIsLoggedIn(hasAuthToken());
+    const syncAuthState = () => {
+      const loggedIn = hasAuthToken();
+      setIsLoggedIn(loggedIn);
+      if (loggedIn && !isDevMode) {
+        redirectToDashboard();
+      }
+    };
 
     syncAuthState();
     window.addEventListener('storage', syncAuthState);
@@ -44,7 +51,7 @@ export default function App() {
       window.removeEventListener('storage', syncAuthState);
       window.removeEventListener('bundai:auth-change', syncAuthState);
     };
-  }, []);
+  }, [isDevMode]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -54,15 +61,21 @@ export default function App() {
   };
 
   const handleLoginClick = () => {
-    if (!isLoggedIn) {
-      navigate('/login');
+    if (isLoggedIn && !isDevMode) {
+      redirectToDashboard();
+      return;
     }
+
+    navigate('/login');
   };
 
   const handleSignUpClick = () => {
-    if (!isLoggedIn) {
-      navigate('/signup');
+    if (isLoggedIn && !isDevMode) {
+      redirectToDashboard();
+      return;
     }
+
+    navigate('/signup');
   };
 
   const handleLogout = async () => {
@@ -81,7 +94,7 @@ export default function App() {
   return (
     <div
       className="min-h-screen w-full"
-      style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}
+      style={{ backgroundColor: COLORS.background, color: COLORS.textPrimary }}
     >
       <AnimatedBackground />
 
@@ -89,17 +102,18 @@ export default function App() {
       <nav
         className="fixed top-0 w-full z-50 backdrop-blur-lg"
         style={{
-          backgroundColor: COLORS.surface + 'F0',
+          backgroundColor: COLORS.surface + 'E6',
           borderBottom: `1px solid ${COLORS.divider}`,
+          boxShadow: "0 12px 30px rgba(28, 27, 26, 0.08)",
         }}
       >
-        <div className="mx-auto px-6 py-4">
+        <div className="mx-auto px-6 py-4 max-w-6xl">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center space-x-3 z-10">
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
-                style={{ backgroundColor: COLORS.brandPrimary }}
+                style={{ background: `linear-gradient(135deg, ${COLORS.brandPrimary} 0%, ${COLORS.brandPrimaryDark} 100%)` }}
               >
                 <span className="text-white font-bold text-lg">文</span>
               </div>
@@ -291,11 +305,25 @@ export default function App() {
       <section
         id="home"
         className="relative py-16 sm:py-20 px-4 sm:px-6"
-        style={{ backgroundColor: COLORS.surfaceMuted }}
+        style={{
+          background: `linear-gradient(180deg, ${COLORS.surfaceMuted} 0%, ${COLORS.background} 100%)`,
+        }}
       >
         <div className="max-w-5xl mx-auto text-center">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold mb-6 animate-fade-up"
+            style={{
+              backgroundColor: COLORS.surface,
+              border: `1px solid ${COLORS.divider}`,
+              color: COLORS.textSecondary,
+            }}
+          >
+            <span>Audio-first immersion</span>
+            <span style={{ color: COLORS.brandPrimary }}>•</span>
+            <span>Built for anime + real content</span>
+          </div>
           <h1
-            className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black mb-6 sm:mb-8 leading-tight max-w-5xl mx-auto px-2"
+            className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black mb-6 sm:mb-8 leading-tight max-w-5xl mx-auto px-2 animate-fade-up animate-delay-150"
             style={{ color: COLORS.textPrimary }}
           >
             Start Watching{' '}
@@ -305,13 +333,13 @@ export default function App() {
             <span style={{ color: COLORS.accentSuccess }}>effortlessly !</span>
           </h1>
           <p
-            className="text-lg sm:text-xl mb-8 sm:mb-12 max-w-3xl mx-auto px-4"
+            className="text-lg sm:text-xl mb-8 sm:mb-12 max-w-3xl mx-auto px-4 animate-fade-up animate-delay-300"
             style={{ color: COLORS.textSecondary }}
           >
             Pick up words by sound as you watch anime, with or without kanji.
           </p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-16 items-center px-4 mt-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-16 items-center px-4 mt-12 animate-fade-up animate-delay-450">
             {/* Chrome Extension */}
             <div className="relative order-1">
               <div
@@ -355,7 +383,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8 sm:mt-12 px-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8 sm:mt-12 px-4 animate-fade-up animate-delay-450">
             <a
               href="https://chromewebstore.google.com/detail/bundai-extension-plasmo/aoencglmiihcheldbcpjlnlfnemcglfe?authuser=1&hl=en"
               target="_blank"
@@ -444,7 +472,9 @@ export default function App() {
       <section
         id="features"
         className="relative py-16 sm:py-20 px-4 sm:px-6"
-        style={{ backgroundColor: COLORS.background }}
+        style={{
+          background: `linear-gradient(180deg, ${COLORS.background} 0%, ${COLORS.surfaceMuted} 100%)`,
+        }}
       >
         <div className="mx-auto">
           <div className="text-center mb-12 sm:mb-16">
@@ -627,7 +657,9 @@ export default function App() {
       <section
         id="pricing"
         className="relative py-16 sm:py-20 px-4 sm:px-6"
-        style={{ backgroundColor: COLORS.surfaceMuted }}
+        style={{
+          background: `linear-gradient(180deg, ${COLORS.surfaceMuted} 0%, ${COLORS.background} 100%)`,
+        }}
       >
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
@@ -882,7 +914,9 @@ export default function App() {
       {/* Footer Section */}
       <footer
         className="relative py-16 sm:py-20 px-4 sm:px-6"
-        style={{ backgroundColor: COLORS.background }}
+        style={{
+          background: `linear-gradient(180deg, ${COLORS.background} 0%, ${COLORS.surface} 100%)`,
+        }}
       >
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -891,7 +925,7 @@ export default function App() {
               <div className="flex items-center justify-center sm:justify-start space-x-3 mb-4">
                 <div
                   className="w-8 sm:w-10 h-8 sm:h-10 rounded-xl flex items-center justify-center shadow-lg"
-                  style={{ backgroundColor: COLORS.brandPrimary }}
+                  style={{ background: `linear-gradient(135deg, ${COLORS.brandPrimary} 0%, ${COLORS.brandPrimaryDark} 100%)` }}
                 >
                   <span className="text-white font-bold text-base sm:text-lg">
                     文
@@ -1085,47 +1119,6 @@ export default function App() {
         </div>
       </footer>
 
-      <style jsx>{`
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-20px) rotate(3deg);
-          }
-        }
-
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-          width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: #f7f5ff;
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: linear-gradient(45deg, #7f53f5, #5632d4);
-          border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(45deg, #5632d4, #7f53f5);
-        }
-
-        /* Smooth scroll behavior */
-        html {
-          scroll-behavior: smooth;
-        }
-        .text-shadow {
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-        }
-      `}</style>
     </div>
   );
 }

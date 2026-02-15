@@ -1,4 +1,25 @@
 export const TOKEN_STORAGE_KEY = 'bundaiAuthToken'
+export const APP_ORIGIN = 'https://bundai.app'
+export const DASHBOARD_PATH = '/dashboard'
+export const LOGIN_PATH = '/login'
+export const DASHBOARD_URL = `${APP_ORIGIN}${DASHBOARD_PATH}`
+export const LOGIN_URL = `${APP_ORIGIN}${LOGIN_PATH}`
+
+const isDevMode = () => {
+  try {
+    return Boolean(import.meta?.env?.DEV)
+  } catch {
+    return false
+  }
+}
+
+export const getAppUrl = (path) => {
+  if (!path?.startsWith('/')) {
+    return path
+  }
+
+  return isDevMode() ? path : `${APP_ORIGIN}${path}`
+}
 
 export const hasAuthToken = () => {
   try {
@@ -30,6 +51,34 @@ export const setAuthData = (loginData) => {
     }
   } catch (error) {
     console.error('Failed to set auth data:', error)
+  }
+}
+
+export const redirectToDashboard = () => {
+  try {
+    if (typeof window === 'undefined') {
+      return false
+    }
+
+    window.location.replace(getAppUrl(DASHBOARD_PATH))
+    return true
+  } catch (error) {
+    console.error('Failed to redirect to dashboard:', error)
+    return false
+  }
+}
+
+export const redirectToLogin = () => {
+  try {
+    if (typeof window === 'undefined') {
+      return false
+    }
+
+    window.location.replace(getAppUrl(LOGIN_PATH))
+    return true
+  } catch (error) {
+    console.error('Failed to redirect to login:', error)
+    return false
   }
 }
 

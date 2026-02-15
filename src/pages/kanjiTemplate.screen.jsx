@@ -147,10 +147,11 @@ export default function KanjiTemplate() {
     }
 
     const getFontSize = (text) => {
-        if (!text) return '10px'
-        if (text.length <= 5) return '10px'
-        else if (text.length <= 8) return '8px'
-        else return '6px'
+        if (!text) return '14px'
+        if (text.length <= 5) return '14px'
+        if (text.length <= 8) return '12px'
+        if (text.length <= 12) return '11px'
+        return '10px'
     }
 
     return (
@@ -208,15 +209,19 @@ export default function KanjiTemplate() {
                                     boxShadow: `0 4px 8px ${COLORS.brandPrimaryDark}1A`
                                 }}
                             >
-                                <div className="text-3xl font-medium mb-1" style={{ color: COLORS.textPrimary }}>
+                                <div
+                                    className="text-[2rem] leading-none font-semibold mb-2"
+                                    style={{ color: COLORS.textPrimary, fontFamily: "var(--font-display)" }}
+                                >
                                     {isWord ? item.kanji : item.kanjiName}
                                 </div>
                                 {(item.meanings || item.meaning) && (
                                     <div
-                                        className="text-center"
+                                        className="text-center leading-snug"
                                         style={{
                                             color: COLORS.textSecondary,
-                                            fontSize: getFontSize(item.meanings ? item.meanings[0] : item.meaning)
+                                            fontSize: getFontSize(item.meanings ? item.meanings[0] : item.meaning),
+                                            fontFamily: "var(--font-body)"
                                         }}
                                     >
                                         {item.meanings ? item.meanings[0] : item.meaning}
@@ -224,10 +229,11 @@ export default function KanjiTemplate() {
                                 )}
                                 {item.kun && !hiragana && !katakana && !isWord && (
                                     <div
-                                        className="text-center mt-1"
+                                        className="text-center mt-2"
                                         style={{
                                             color: COLORS.textPrimary,
-                                            fontSize: getFontSize(toRomaji(item.kun[0]))
+                                            fontSize: getFontSize(toRomaji(item.kun[0])),
+                                            fontFamily: "var(--font-body)"
                                         }}
                                     >
                                         {toRomaji(item.kun[0])}
@@ -241,4 +247,3 @@ export default function KanjiTemplate() {
         </div>
     )
 }
-

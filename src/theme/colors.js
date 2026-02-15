@@ -29,7 +29,7 @@ export const COLORS = {
     outline: '#d7d7e5',
 
     // component aliases
-    cardKanji: '#5632d4',
+    cardKanji: '#E91E63',
     cardWord: '#7f53f5',
     cardSupport: '#b79cff',
     kanjiHighlight: '#E91E63',
@@ -55,4 +55,3 @@ export const COLORS = {
 }
 
 export default COLORS
-

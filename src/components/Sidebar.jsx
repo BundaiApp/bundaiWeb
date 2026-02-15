@@ -6,6 +6,7 @@ import { clearAuthToken } from "../lib/auth"
 import logOutMutation from "../graphql/mutations/logOut.mutation"
 import FIND_PENDING_FLASHCARDS from "../graphql/queries/findPendingCards.query"
 import GET_PENDING_SOUND_FLASHCARDS from "../graphql/queries/getPendingSoundFlashCards.query"
+import COLORS from "../theme/colors"
 
 export default function Sidebar({ isOpen, onClose }) {
     const location = useLocation()
@@ -97,19 +98,19 @@ export default function Sidebar({ isOpen, onClose }) {
             <div
                 className={`fixed left-0 top-0 h-screen w-64 flex flex-col z-50 transition-transform duration-300 md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'
                     }`}
-                style={{ backgroundColor: '#ffffff', borderRight: '1px solid #e5e7eb' }}
+                style={{ backgroundColor: COLORS.surface, borderRight: `1px solid ${COLORS.divider}` }}
             >
                 {/* Logo Section */}
-                <div className="p-6 flex items-center justify-between" style={{ borderBottom: '1px solid #e5e7eb' }}>
+                <div className="p-6 flex items-center justify-between" style={{ borderBottom: `1px solid ${COLORS.divider}` }}>
                     <Link to="/dashboard" className="flex items-center space-x-3 group" onClick={handleNavClick}>
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" style={{ background: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)' }}>
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" style={{ background: `linear-gradient(135deg, ${COLORS.brandPrimary} 0%, ${COLORS.brandPrimaryDark} 100%)` }}>
                             <span className="text-white font-bold text-xl">文</span>
                         </div>
                         <div>
-                            <span className="text-xl font-bold block" style={{ color: '#1f1a3d' }}>
+                            <span className="text-xl font-bold block" style={{ color: COLORS.textPrimary }}>
                                 Bundai
                             </span>
-                            <span className="text-xs" style={{ color: '#8f93a3' }}>Japanese Learning</span>
+                            <span className="text-xs" style={{ color: COLORS.textMuted }}>Japanese Learning</span>
                         </div>
                     </Link>
 
@@ -118,7 +119,7 @@ export default function Sidebar({ isOpen, onClose }) {
                         onClick={onClose}
                         className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
                     >
-                        <X className="w-5 h-5" style={{ color: '#5b6070' }} />
+                        <X className="w-5 h-5" style={{ color: COLORS.textSecondary }} />
                     </button>
                 </div>
 
@@ -135,29 +136,29 @@ export default function Sidebar({ isOpen, onClose }) {
                                 onClick={handleNavClick}
                                 className="flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden"
                                 style={{
-                                    backgroundColor: active ? '#7f53f5' : 'transparent',
-                                    color: active ? '#ffffff' : '#5b6070'
+                                    backgroundColor: active ? COLORS.brandPrimary : 'transparent',
+                                    color: active ? COLORS.interactiveTextOnPrimary : COLORS.textSecondary
                                 }}
                                 onMouseEnter={(e) => {
                                     if (!active) {
-                                        e.currentTarget.style.backgroundColor = '#f1ecff'
-                                        e.currentTarget.style.color = '#1f1a3d'
+                                        e.currentTarget.style.backgroundColor = COLORS.surfaceMuted
+                                        e.currentTarget.style.color = COLORS.textPrimary
                                     }
                                 }}
                                 onMouseLeave={(e) => {
                                     if (!active) {
                                         e.currentTarget.style.backgroundColor = 'transparent'
-                                        e.currentTarget.style.color = '#5b6070'
+                                        e.currentTarget.style.color = COLORS.textSecondary
                                     }
                                 }}
                             >
                                 <div className="flex items-center space-x-3 relative z-10">
-                                    <Icon className="w-5 h-5" style={{ color: active ? '#ffffff' : '#8f93a3' }} />
+                                    <Icon className="w-5 h-5" style={{ color: active ? COLORS.interactiveTextOnPrimary : COLORS.textMuted }} />
                                     <span className="font-medium">{item.label}</span>
                                 </div>
 
                                 {item.badge !== null && item.badge !== undefined && (
-                                    <span className="text-white text-xs font-bold px-2 py-1 rounded-full min-w-[2rem] text-center" style={{ backgroundColor: '#ee5d67' }}>
+                                    <span className="text-white text-xs font-bold px-2 py-1 rounded-full min-w-[2rem] text-center" style={{ backgroundColor: COLORS.accentDanger }}>
                                         {item.badge}
                                     </span>
                                 )}
@@ -167,17 +168,17 @@ export default function Sidebar({ isOpen, onClose }) {
                 </nav>
 
                 {/* User Profile Section */}
-                <div className="p-4" style={{ borderTop: '1px solid #e5e7eb' }}>
-                    <div className="rounded-xl p-4" style={{ backgroundColor: '#f7f5ff' }}>
+                <div className="p-4" style={{ borderTop: `1px solid ${COLORS.divider}` }}>
+                    <div className="rounded-xl p-4" style={{ backgroundColor: COLORS.surfaceMuted }}>
                         <div className="flex items-center space-x-3 mb-3">
-                            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #7f53f5 0%, #5632d4 100%)' }}>
+                            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${COLORS.brandPrimary} 0%, ${COLORS.brandPrimaryDark} 100%)` }}>
                                 <span className="text-white font-semibold text-sm">
                                     {userName.charAt(0).toUpperCase()}
                                 </span>
                             </div>
                             <div className="flex-1 min-w-0">
-                                <div className="font-medium text-sm truncate" style={{ color: '#1f1a3d' }}>{userName}</div>
-                                <div className="text-xs truncate" style={{ color: '#8f93a3' }}>{userEmail}</div>
+                                <div className="font-medium text-sm truncate" style={{ color: COLORS.textPrimary }}>{userName}</div>
+                                <div className="text-xs truncate" style={{ color: COLORS.textMuted }}>{userEmail}</div>
                             </div>
                         </div>
 
@@ -186,16 +187,16 @@ export default function Sidebar({ isOpen, onClose }) {
                             disabled={logoutLoading}
                             className="w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 disabled:opacity-50"
                             style={{
-                                backgroundColor: '#dcd5ff',
-                                color: '#5632d4'
+                                backgroundColor: COLORS.interactiveSurface,
+                                color: COLORS.brandPrimaryDark
                             }}
                             onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = '#8c7bfa'
-                                e.currentTarget.style.color = '#ffffff'
+                                e.currentTarget.style.backgroundColor = COLORS.interactiveSurfaceActive
+                                e.currentTarget.style.color = COLORS.interactiveTextOnPrimary
                             }}
                             onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = '#dcd5ff'
-                                e.currentTarget.style.color = '#5632d4'
+                                e.currentTarget.style.backgroundColor = COLORS.interactiveSurface
+                                e.currentTarget.style.color = COLORS.brandPrimaryDark
                             }}
                         >
                             <LogOut className="w-4 h-4" />
@@ -209,5 +210,3 @@ export default function Sidebar({ isOpen, onClose }) {
         </>
     )
 }
-
-

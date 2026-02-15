@@ -4,10 +4,11 @@ export const Button = ({
   size = "md",
   variant = "primary",
   className = "",
+  style = {},
   ...props
 }) => {
   const baseClasses =
-    "inline-flex items-center justify-center rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-opacity-50 disabled:opacity-50 disabled:pointer-events-none transform hover:scale-105 active:scale-95";
+    "inline-flex items-center justify-center rounded-xl font-semibold transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white/70 disabled:opacity-50 disabled:pointer-events-none hover:-translate-y-0.5 active:translate-y-0";
   
   const sizeClasses = {
     sm: "h-10 px-4 text-sm",
@@ -17,27 +18,40 @@ export const Button = ({
   };
 
   const variantClasses = {
-    primary:
-      "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-blue-500",
-  
+    primary: "text-white shadow-lg hover:shadow-xl",
     secondary:
-      "bg-gradient-to-r from-blue-900/50 to-purple-900/50 text-blue-100 font-semibold border border-blue-500/20 backdrop-blur-md hover:from-blue-800/50 hover:to-purple-800/50 hover:border-blue-400/30 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500/60",
-  
-    accent:
-      "bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-orange-500",
-  
-    success:
-      "bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:from-emerald-600 hover:to-cyan-600 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-emerald-500",
-  
+      "text-[#1f1a3d] border border-[#d7d7e5] backdrop-blur-md shadow-md hover:shadow-lg",
+    accent: "text-white shadow-lg hover:shadow-xl",
+    success: "text-white shadow-lg hover:shadow-xl",
     outline:
-      "border-2 border-blue-500/50 bg-white/5 text-blue-400 backdrop-blur-sm hover:border-blue-400 hover:bg-blue-500/20 hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50 shadow-lg hover:shadow-xl transition-all duration-300",
+      "border-2 border-[#7f53f5]/50 text-[#7f53f5] backdrop-blur-sm hover:border-[#7f53f5] hover:bg-[#7f53f5]/10 shadow-md hover:shadow-lg",
   };
-  
+  const variantStyles = {
+    primary: {
+      background: "linear-gradient(135deg, #7f53f5 0%, #5632d4 100%)",
+      boxShadow: "0 14px 30px rgba(127, 83, 245, 0.25)",
+    },
+    secondary: {
+      background: "rgba(255, 255, 255, 0.7)",
+    },
+    accent: {
+      background: "linear-gradient(135deg, #ffb020 0%, #ee5d67 100%)",
+      boxShadow: "0 14px 30px rgba(238, 93, 103, 0.25)",
+    },
+    success: {
+      background: "linear-gradient(135deg, #43b581 0%, #7f53f5 100%)",
+      boxShadow: "0 14px 30px rgba(67, 181, 129, 0.25)",
+    },
+    outline: {
+      background: "transparent",
+    },
+  };
 
   return (
     <button
       onClick={onClick}
       className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
+      style={{ ...variantStyles[variant], ...style }}
       {...props}
     >
       {children}
