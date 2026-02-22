@@ -4,20 +4,11 @@ import { useEffect, useState } from 'react';
 import {
   Menu,
   X,
-  Languages,
-  BookOpen,
-  Brain,
-  Eye,
-  MonitorSmartphone,
-  Monitor,
   Globe,
-  Smartphone,
-  Play,
   Star,
   CheckCircle,
   Download,
 } from 'lucide-react';
-import { GlassCard } from '../components/GlassCard';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { Button } from '../components/Button';
 import { Link, useNavigate } from 'react-router-dom';
@@ -69,15 +60,6 @@ export default function App() {
     navigate('/login');
   };
 
-  const handleSignUpClick = () => {
-    if (isLoggedIn && !isDevMode) {
-      redirectToDashboard();
-      return;
-    }
-
-    navigate('/signup');
-  };
-
   const handleLogout = async () => {
     try {
       // Call the backend logout mutation
@@ -90,6 +72,93 @@ export default function App() {
       setIsLoggedIn(false);
     }
   };
+
+  const transformationCards = [
+    {
+      stage: 'Capture',
+      platform: 'Dual Subtitle Loader',
+      title: 'Catch new words while watching',
+      description:
+        'Use dual subtitles to instantly save unknown words and sentence context from real Japanese content.',
+      outcome: 'Passive watching becomes active vocabulary collection.',
+      accent: COLORS.brandPrimary,
+    },
+    {
+      stage: 'Understand',
+      platform: 'Mobile App',
+      title: 'Break down meaning quickly',
+      description:
+        'Open saved words in the app, study examples, and connect each term to usage patterns you can remember.',
+      outcome: 'New words move from recognition to real understanding.',
+      accent: COLORS.accentDanger,
+    },
+    {
+      stage: 'Retain',
+      platform: 'Mobile App',
+      title: 'Lock it in with daily review',
+      description:
+        'Train with SRS and targeted review sessions so high-value words stay available when you need them.',
+      outcome: 'Less forgetting and faster long-term retention.',
+      accent: COLORS.accentSuccess,
+    },
+    {
+      stage: 'Continue anywhere',
+      platform: '',
+      title: 'Keep momentum on desktop',
+      description:
+        'Switch to web at your desk without breaking flow. Progress and review data stay in sync across products.',
+      outcome: 'Consistent practice even when your device changes.',
+      accent: COLORS.accentWarning,
+    },
+  ];
+
+  const mobileShowcaseShots = [
+    { src: '/instant QUiz.png', label: 'Instant Quiz' },
+    { src: '/animeWords.png', label: 'Anime Vocabulary' },
+    { src: '/apple.png', label: 'Top 1000 Words' },
+    { src: '/50Levels.png', label: 'Level System' },
+  ];
+
+  const heroMobileStackCards = [
+    {
+      id: 'anime',
+      src: '/animeWords.png',
+      alt: 'Bundai anime vocabulary screen',
+      label: 'Anime Vocabulary',
+      accent: COLORS.accentDanger,
+      positionClass: 'left-0 sm:left-2 top-12 sm:top-20 -rotate-[12deg] z-10',
+      sizeClass: 'w-32 sm:w-40 md:w-44',
+    },
+    {
+      id: 'quiz',
+      src: '/instant QUiz.png',
+      alt: 'Bundai instant quiz screen',
+      label: 'Instant Quiz',
+      accent: COLORS.brandPrimary,
+      positionClass:
+        'left-1/2 -translate-x-1/2 top-2 sm:top-8 rotate-[2deg] z-20',
+      sizeClass: 'w-32 sm:w-40 md:w-44',
+    },
+    {
+      id: 'levels',
+      src: '/50Levels.png',
+      alt: 'Bundai level tracking screen',
+      label: 'Level Tracking',
+      accent: COLORS.accentWarning,
+      positionClass: 'right-0 sm:right-2 top-10 sm:top-16 rotate-[11deg] z-30',
+      sizeClass: 'w-32 sm:w-40 md:w-44',
+    },
+    {
+      id: 'top1000',
+      src: '/apple.png',
+      alt: 'Bundai top 1000 words screen',
+      label: 'Top 1000 Words',
+      accent: COLORS.accentSuccess,
+      positionClass:
+        'left-1/2 -translate-x-1/2 bottom-0 sm:bottom-2 -rotate-[3deg] z-40',
+      sizeClass: 'w-36 sm:w-44 md:w-48',
+    },
+  ];
 
   return (
     <div
@@ -347,8 +416,12 @@ export default function App() {
                 style={{ backgroundColor: COLORS.surface }}
               >
                 <img
-                  src="/hell.png"
-                  alt="Bundai Chrome Extension"
+                  src="/dual-subtitle-loader-capture.png"
+                  alt="Dual Subtitle Loader extension capture"
+                  onError={(event) => {
+                    event.currentTarget.onerror = null;
+                    event.currentTarget.src = '/hell.png';
+                  }}
                   className="w-full h-auto"
                 />
               </div>
@@ -362,17 +435,43 @@ export default function App() {
 
             {/* Mobile mockup */}
             <div className="flex justify-center order-2">
-              <div className="relative">
+              <div className="relative w-full max-w-[420px] sm:max-w-[500px] h-[340px] sm:h-[470px]">
                 <div
-                  className="rounded-2xl shadow-2xl overflow-hidden"
-                  style={{ backgroundColor: COLORS.surface }}
-                >
-                  <img
-                    src="/soundCat.png"
-                    alt="Bundai Mobile App"
-                    className="w-auto h-80 sm:h-96 object-cover"
-                  />
-                </div>
+                  className="absolute inset-10 rounded-[3rem] blur-3xl opacity-45"
+                  style={{
+                    background: `radial-gradient(circle, ${COLORS.brandPrimaryLight} 0%, ${COLORS.surfaceMuted} 70%)`,
+                  }}
+                />
+                {heroMobileStackCards.map((card) => (
+                  <div
+                    key={card.id}
+                    className={`absolute ${card.positionClass} ${card.sizeClass} rounded-2xl p-2 sm:p-3 shadow-2xl`}
+                    style={{
+                      backgroundColor: COLORS.surface,
+                      border: `1px solid ${COLORS.outline}`,
+                    }}
+                  >
+                    <div
+                      className="rounded-xl p-1"
+                      style={{
+                        backgroundColor: COLORS.surfaceMuted,
+                        border: `1px solid ${COLORS.outline}`,
+                      }}
+                    >
+                      <img
+                        src={card.src}
+                        alt={card.alt}
+                        className="w-full aspect-[9/19] rounded-lg object-cover object-top"
+                      />
+                    </div>
+                    <div
+                      className="mt-2 text-[11px] sm:text-xs font-semibold text-center"
+                      style={{ color: card.accent }}
+                    >
+                      {card.label}
+                    </div>
+                  </div>
+                ))}
                 <div
                   className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center animate-pulse"
                   style={{ backgroundColor: COLORS.brandSecondary }}
@@ -382,6 +481,15 @@ export default function App() {
               </div>
             </div>
           </div>
+
+          <p
+            className="mt-6 sm:mt-8 text-sm sm:text-base font-semibold px-4 animate-fade-up animate-delay-450"
+            style={{ color: COLORS.textSecondary }}
+          >
+            Capture in Dual Subtitle Loader
+            <span style={{ color: COLORS.brandPrimary }}> {'\u2192'} </span>
+            Revise in Mobile App
+          </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8 sm:mt-12 px-4 animate-fade-up animate-delay-450">
             <a
@@ -482,171 +590,163 @@ export default function App() {
               className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2"
               style={{ color: COLORS.textPrimary }}
             >
-              Revolutionary Learning
-              <span style={{ color: COLORS.brandPrimary }}> Features</span>
+              From Exposure to
+              <span style={{ color: COLORS.brandPrimary }}> Fluency</span>
             </h2>
             <p
               className="text-lg sm:text-xl max-w-3xl mx-auto px-4"
               style={{ color: COLORS.textSecondary }}
             >
-              Powered by AI and designed for real-world fluency, not just test
-              scores.
+              One connected workflow across two products: Dual Subtitle Loader
+              for capture, mobile app for mastery, and web sync for everyday
+              consistency.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-20 px-4">
-            {/* Highlighted (most important) card */}
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 px-4">
+            {[
+              'Dual Subtitle Loader extension',
+              'Mobile app training',
+              'Web sync continuation',
+            ].map((pill) => (
+              <span
+                key={pill}
+                className="inline-flex items-center rounded-full px-4 py-2 text-xs sm:text-sm font-semibold"
+                style={{
+                  backgroundColor: COLORS.surface,
+                  color: COLORS.textSecondary,
+                  border: `1px solid ${COLORS.outline}`,
+                }}
+              >
+                {pill}
+              </span>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8 mb-12 sm:mb-14 px-4">
+            {transformationCards.map((card, index) => (
+              <article
+                key={card.title}
+                className="rounded-3xl p-4 sm:p-5 shadow-lg transition-transform hover:-translate-y-1"
+                style={{
+                  backgroundColor: COLORS.surface,
+                  border: `1px solid ${COLORS.outline}`,
+                }}
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black"
+                    style={{
+                      backgroundColor: COLORS.surfaceMuted,
+                      color: card.accent,
+                    }}
+                  >
+                    {index + 1}
+                  </div>
+                  <div
+                    className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"
+                    style={{
+                      backgroundColor: COLORS.surfaceMuted,
+                      color: card.accent,
+                    }}
+                  >
+                    {card.stage}
+                    {card.platform ? ` • ${card.platform}` : ''}
+                  </div>
+                </div>
+
+                <h3
+                  className="text-lg sm:text-xl font-bold mb-2"
+                  style={{ color: COLORS.textPrimary }}
+                >
+                  {card.title}
+                </h3>
+                <p
+                  className="text-sm sm:text-base leading-relaxed mb-3"
+                  style={{ color: COLORS.textSecondary }}
+                >
+                  {card.description}
+                </p>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: card.accent }}
+                >
+                  {card.outcome}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <div className="mb-12 sm:mb-14 px-4">
+            <h3
+              className="text-2xl sm:text-3xl font-bold text-center mb-3"
+              style={{ color: COLORS.textPrimary }}
+            >
+              Mobile App Screens
+            </h3>
+            <p
+              className="text-center text-sm sm:text-base max-w-3xl mx-auto"
+              style={{ color: COLORS.textSecondary }}
+            >
+              Current product views from the app, shown as real UI examples.
+            </p>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-6">
+              {mobileShowcaseShots.map((shot) => (
+                <figure
+                  key={shot.src}
+                  className="rounded-2xl p-3 sm:p-4 shadow-lg"
+                  style={{
+                    backgroundColor: COLORS.surface,
+                    border: `1px solid ${COLORS.outline}`,
+                  }}
+                >
+                  <div
+                    className="rounded-2xl p-2"
+                    style={{
+                      backgroundColor: COLORS.surfaceMuted,
+                      border: `1px solid ${COLORS.outline}`,
+                    }}
+                  >
+                    <img
+                      src={shot.src}
+                      alt={`${shot.label} screenshot`}
+                      loading="lazy"
+                      className="w-full aspect-[9/19] rounded-[1rem] object-cover object-top"
+                    />
+                  </div>
+                  <figcaption
+                    className="text-center text-xs sm:text-sm font-semibold mt-3"
+                    style={{ color: COLORS.textSecondary }}
+                  >
+                    {shot.label}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+
+          <div className="max-w-4xl mx-auto px-4">
             <div
-              className="p-6 sm:p-8 text-center transform transition-all hover:scale-105 hover:shadow-xl rounded-2xl sm:col-span-2 lg:col-span-1"
+              className="rounded-2xl p-5 sm:p-6 text-center"
               style={{
                 backgroundColor: COLORS.surface,
-                border: `2px solid ${COLORS.brandPrimary}`,
+                border: `1px solid ${COLORS.outline}`,
               }}
             >
-              <div
-                className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6"
-                style={{ backgroundColor: COLORS.brandPrimary }}
-              >
-                <MonitorSmartphone className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
-              </div>
-              <h3
-                className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4"
-                style={{ color: COLORS.textPrimary }}
-              >
-                Cross-Platform Sync
-              </h3>
               <p
-                className="leading-relaxed text-sm sm:text-base"
+                className="text-base sm:text-lg leading-relaxed"
                 style={{ color: COLORS.textSecondary }}
               >
-                Learn seamlessly across desktop, mobile, and browser extension.
-                Your progress syncs everywhere instantly.
-              </p>
-            </div>
-
-            {/* Other cards */}
-            <div
-              className="p-6 sm:p-8 text-center rounded-2xl shadow-lg"
-              style={{ backgroundColor: COLORS.surface }}
-            >
-              <div
-                className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6"
-                style={{ backgroundColor: COLORS.accentDanger }}
-              >
-                <Languages className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
-              </div>
-              <h3
-                className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4"
-                style={{ color: COLORS.textPrimary }}
-              >
-                2000 Essential Kanji
-              </h3>
-              <p
-                className="leading-relaxed text-sm sm:text-base"
-                style={{ color: COLORS.textSecondary }}
-              >
-                Master every kanji you need with our scientifically-ordered
-                curriculum and visual memory techniques.
-              </p>
-            </div>
-
-            <div
-              className="p-6 sm:p-8 text-center rounded-2xl shadow-lg"
-              style={{ backgroundColor: COLORS.surface }}
-            >
-              <div
-                className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6"
-                style={{ backgroundColor: COLORS.accentSuccess }}
-              >
-                <Brain className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
-              </div>
-              <h3
-                className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4"
-                style={{ color: COLORS.textPrimary }}
-              >
-                AI-Powered SRS
-              </h3>
-              <p
-                className="leading-relaxed text-sm sm:text-base"
-                style={{ color: COLORS.textSecondary }}
-              >
-                Our intelligent spaced repetition adapts to your learning speed
-                and optimizes retention automatically.
-              </p>
-            </div>
-
-            <div
-              className="p-6 sm:p-8 text-center rounded-2xl shadow-lg"
-              style={{ backgroundColor: COLORS.surface }}
-            >
-              <div
-                className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6"
-                style={{ backgroundColor: COLORS.brandSecondary }}
-              >
-                <Globe className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
-              </div>
-              <h3
-                className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4"
-                style={{ color: COLORS.textPrimary }}
-              >
-                YouTube Integration
-              </h3>
-              <p
-                className="leading-relaxed text-sm sm:text-base"
-                style={{ color: COLORS.textSecondary }}
-              >
-                Learn from real Japanese content. Our extension provides instant
-                translations and vocabulary building.
-              </p>
-            </div>
-
-            <div
-              className="p-6 sm:p-8 text-center rounded-2xl shadow-lg"
-              style={{ backgroundColor: COLORS.surface }}
-            >
-              <div
-                className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6"
-                style={{ backgroundColor: COLORS.accentWarning }}
-              >
-                <BookOpen className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
-              </div>
-              <h3
-                className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4"
-                style={{ color: COLORS.textPrimary }}
-              >
-                1000 Core Words
-              </h3>
-              <p
-                className="leading-relaxed text-sm sm:text-base"
-                style={{ color: COLORS.textSecondary }}
-              >
-                Immersive vocabulary learning with audio-first approach and
-                contextual understanding.
-              </p>
-            </div>
-
-            <div
-              className="p-6 sm:p-8 text-center rounded-2xl shadow-lg"
-              style={{ backgroundColor: COLORS.surface }}
-            >
-              <div
-                className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6"
-                style={{ backgroundColor: COLORS.brandPrimaryLight }}
-              >
-                <Eye className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
-              </div>
-              <h3
-                className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4"
-                style={{ color: COLORS.textPrimary }}
-              >
-                Similar Kanji Training
-              </h3>
-              <p
-                className="leading-relaxed text-sm sm:text-base"
-                style={{ color: COLORS.textSecondary }}
-              >
-                Never confuse similar-looking characters again with our
-                specialized recognition training system.
+                Prefer studying on desktop? The web app already includes
+                <span
+                  className="font-bold"
+                  style={{ color: COLORS.brandPrimary }}
+                >
+                  {' '}
+                  60% to 70% feature parity
+                </span>{' '}
+                with the mobile app, with synced progress and core review
+                workflows.
               </p>
             </div>
           </div>
