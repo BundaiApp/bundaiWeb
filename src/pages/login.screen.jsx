@@ -168,12 +168,22 @@ export default function Login() {
             </div>
           </form>
 
-          <p className="text-center text-sm text-slate-600">
-            Don't have an account?{" "}
-            <Link to="/" className="text-violet-700 hover:text-violet-800">
-              Explore Bundai
-            </Link>
-          </p>
+          <div className="space-y-3">
+            <Button
+              variant="accent"
+              className="w-full"
+              onClick={() => navigate("/signup")}
+              disabled={loading || isLoggedIn}
+            >
+              Sign Up
+            </Button>
+            <p className="text-center text-sm text-slate-600">
+              Don't have an account?{" "}
+              <Link to="/" className="text-violet-700 hover:text-violet-800">
+                Explore Bundai
+              </Link>
+            </p>
+          </div>
         </GlassCard>
       </div>
     </div>
