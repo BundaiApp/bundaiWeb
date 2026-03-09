@@ -25,6 +25,8 @@ export default function App() {
   const [executeLogOut, { loading: logoutLoading }] =
     useMutation(logOutMutation);
 
+  const isPromotionActive = Boolean(import.meta?.env?.VITE_PROMO_ACTIVE === 'true');
+
   useEffect(() => {
     const syncAuthState = () => {
       const loggedIn = hasAuthToken();
@@ -794,7 +796,7 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto px-4">
-            {/* Weekly Plan */}
+            {/* Monthly Plan */}
             <div
               className="p-6 sm:p-8 text-center rounded-2xl shadow-lg"
               style={{ backgroundColor: COLORS.surface }}
@@ -804,15 +806,41 @@ export default function App() {
                   className="text-xl sm:text-2xl font-bold mb-2"
                   style={{ color: COLORS.textPrimary }}
                 >
-                  Weekly
+                  Monthly
                 </h3>
-                <div
-                  className="text-3xl sm:text-4xl font-black mb-2"
-                  style={{ color: COLORS.textPrimary }}
-                >
-                  $1.99
-                </div>
-                <div style={{ color: COLORS.textMuted }}>per week</div>
+                {isPromotionActive ? (
+                  <>
+                    <div
+                      className="text-2xl sm:text-3xl font-black mb-1"
+                      style={{ color: COLORS.textMuted, textDecoration: 'line-through' }}
+                    >
+                      $8.99
+                    </div>
+                    <div
+                      className="text-3xl sm:text-4xl font-black mb-2"
+                      style={{ color: COLORS.brandPrimary }}
+                    >
+                      $5.99
+                    </div>
+                    <div style={{ color: COLORS.textMuted }}>per month</div>
+                    <div
+                      className="text-sm mt-1"
+                      style={{ color: COLORS.accentSuccess }}
+                    >
+                      33% OFF - Limited time!
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div
+                      className="text-3xl sm:text-4xl font-black mb-2"
+                      style={{ color: COLORS.textPrimary }}
+                    >
+                      $8.99
+                    </div>
+                    <div style={{ color: COLORS.textMuted }}>per month</div>
+                  </>
+                )}
               </div>
               <ul className="text-left space-y-3 mb-8 text-sm sm:text-base">
                 <li className="flex items-center">
@@ -876,7 +904,7 @@ export default function App() {
                 onClick={handleLoginClick}
                 style={{ backgroundColor: 'transparent' }}
               >
-                Start Weekly
+                Start Monthly
               </Button>
             </div>
 
@@ -902,17 +930,25 @@ export default function App() {
                   Yearly
                 </h3>
                 <div
+                  className="text-2xl sm:text-3xl font-black mb-1"
+                  style={{ color: COLORS.textMuted, textDecoration: 'line-through' }}
+                >
+                  $120
+                </div>
+                <div
                   className="text-3xl sm:text-4xl font-black mb-2"
                   style={{ color: COLORS.textPrimary }}
                 >
                   $29.99
                 </div>
-                <div style={{ color: COLORS.textMuted }}>per year</div>
+                <div style={{ color: COLORS.textMuted }}>
+                  {isPromotionActive ? '18 months' : '12 months'}
+                </div>
                 <div
                   className="text-sm mt-1"
                   style={{ color: COLORS.accentSuccess }}
                 >
-                  Save $125!
+                  Save ${isPromotionActive ? '$100+!' : '$90!'}
                 </div>
               </div>
               <ul className="text-left space-y-3 mb-8 text-sm sm:text-base">
