@@ -43,8 +43,13 @@ export default function Terms() {
             </p>
 
             <section>
+              <h2 className="text-2xl font-semibold text-white mb-4">Agreement to Terms</h2>
+              <p>By using Bundai, you agree to these Terms of Service. If you don't agree, don't use the service.</p>
+            </section>
+
+            <section>
               <h2 className="text-2xl font-semibold text-white mb-4">What Bundai Is</h2>
-              <p>Japanese language learning platform with mobile app and browser extension.</p>
+              <p>Bundai is a Japanese language learning platform with mobile app and browser extension.</p>
             </section>
 
             <section>
