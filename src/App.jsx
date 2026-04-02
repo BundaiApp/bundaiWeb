@@ -6,6 +6,7 @@ import Refund from './pages/Refund';
 import Login from './pages/login.screen';
 import SignUp from './pages/signup.screen';
 import ForgotPassword from './pages/forgotPassword.screen';
+import PricingPage from './pages/pricing.screen';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/dashboard.screen';
 import KanjiTemplate from './pages/kanjiTemplate.screen';
@@ -33,6 +34,7 @@ export default function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

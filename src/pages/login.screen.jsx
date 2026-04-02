@@ -7,10 +7,15 @@ import { Mail, Lock, ArrowLeft } from "lucide-react"
 import { GlassCard } from "../components/GlassCard"
 import { Button } from "../components/Button"
 import logInMutation from "../graphql/mutations/logIn.mutation"
-import { hasAuthToken, setAuthData, redirectToDashboard } from "../lib/auth"
+import {
+  hasAuthToken,
+  setAuthData,
+  redirectToDashboard,
+  shouldSkipAuthRedirects
+} from "../lib/auth"
 
 export default function Login() {
-  const isDevMode = Boolean(import.meta?.env?.DEV)
+  const skipAuthRedirects = shouldSkipAuthRedirects()
   const navigate = useNavigate()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -21,10 +26,10 @@ export default function Login() {
   useEffect(() => {
     const loggedIn = hasAuthToken()
     setIsLoggedIn(loggedIn)
-    if (loggedIn && !isDevMode) {
+    if (loggedIn && !skipAuthRedirects) {
       redirectToDashboard()
     }
-  }, [isDevMode])
+  }, [skipAuthRedirects])
 
   const handleSubmit = async (event) => {
     event.preventDefault()

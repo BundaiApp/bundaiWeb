@@ -6,32 +6,35 @@ import {
   X,
   Globe,
   Star,
-  CheckCircle,
   Download,
 } from 'lucide-react';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { Button } from '../components/Button';
+import InteractiveSubtitleDemo from '../components/InteractiveSubtitleDemo';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client/react';
-import { hasAuthToken, clearAuthToken, redirectToDashboard } from '../lib/auth';
+import {
+  hasAuthToken,
+  clearAuthToken,
+  redirectToDashboard,
+  shouldSkipAuthRedirects
+} from '../lib/auth';
 import logOutMutation from '../graphql/mutations/logOut.mutation';
 import COLORS from '../theme/colors';
 
 export default function App() {
-  const isDevMode = Boolean(import.meta?.env?.DEV);
+  const skipAuthRedirects = shouldSkipAuthRedirects();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [executeLogOut, { loading: logoutLoading }] =
     useMutation(logOutMutation);
 
-  const isPromotionActive = Boolean(import.meta?.env?.VITE_PROMO_ACTIVE === 'true');
-
   useEffect(() => {
     const syncAuthState = () => {
       const loggedIn = hasAuthToken();
       setIsLoggedIn(loggedIn);
-      if (loggedIn && !isDevMode) {
+      if (loggedIn && !skipAuthRedirects) {
         redirectToDashboard();
       }
     };
@@ -44,7 +47,7 @@ export default function App() {
       window.removeEventListener('storage', syncAuthState);
       window.removeEventListener('bundai:auth-change', syncAuthState);
     };
-  }, [isDevMode]);
+  }, [skipAuthRedirects]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -54,7 +57,7 @@ export default function App() {
   };
 
   const handleLoginClick = () => {
-    if (isLoggedIn && !isDevMode) {
+    if (isLoggedIn && !skipAuthRedirects) {
       redirectToDashboard();
       return;
     }
@@ -74,45 +77,6 @@ export default function App() {
       setIsLoggedIn(false);
     }
   };
-
-  const transformationCards = [
-    {
-      stage: 'Capture',
-      platform: 'Dual Subtitle Loader',
-      title: 'Catch new words while watching',
-      description:
-        'Use dual subtitles to instantly save unknown words and sentence context from real Japanese content.',
-      outcome: 'Passive watching becomes active vocabulary collection.',
-      accent: COLORS.brandPrimary,
-    },
-    {
-      stage: 'Understand',
-      platform: 'Mobile App',
-      title: 'Break down meaning quickly',
-      description:
-        'Open saved words in the app, study examples, and connect each term to usage patterns you can remember.',
-      outcome: 'New words move from recognition to real understanding.',
-      accent: COLORS.accentDanger,
-    },
-    {
-      stage: 'Retain',
-      platform: 'Mobile App',
-      title: 'Lock it in with daily review',
-      description:
-        'Train with SRS and targeted review sessions so high-value words stay available when you need them.',
-      outcome: 'Less forgetting and faster long-term retention.',
-      accent: COLORS.accentSuccess,
-    },
-    {
-      stage: 'Continue anywhere',
-      platform: '',
-      title: 'Keep momentum on desktop',
-      description:
-        'Switch to web at your desk without breaking flow. Progress and review data stay in sync across products.',
-      outcome: 'Consistent practice even when your device changes.',
-      accent: COLORS.accentWarning,
-    },
-  ];
 
   const mobileShowcaseShots = [
     { src: '/instant QUiz.png', label: 'Instant Quiz' },
@@ -197,59 +161,7 @@ export default function App() {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-8">
-              <a
-                onClick={() => scrollToSection('home')}
-                className="cursor-pointer transition-colors"
-                style={{ color: COLORS.textSecondary }}
-                onMouseEnter={(e) =>
-                  (e.target.style.color = COLORS.brandPrimary)
-                }
-                onMouseLeave={(e) =>
-                  (e.target.style.color = COLORS.textSecondary)
-                }
-              >
-                Home
-              </a>
-              <a
-                onClick={() => scrollToSection('pricing')}
-                className="cursor-pointer transition-colors"
-                style={{ color: COLORS.textSecondary }}
-                onMouseEnter={(e) =>
-                  (e.target.style.color = COLORS.brandPrimary)
-                }
-                onMouseLeave={(e) =>
-                  (e.target.style.color = COLORS.textSecondary)
-                }
-              >
-                Pricing
-              </a>
-              <a
-                onClick={() => scrollToSection('features')}
-                className="cursor-pointer transition-colors"
-                style={{ color: COLORS.textSecondary }}
-                onMouseEnter={(e) =>
-                  (e.target.style.color = COLORS.brandPrimary)
-                }
-                onMouseLeave={(e) =>
-                  (e.target.style.color = COLORS.textSecondary)
-                }
-              >
-                Features
-              </a>
-              <a
-                onClick={() => scrollToSection('home')}
-                className="cursor-pointer transition-colors"
-                style={{ color: COLORS.textSecondary }}
-                onMouseEnter={(e) =>
-                  (e.target.style.color = COLORS.brandPrimary)
-                }
-                onMouseLeave={(e) =>
-                  (e.target.style.color = COLORS.textSecondary)
-                }
-              >
-                Demo
-              </a>
+            <div className="hidden md:flex items-center">
               {isLoggedIn ? (
                 <Button
                   size="sm"
@@ -294,58 +206,6 @@ export default function App() {
               style={{ borderColor: COLORS.divider }}
             >
               <div className="flex flex-col space-y-4 pt-4">
-                <a
-                  onClick={() => scrollToSection('home')}
-                  className="cursor-pointer transition-colors"
-                  style={{ color: COLORS.textSecondary }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.color = COLORS.brandPrimary)
-                  }
-                  onMouseLeave={(e) =>
-                    (e.target.style.color = COLORS.textSecondary)
-                  }
-                >
-                  Home
-                </a>
-                <a
-                  onClick={() => scrollToSection('pricing')}
-                  className="cursor-pointer transition-colors"
-                  style={{ color: COLORS.textSecondary }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.color = COLORS.brandPrimary)
-                  }
-                  onMouseLeave={(e) =>
-                    (e.target.style.color = COLORS.textSecondary)
-                  }
-                >
-                  Pricing
-                </a>
-                <a
-                  onClick={() => scrollToSection('features')}
-                  className="cursor-pointer transition-colors"
-                  style={{ color: COLORS.textSecondary }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.color = COLORS.brandPrimary)
-                  }
-                  onMouseLeave={(e) =>
-                    (e.target.style.color = COLORS.textSecondary)
-                  }
-                >
-                  Features
-                </a>
-                <a
-                  onClick={() => scrollToSection('home')}
-                  className="cursor-pointer transition-colors"
-                  style={{ color: COLORS.textSecondary }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.color = COLORS.brandPrimary)
-                  }
-                  onMouseLeave={(e) =>
-                    (e.target.style.color = COLORS.textSecondary)
-                  }
-                >
-                  Demo
-                </a>
                 {isLoggedIn ? (
                   <Button
                     size="sm"
@@ -375,26 +235,14 @@ export default function App() {
       {/* Demo Section */}
       <section
         id="home"
-        className="relative py-16 sm:py-20 px-4 sm:px-6"
+        className="relative py-12 sm:py-16 px-4 sm:px-6"
         style={{
           background: `linear-gradient(180deg, ${COLORS.surfaceMuted} 0%, ${COLORS.background} 100%)`,
         }}
       >
         <div className="max-w-5xl mx-auto text-center">
-          <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold mb-6 animate-fade-up"
-            style={{
-              backgroundColor: COLORS.surface,
-              border: `1px solid ${COLORS.divider}`,
-              color: COLORS.textSecondary,
-            }}
-          >
-            <span>Audio-first immersion</span>
-            <span style={{ color: COLORS.brandPrimary }}>•</span>
-            <span>Built for anime + real content</span>
-          </div>
           <h1
-            className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black mb-6 sm:mb-8 leading-tight max-w-5xl mx-auto px-2 animate-fade-up animate-delay-150"
+            className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black mb-5 sm:mb-6 leading-tight max-w-5xl mx-auto px-2 animate-fade-up animate-delay-150"
             style={{ color: COLORS.textPrimary }}
           >
             Start Watching{' '}
@@ -404,13 +252,13 @@ export default function App() {
             <span style={{ color: COLORS.accentSuccess }}>effortlessly !</span>
           </h1>
           <p
-            className="text-lg sm:text-xl mb-8 sm:mb-12 max-w-3xl mx-auto px-4 animate-fade-up animate-delay-300"
+            className="text-lg sm:text-xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4 animate-fade-up animate-delay-300"
             style={{ color: COLORS.textSecondary }}
           >
             Pick up words by sound as you watch anime, with or without kanji.
           </p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-16 items-center px-4 mt-12 animate-fade-up animate-delay-450">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-12 items-center px-4 mt-8 animate-fade-up animate-delay-450">
             {/* Chrome Extension */}
             <div className="relative order-1">
               <div
@@ -485,7 +333,7 @@ export default function App() {
           </div>
 
           <p
-            className="mt-6 sm:mt-8 text-sm sm:text-base font-semibold px-4 animate-fade-up animate-delay-450"
+            className="mt-4 sm:mt-6 text-sm sm:text-base font-semibold px-4 animate-fade-up animate-delay-450"
             style={{ color: COLORS.textSecondary }}
           >
             Capture in Dual Subtitle Loader
@@ -493,7 +341,7 @@ export default function App() {
             Revise in Mobile App
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8 sm:mt-12 px-4 animate-fade-up animate-delay-450">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-6 sm:mt-8 px-4 animate-fade-up animate-delay-450">
             <a
               href="https://chromewebstore.google.com/detail/bundai-extension-plasmo/aoencglmiihcheldbcpjlnlfnemcglfe?authuser=1&hl=en"
               target="_blank"
@@ -587,21 +435,20 @@ export default function App() {
         }}
       >
         <div className="mx-auto">
-          <div className="text-center mb-12 sm:mb-16">
+          <div className="text-center mb-8 sm:mb-10">
             <h2
               className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2"
               style={{ color: COLORS.textPrimary }}
             >
-              From Exposure to
-              <span style={{ color: COLORS.brandPrimary }}> Fluency</span>
+              See The Extension
+              <span style={{ color: COLORS.brandPrimary }}> In Action</span>
             </h2>
             <p
               className="text-lg sm:text-xl max-w-3xl mx-auto px-4"
               style={{ color: COLORS.textSecondary }}
             >
-              One connected workflow across two products: Dual Subtitle Loader
-              for capture, mobile app for mastery, and web sync for everyday
-              consistency.
+              A real scene with local subtitle overlays and hover interactions,
+              so visitors can understand the product before installing it.
             </p>
           </div>
 
@@ -625,59 +472,7 @@ export default function App() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8 mb-12 sm:mb-14 px-4">
-            {transformationCards.map((card, index) => (
-              <article
-                key={card.title}
-                className="rounded-3xl p-4 sm:p-5 shadow-lg transition-transform hover:-translate-y-1"
-                style={{
-                  backgroundColor: COLORS.surface,
-                  border: `1px solid ${COLORS.outline}`,
-                }}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black"
-                    style={{
-                      backgroundColor: COLORS.surfaceMuted,
-                      color: card.accent,
-                    }}
-                  >
-                    {index + 1}
-                  </div>
-                  <div
-                    className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"
-                    style={{
-                      backgroundColor: COLORS.surfaceMuted,
-                      color: card.accent,
-                    }}
-                  >
-                    {card.stage}
-                    {card.platform ? ` • ${card.platform}` : ''}
-                  </div>
-                </div>
-
-                <h3
-                  className="text-lg sm:text-xl font-bold mb-2"
-                  style={{ color: COLORS.textPrimary }}
-                >
-                  {card.title}
-                </h3>
-                <p
-                  className="text-sm sm:text-base leading-relaxed mb-3"
-                  style={{ color: COLORS.textSecondary }}
-                >
-                  {card.description}
-                </p>
-                <p
-                  className="text-sm font-semibold"
-                  style={{ color: card.accent }}
-                >
-                  {card.outcome}
-                </p>
-              </article>
-            ))}
-          </div>
+          <InteractiveSubtitleDemo colors={COLORS} />
 
           <div className="mb-12 sm:mb-14 px-4">
             <h3
@@ -755,298 +550,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section
-        id="pricing"
-        className="relative py-16 sm:py-20 px-4 sm:px-6"
-        style={{
-          background: `linear-gradient(180deg, ${COLORS.surfaceMuted} 0%, ${COLORS.background} 100%)`,
-        }}
-      >
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 sm:mb-16">
-            <div
-              className="inline-block px-4 sm:px-6 py-2 sm:py-3 rounded-full mb-6 sm:mb-8"
-              style={{
-                backgroundColor: COLORS.successSoft,
-                border: `1px solid ${COLORS.accentSuccess}`,
-              }}
-            >
-              <span
-                className="text-sm sm:text-base font-semibold"
-                style={{ color: COLORS.accentSuccess }}
-              >
-                🔥 Lifetime free for first 100 users
-              </span>
-            </div>
-            <h2
-              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2"
-              style={{ color: COLORS.textPrimary }}
-            >
-              Choose Your
-              <span style={{ color: COLORS.brandPrimary }}> Learning Path</span>
-            </h2>
-            <p
-              className="text-lg sm:text-xl max-w-3xl mx-auto px-4"
-              style={{ color: COLORS.textSecondary }}
-            >
-              Start free and upgrade when you're ready to accelerate your
-              Japanese mastery.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto px-4">
-            {/* Monthly Plan */}
-            <div
-              className="p-6 sm:p-8 text-center rounded-2xl shadow-lg"
-              style={{ backgroundColor: COLORS.surface }}
-            >
-              <div className="mb-6">
-                <h3
-                  className="text-xl sm:text-2xl font-bold mb-2"
-                  style={{ color: COLORS.textPrimary }}
-                >
-                  Monthly
-                </h3>
-                {isPromotionActive ? (
-                  <>
-                    <div
-                      className="text-2xl sm:text-3xl font-black mb-1"
-                      style={{ color: COLORS.textMuted, textDecoration: 'line-through' }}
-                    >
-                      $8.99
-                    </div>
-                    <div
-                      className="text-3xl sm:text-4xl font-black mb-2"
-                      style={{ color: COLORS.brandPrimary }}
-                    >
-                      $5.99
-                    </div>
-                    <div style={{ color: COLORS.textMuted }}>per month</div>
-                    <div
-                      className="text-sm mt-1"
-                      style={{ color: COLORS.accentSuccess }}
-                    >
-                      33% OFF - Limited time!
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div
-                      className="text-3xl sm:text-4xl font-black mb-2"
-                      style={{ color: COLORS.textPrimary }}
-                    >
-                      $8.99
-                    </div>
-                    <div style={{ color: COLORS.textMuted }}>per month</div>
-                  </>
-                )}
-              </div>
-              <ul className="text-left space-y-3 mb-8 text-sm sm:text-base">
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    All 2000 Kanji characters
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    Complete vocabulary (10,000+ words)
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    YouTube extension
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    AI-powered SRS system
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    Progress analytics
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    Unlimited practice sessions
-                  </span>
-                </li>
-              </ul>
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={handleLoginClick}
-                style={{ backgroundColor: 'transparent' }}
-              >
-                Start Monthly
-              </Button>
-            </div>
-
-            {/* Yearly Plan */}
-            <div
-              className="p-6 sm:p-8 text-center relative md:scale-105 rounded-2xl shadow-xl"
-              style={{
-                backgroundColor: COLORS.surface,
-                border: `2px solid ${COLORS.brandPrimary}`,
-              }}
-            >
-              <div
-                className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-white"
-                style={{ backgroundColor: COLORS.brandPrimary }}
-              >
-                Best Value
-              </div>
-              <div className="mb-6">
-                <h3
-                  className="text-xl sm:text-2xl font-bold mb-2"
-                  style={{ color: COLORS.textPrimary }}
-                >
-                  Yearly
-                </h3>
-                <div
-                  className="text-2xl sm:text-3xl font-black mb-1"
-                  style={{ color: COLORS.textMuted, textDecoration: 'line-through' }}
-                >
-                  $120
-                </div>
-                <div
-                  className="text-3xl sm:text-4xl font-black mb-2"
-                  style={{ color: COLORS.textPrimary }}
-                >
-                  $29.99
-                </div>
-                <div style={{ color: COLORS.textMuted }}>
-                  {isPromotionActive ? '18 months' : '12 months'}
-                </div>
-                <div
-                  className="text-sm mt-1"
-                  style={{ color: COLORS.accentSuccess }}
-                >
-                  Save ${isPromotionActive ? '$100+!' : '$90!'}
-                </div>
-              </div>
-              <ul className="text-left space-y-3 mb-8 text-sm sm:text-base">
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    All 2000 Kanji characters
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    Complete vocabulary (10,000+ words)
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    YouTube extension
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    AI-powered SRS system
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    Progress analytics
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    Unlimited practice sessions
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    Priority support
-                  </span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle
-                    className="w-4 sm:w-5 h-4 sm:h-5 mr-3 flex-shrink-0"
-                    style={{ color: COLORS.accentSuccess }}
-                  />
-                  <span style={{ color: COLORS.textSecondary }}>
-                    Exclusive features
-                  </span>
-                </li>
-              </ul>
-              <Button
-                variant="primary"
-                className="w-full"
-                onClick={handleLoginClick}
-              >
-                Start Yearly
-              </Button>
-            </div>
-          </div>
-
-          <div className="text-center mt-8 sm:mt-12 px-4">
-            <p
-              className="mb-4 text-sm sm:text-base"
-              style={{ color: COLORS.textMuted }}
-            >
-              🎯 30-day money-back guarantee • 🔒 Secure payment • 📱 Instant
-              access
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Footer Section */}
       <footer
         className="relative py-16 sm:py-20 px-4 sm:px-6"
@@ -1120,24 +623,6 @@ export default function App() {
                 Product
               </h4>
               <ul className="space-y-2 text-sm sm:text-base">
-                <li>
-                  <a
-                    href="#features"
-                    className="hover:transition-colors"
-                    style={{ color: COLORS.textSecondary }}
-                  >
-                    Features
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#pricing"
-                    className="hover:transition-colors"
-                    style={{ color: COLORS.textSecondary }}
-                  >
-                    Pricing
-                  </a>
-                </li>
                 <li>
                   <a
                     href="https://apps.apple.com/gb/app/bundai/id6751961361"

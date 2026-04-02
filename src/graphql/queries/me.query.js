@@ -6,9 +6,9 @@ export default gql`
       _id
       email
       name
+      hasPaid
       currentLevel
       createdAt
     }
   }
 `;
-

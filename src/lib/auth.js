@@ -1,5 +1,7 @@
 export const TOKEN_STORAGE_KEY = 'bundaiAuthToken'
 export const APP_ORIGIN = 'https://bundai.app'
+export const LOCAL_APP_ORIGIN = 'http://localhost:5173'
+export const LOCAL_GRAPHQL_URL = 'http://localhost:3000/graphql'
 export const DASHBOARD_PATH = '/dashboard'
 export const LOGIN_PATH = '/login'
 export const DASHBOARD_URL = `${APP_ORIGIN}${DASHBOARD_PATH}`
@@ -13,12 +15,75 @@ const isDevMode = () => {
   }
 }
 
+const isLocalHostname = () => {
+  try {
+    if (typeof window === 'undefined') {
+      return false
+    }
+
+    const hostname = window.location.hostname.toLowerCase()
+    return (
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '0.0.0.0' ||
+      hostname.endsWith('.local')
+    )
+  } catch {
+    return false
+  }
+}
+
+const getEnvFlag = (value, fallback = false) => {
+  if (typeof value !== 'string') {
+    return fallback
+  }
+
+  const normalized = value.trim().toLowerCase()
+  if (['1', 'true', 'yes', 'on'].includes(normalized)) {
+    return true
+  }
+  if (['0', 'false', 'no', 'off'].includes(normalized)) {
+    return false
+  }
+
+  return fallback
+}
+
+export const shouldSkipAuthRedirects = () => {
+  try {
+    const envValue = import.meta?.env?.VITE_SKIP_AUTH_REDIRECTS
+    return getEnvFlag(envValue, isDevMode() || isLocalHostname())
+  } catch {
+    return isDevMode() || isLocalHostname()
+  }
+}
+
+export const isLocalRuntime = () => {
+  return isDevMode() || isLocalHostname()
+}
+
+export const getBaseAppOrigin = () => {
+  try {
+    if (typeof window !== 'undefined' && isLocalRuntime()) {
+      return window.location.origin || LOCAL_APP_ORIGIN
+    }
+  } catch {
+    // Fall back to defaults below.
+  }
+
+  return APP_ORIGIN
+}
+
 export const getAppUrl = (path) => {
   if (!path?.startsWith('/')) {
     return path
   }
 
-  return isDevMode() ? path : `${APP_ORIGIN}${path}`
+  if (isLocalRuntime()) {
+    return path
+  }
+
+  return `${getBaseAppOrigin()}${path}`
 }
 
 export const hasAuthToken = () => {
