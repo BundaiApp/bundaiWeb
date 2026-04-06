@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Volume2, VolumeX } from 'lucide-react'
 import { toRomaji } from 'wanakana'
 
@@ -38,6 +38,7 @@ const cues = [
   {
     start: 7.37,
     end: 12.64,
+    timecode: 'S03E12 • 00:20:34-00:20:47',
     english: "However, his peak output is slightly below Ishigori's.",
     parts: [
       { text: 'しかし', key: 'しかし' },
@@ -177,16 +178,14 @@ const glossary = {
 }
 
 export default function InteractiveSubtitleDemo({ colors }) {
+  const demoCue = cues[2]
+  const demoStartTime = demoCue.start + 0.08
   const videoRef = useRef(null)
   const frameRef = useRef(null)
   const hideTimerRef = useRef(null)
-  const [currentTime, setCurrentTime] = useState(0)
+  const hasPrimedVideoRef = useRef(false)
   const [activeCard, setActiveCard] = useState(null)
   const [isMuted, setIsMuted] = useState(true)
-
-  const activeCue = useMemo(() => {
-    return cues.find((cue) => currentTime >= cue.start && currentTime < cue.end) || cues[0]
-  }, [currentTime])
 
   const clearHideTimer = () => {
     if (hideTimerRef.current) {
@@ -268,15 +267,37 @@ export default function InteractiveSubtitleDemo({ colors }) {
         <video
           ref={videoRef}
           src="/demo/jjk-s03e12-demo.mp4"
+          poster="/demo/jjk-s03e12-poster.jpg"
           className="block w-full h-auto"
           autoPlay
-          loop
           muted
+          preload="metadata"
           playsInline
           onPlay={(event) => setIsMuted(event.currentTarget.muted)}
-          onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
-          onLoadedMetadata={(event) => setCurrentTime(event.currentTarget.currentTime)}
+          onLoadedMetadata={(event) => {
+            if (hasPrimedVideoRef.current) return
+            hasPrimedVideoRef.current = true
+            event.currentTarget.currentTime = demoStartTime
+          }}
+          onEnded={(event) => {
+            event.currentTarget.currentTime = demoStartTime
+            void event.currentTarget.play().catch(() => {})
+          }}
         />
+
+        <div className="absolute top-4 left-1/2 z-20 -translate-x-1/2">
+          <div
+            className="rounded-full px-4 py-2 text-xs sm:text-sm font-bold tracking-[0.04em] backdrop-blur-md"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.88)',
+              color: colors.textPrimary,
+              border: '1px solid rgba(255,255,255,0.48)',
+              boxShadow: '0 10px 30px rgba(31,26,61,0.12)'
+            }}
+          >
+            {demoCue.timecode}
+          </div>
+        </div>
 
         <button
           type="button"
@@ -354,7 +375,7 @@ export default function InteractiveSubtitleDemo({ colors }) {
                 className="text-center text-2xl sm:text-3xl md:text-4xl font-black leading-tight"
                 style={{ color: '#ffffff' }}
               >
-                {activeCue.parts.map((part, index) =>
+                {demoCue.parts.map((part, index) =>
                   part.key ? (
                     <span
                       key={`${part.key}-${index}`}
@@ -377,7 +398,7 @@ export default function InteractiveSubtitleDemo({ colors }) {
                 className="mt-2 text-center text-xs sm:text-sm font-semibold tracking-[0.16em] uppercase"
                 style={{ color: 'rgba(255,255,255,0.72)' }}
               >
-                {activeCue.english}
+                {demoCue.english}
               </p>
             </div>
           </div>

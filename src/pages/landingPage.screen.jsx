@@ -51,11 +51,6 @@ export default function App() {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const scrollToSection = (sectionId) => {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-    setIsMenuOpen(false);
-  };
-
   const handleLoginClick = () => {
     if (isLoggedIn && !skipAuthRedirects) {
       redirectToDashboard();
@@ -83,47 +78,6 @@ export default function App() {
     { src: '/animeWords.png', label: 'Anime Vocabulary' },
     { src: '/apple.png', label: 'Top 1000 Words' },
     { src: '/50Levels.png', label: 'Level System' },
-  ];
-
-  const heroMobileStackCards = [
-    {
-      id: 'anime',
-      src: '/animeWords.png',
-      alt: 'Bundai anime vocabulary screen',
-      label: 'Anime Vocabulary',
-      accent: COLORS.accentDanger,
-      positionClass: 'left-0 sm:left-2 top-12 sm:top-20 -rotate-[12deg] z-10',
-      sizeClass: 'w-32 sm:w-40 md:w-44',
-    },
-    {
-      id: 'quiz',
-      src: '/instant QUiz.png',
-      alt: 'Bundai instant quiz screen',
-      label: 'Instant Quiz',
-      accent: COLORS.brandPrimary,
-      positionClass:
-        'left-1/2 -translate-x-1/2 top-2 sm:top-8 rotate-[2deg] z-20',
-      sizeClass: 'w-32 sm:w-40 md:w-44',
-    },
-    {
-      id: 'levels',
-      src: '/50Levels.png',
-      alt: 'Bundai level tracking screen',
-      label: 'Level Tracking',
-      accent: COLORS.accentWarning,
-      positionClass: 'right-0 sm:right-2 top-10 sm:top-16 rotate-[11deg] z-30',
-      sizeClass: 'w-32 sm:w-40 md:w-44',
-    },
-    {
-      id: 'top1000',
-      src: '/apple.png',
-      alt: 'Bundai top 1000 words screen',
-      label: 'Top 1000 Words',
-      accent: COLORS.accentSuccess,
-      positionClass:
-        'left-1/2 -translate-x-1/2 bottom-0 sm:bottom-2 -rotate-[3deg] z-40',
-      sizeClass: 'w-36 sm:w-44 md:w-48',
-    },
   ];
 
   return (
@@ -292,36 +246,13 @@ export default function App() {
                     background: `radial-gradient(circle, ${COLORS.brandPrimaryLight} 0%, ${COLORS.surfaceMuted} 70%)`,
                   }}
                 />
-                {heroMobileStackCards.map((card) => (
-                  <div
-                    key={card.id}
-                    className={`absolute ${card.positionClass} ${card.sizeClass} rounded-2xl p-2 sm:p-3 shadow-2xl`}
-                    style={{
-                      backgroundColor: COLORS.surface,
-                      border: `1px solid ${COLORS.outline}`,
-                    }}
-                  >
-                    <div
-                      className="rounded-xl p-1"
-                      style={{
-                        backgroundColor: COLORS.surfaceMuted,
-                        border: `1px solid ${COLORS.outline}`,
-                      }}
-                    >
-                      <img
-                        src={card.src}
-                        alt={card.alt}
-                        className="w-full aspect-[9/19] rounded-lg object-cover object-top"
-                      />
-                    </div>
-                    <div
-                      className="mt-2 text-[11px] sm:text-xs font-semibold text-center"
-                      style={{ color: card.accent }}
-                    >
-                      {card.label}
-                    </div>
-                  </div>
-                ))}
+                <img
+                  src="/hero-mobile-stack.png"
+                  alt="Bundai mobile app feature stack"
+                  width="960"
+                  height="780"
+                  className="absolute left-1/2 top-1/2 w-full max-w-[420px] sm:max-w-[500px] -translate-x-1/2 -translate-y-1/2"
+                />
                 <div
                   className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center animate-pulse"
                   style={{ backgroundColor: COLORS.brandSecondary }}
