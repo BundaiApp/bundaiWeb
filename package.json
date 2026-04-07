@@ -22,6 +22,8 @@
     "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",
     "lucide-react": "^0.515.0",
+    "posthog-js": "^1.364.7",
+    "posthog-node": "^5.28.11",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.9.1",

@@ -11,6 +11,7 @@ import {
   getPaddleInstance,
   isPaddleConfigured
 } from "../lib/paddle"
+import posthog from "../lib/posthog"
 
 const PRODUCT_SURFACES = [
   {
@@ -23,9 +24,9 @@ const PRODUCT_SURFACES = [
   {
     title: "Mobile app",
     description: "Study saved words, anime vocabulary, and kanji on your phone.",
-    imageSrc: "/appScreenshot.png",
-    imageAlt: "Bundai mobile app screenshot",
-    fit: "contain"
+    imageSrc: "/page-full.png",
+    imageAlt: "Bundai mobile app feature preview",
+    fit: "cover"
   },
   {
     title: "Desktop and web",
@@ -188,6 +189,7 @@ export default function PricingPlans({ id, standalone = false }) {
       })
     } catch (error) {
       console.error("Failed to open Paddle checkout", error)
+      posthog.captureException(error, authData?.userId)
       setCheckoutError(
         error?.message || "Unable to start Paddle checkout."
       )

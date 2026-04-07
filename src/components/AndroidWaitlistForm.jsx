@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useMutation } from "@apollo/client/react"
 import { Mail, CheckCircle, Loader2, Smartphone } from "lucide-react"
 import addToWaitlistMutation from "../graphql/mutations/addToWaitlist.mutation"
+import posthog from "../lib/posthog"
 
 export function AndroidWaitlistForm({ compact = false }) {
   const [email, setEmail] = useState("")
@@ -39,6 +40,7 @@ export function AndroidWaitlistForm({ compact = false }) {
       }
     } catch (err) {
       console.error("Waitlist error:", err)
+      posthog.captureException(err)
       setError("Failed to join waitlist. Please try again.")
     }
   }

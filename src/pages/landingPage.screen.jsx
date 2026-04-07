@@ -1,13 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import {
-  Menu,
-  X,
-  Globe,
-  Star,
-  Download,
-} from 'lucide-react';
+import { Menu, X, Globe, Download } from 'lucide-react';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { Button } from '../components/Button';
 import InteractiveSubtitleDemo from '../components/InteractiveSubtitleDemo';
@@ -17,10 +11,22 @@ import {
   hasAuthToken,
   clearAuthToken,
   redirectToDashboard,
-  shouldSkipAuthRedirects
+  shouldSkipAuthRedirects,
 } from '../lib/auth';
 import logOutMutation from '../graphql/mutations/logOut.mutation';
 import COLORS from '../theme/colors';
+import posthog from '../lib/posthog';
+import { getTrafficProperties } from '../lib/trafficAttribution';
+
+function trackLandingCtaClick(destination) {
+  posthog.capture({
+    event: 'landing cta clicked',
+    properties: {
+      destination,
+      ...getTrafficProperties(),
+    },
+  });
+}
 
 export default function App() {
   const skipAuthRedirects = shouldSkipAuthRedirects();
@@ -49,6 +55,13 @@ export default function App() {
     };
   }, [skipAuthRedirects]);
 
+  useEffect(() => {
+    posthog.capture({
+      event: 'landing page viewed',
+      properties: getTrafficProperties(),
+    });
+  }, []);
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleLoginClick = () => {
@@ -69,16 +82,10 @@ export default function App() {
     } finally {
       // Clear local token regardless of backend response
       clearAuthToken();
+      posthog.reset();
       setIsLoggedIn(false);
     }
   };
-
-  const mobileShowcaseShots = [
-    { src: '/instant QUiz.png', label: 'Instant Quiz' },
-    { src: '/animeWords.png', label: 'Anime Vocabulary' },
-    { src: '/apple.png', label: 'Top 1000 Words' },
-    { src: '/50Levels.png', label: 'Level System' },
-  ];
 
   return (
     <div
@@ -93,7 +100,7 @@ export default function App() {
         style={{
           backgroundColor: COLORS.surface + 'E6',
           borderBottom: `1px solid ${COLORS.divider}`,
-          boxShadow: "0 12px 30px rgba(28, 27, 26, 0.08)",
+          boxShadow: '0 12px 30px rgba(28, 27, 26, 0.08)',
         }}
       >
         <div className="mx-auto px-6 py-4 max-w-6xl">
@@ -102,7 +109,9 @@ export default function App() {
             <div className="flex items-center space-x-3 z-10">
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
-                style={{ background: `linear-gradient(135deg, ${COLORS.brandPrimary} 0%, ${COLORS.brandPrimaryDark} 100%)` }}
+                style={{
+                  background: `linear-gradient(135deg, ${COLORS.brandPrimary} 0%, ${COLORS.brandPrimaryDark} 100%)`,
+                }}
               >
                 <span className="text-white font-bold text-lg">文</span>
               </div>
@@ -212,71 +221,29 @@ export default function App() {
             Pick up words by sound as you watch anime, with or without kanji.
           </p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-12 items-center px-4 mt-8 animate-fade-up animate-delay-450">
-            {/* Chrome Extension */}
-            <div className="relative order-1">
-              <div
-                className="rounded-2xl shadow-2xl overflow-hidden"
-                style={{ backgroundColor: COLORS.surface }}
-              >
-                <img
-                  src="/dual-subtitle-loader-capture.png"
-                  alt="Dual Subtitle Loader extension capture"
-                  onError={(event) => {
-                    event.currentTarget.onerror = null;
-                    event.currentTarget.src = '/hell.png';
-                  }}
-                  className="w-full h-auto"
-                />
-              </div>
-              <div
-                className="absolute -bottom-2 sm:-bottom-4 -right-2 sm:-right-4 w-8 sm:w-12 h-8 sm:h-12 rounded-full flex items-center justify-center animate-bounce"
-                style={{ backgroundColor: COLORS.accentSuccess }}
-              >
-                <Globe className="w-4 sm:w-6 h-4 sm:h-6 text-white" />
-              </div>
-            </div>
-
-            {/* Mobile mockup */}
-            <div className="flex justify-center order-2">
-              <div className="relative w-full max-w-[420px] sm:max-w-[500px] h-[340px] sm:h-[470px]">
-                <div
-                  className="absolute inset-10 rounded-[3rem] blur-3xl opacity-45"
-                  style={{
-                    background: `radial-gradient(circle, ${COLORS.brandPrimaryLight} 0%, ${COLORS.surfaceMuted} 70%)`,
-                  }}
-                />
-                <img
-                  src="/hero-mobile-stack.png"
-                  alt="Bundai mobile app feature stack"
-                  width="960"
-                  height="780"
-                  className="absolute left-1/2 top-1/2 w-full max-w-[420px] sm:max-w-[500px] -translate-x-1/2 -translate-y-1/2"
-                />
-                <div
-                  className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center animate-pulse"
-                  style={{ backgroundColor: COLORS.brandSecondary }}
-                >
-                  <Star className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <p
-            className="mt-4 sm:mt-6 text-sm sm:text-base font-semibold px-4 animate-fade-up animate-delay-450"
-            style={{ color: COLORS.textSecondary }}
+          <figure
+            className="mt-8 px-4 animate-fade-up animate-delay-450"
+            aria-label="Bundai hero preview"
           >
-            Capture in Dual Subtitle Loader
-            <span style={{ color: COLORS.brandPrimary }}> {'\u2192'} </span>
-            Revise in Mobile App
-          </p>
+            <img
+              src="/hero-combined.jpg"
+              alt="Dual Subtitle Loader capture beside Bundai mobile app study views"
+              width="1160"
+              height="430"
+              className="w-full max-w-6xl mx-auto rounded-[2rem] shadow-2xl"
+              style={{
+                border: `1px solid ${COLORS.outline}`,
+                backgroundColor: COLORS.surface,
+              }}
+            />
+          </figure>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-6 sm:mt-8 px-4 animate-fade-up animate-delay-450">
             <a
               href="https://chromewebstore.google.com/detail/bundai-extension-plasmo/aoencglmiihcheldbcpjlnlfnemcglfe?authuser=1&hl=en"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackLandingCtaClick('chrome_extension')}
               className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto"
               style={{ backgroundColor: COLORS.textPrimary }}
             >
@@ -303,6 +270,7 @@ export default function App() {
               href="https://apps.apple.com/gb/app/bundai/id6751961361"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackLandingCtaClick('ios_app')}
               className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto"
               style={{ backgroundColor: COLORS.textPrimary }}
             >
@@ -360,47 +328,20 @@ export default function App() {
       {/* Features Section */}
       <section
         id="features"
-        className="relative py-16 sm:py-20 px-4 sm:px-6"
+        className="relative py-10 sm:py-12 px-4 sm:px-6"
         style={{
           background: `linear-gradient(180deg, ${COLORS.background} 0%, ${COLORS.surfaceMuted} 100%)`,
         }}
       >
         <div className="mx-auto">
-          <div className="text-center mb-8 sm:mb-10">
+          <div className="text-center mb-4 sm:mb-5">
             <h2
-              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3 px-2"
               style={{ color: COLORS.textPrimary }}
             >
               See The Extension
               <span style={{ color: COLORS.brandPrimary }}> In Action</span>
             </h2>
-            <p
-              className="text-lg sm:text-xl max-w-3xl mx-auto px-4"
-              style={{ color: COLORS.textSecondary }}
-            >
-              A real scene with local subtitle overlays and hover interactions,
-              so visitors can understand the product before installing it.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 px-4">
-            {[
-              'Dual Subtitle Loader extension',
-              'Mobile app training',
-              'Web sync continuation',
-            ].map((pill) => (
-              <span
-                key={pill}
-                className="inline-flex items-center rounded-full px-4 py-2 text-xs sm:text-sm font-semibold"
-                style={{
-                  backgroundColor: COLORS.surface,
-                  color: COLORS.textSecondary,
-                  border: `1px solid ${COLORS.outline}`,
-                }}
-              >
-                {pill}
-              </span>
-            ))}
           </div>
 
           <InteractiveSubtitleDemo colors={COLORS} />
@@ -410,47 +351,39 @@ export default function App() {
               className="text-2xl sm:text-3xl font-bold text-center mb-3"
               style={{ color: COLORS.textPrimary }}
             >
-              Mobile App Screens
+              Mobile App Preview
             </h3>
             <p
               className="text-center text-sm sm:text-base max-w-3xl mx-auto"
               style={{ color: COLORS.textSecondary }}
             >
-              Current product views from the app, shown as real UI examples.
+              A single full preview keeps the landing page cleaner while still
+              showing the core study surfaces.
             </p>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-6">
-              {mobileShowcaseShots.map((shot) => (
-                <figure
-                  key={shot.src}
-                  className="rounded-2xl p-3 sm:p-4 shadow-lg"
-                  style={{
-                    backgroundColor: COLORS.surface,
-                    border: `1px solid ${COLORS.outline}`,
-                  }}
-                >
-                  <div
-                    className="rounded-2xl p-2"
-                    style={{
-                      backgroundColor: COLORS.surfaceMuted,
-                      border: `1px solid ${COLORS.outline}`,
-                    }}
-                  >
-                    <img
-                      src={shot.src}
-                      alt={`${shot.label} screenshot`}
-                      loading="lazy"
-                      className="w-full aspect-[9/19] rounded-[1rem] object-cover object-top"
-                    />
-                  </div>
-                  <figcaption
-                    className="text-center text-xs sm:text-sm font-semibold mt-3"
-                    style={{ color: COLORS.textSecondary }}
-                  >
-                    {shot.label}
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
+            <figure
+              className="mt-6 max-w-5xl mx-auto rounded-[2rem] p-4 sm:p-5 shadow-lg"
+              style={{
+                backgroundColor: COLORS.surface,
+                border: `1px solid ${COLORS.outline}`,
+              }}
+            >
+              <div
+                className="rounded-[1.5rem] p-2 sm:p-3"
+                style={{
+                  backgroundColor: COLORS.surfaceMuted,
+                  border: `1px solid ${COLORS.outline}`,
+                }}
+              >
+                <img
+                  src="/page-full.png"
+                  alt="Bundai mobile app feature preview"
+                  loading="lazy"
+                  width="1280"
+                  height="720"
+                  className="w-full max-w-4xl mx-auto"
+                />
+              </div>
+            </figure>
           </div>
 
           <div className="max-w-4xl mx-auto px-4">
@@ -495,7 +428,9 @@ export default function App() {
               <div className="flex items-center justify-center sm:justify-start space-x-3 mb-4">
                 <div
                   className="w-8 sm:w-10 h-8 sm:h-10 rounded-xl flex items-center justify-center shadow-lg"
-                  style={{ background: `linear-gradient(135deg, ${COLORS.brandPrimary} 0%, ${COLORS.brandPrimaryDark} 100%)` }}
+                  style={{
+                    background: `linear-gradient(135deg, ${COLORS.brandPrimary} 0%, ${COLORS.brandPrimaryDark} 100%)`,
+                  }}
                 >
                   <span className="text-white font-bold text-base sm:text-lg">
                     文
@@ -670,7 +605,6 @@ export default function App() {
           </div>
         </div>
       </footer>
-
     </div>
   );
 }

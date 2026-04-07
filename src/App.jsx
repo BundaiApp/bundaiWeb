@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import LandingPage from './pages/landingPage.screen';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
@@ -27,10 +28,33 @@ import AnimeDetail from './pages/animeDetail.screen';
 import Similars from './pages/similars.screen';
 import SimilarDetail from './pages/similarDetail.screen';
 import Settings from './pages/settings.screen';
+import posthog from './lib/posthog';
+import { getTrafficProperties } from './lib/trafficAttribution';
+
+function SiteEntryTracker() {
+  const location = useLocation();
+  const hasTrackedEntry = useRef(false);
+
+  useEffect(() => {
+    if (hasTrackedEntry.current) {
+      return;
+    }
+
+    hasTrackedEntry.current = true;
+
+    posthog.capture({
+      event: 'site entry viewed',
+      properties: getTrafficProperties(location.pathname),
+    });
+  }, [location.pathname]);
+
+  return null;
+}
 
 export default function App() {
   return (
     <Router>
+      <SiteEntryTracker />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
