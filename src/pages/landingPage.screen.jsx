@@ -211,8 +211,30 @@ export default function App() {
             Start Watching{' '}
             <span style={{ color: COLORS.brandPrimary }}>Anime</span>
             <br />
-            in <span style={{ color: COLORS.brandPrimary }}>Japanese</span>{' '}
-            <span style={{ color: COLORS.accentSuccess }}>effortlessly !</span>
+            in
+            <span
+              style={{
+                color: COLORS.brandPrimary,
+                position: 'relative',
+                left: '10px',
+              }}
+            >
+              Japanese
+              <span
+                style={{
+                  color: '#F97316',
+                  position: 'absolute',
+                  top: '-5px',
+                  right: '-155px',
+                  fontSize: '0.45em',
+                  fontWeight: '800',
+                  transform: 'rotate(8deg)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                effortlessly
+              </span>
+            </span>
           </h1>
           <p
             className="text-lg sm:text-xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4 animate-fade-up animate-delay-300"
