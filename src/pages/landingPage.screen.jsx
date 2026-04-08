@@ -353,13 +353,6 @@ export default function App() {
             >
               Mobile App Preview
             </h3>
-            <p
-              className="text-center text-sm sm:text-base max-w-3xl mx-auto"
-              style={{ color: COLORS.textSecondary }}
-            >
-              A single full preview keeps the landing page cleaner while still
-              showing the core study surfaces.
-            </p>
             <figure
               className="mt-6 max-w-5xl mx-auto rounded-[2rem] p-4 sm:p-5 shadow-lg"
               style={{
