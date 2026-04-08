@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/client/react"
 import { useLocation, useNavigate } from "react-router-dom"
 import COLORS from "../theme/colors"
 import CALCULATE_NEXT_REVIEW_DATE from "../graphql/mutations/calculateNextReviewDate.mutation"
+import posthog from "../lib/posthog"
 
 export default function SRSEngine() {
     const location = useLocation()
@@ -66,6 +67,7 @@ export default function SRSEngine() {
                 setNumber(number + 1)
                 setSelectedAns(null)
             } else {
+                posthog.capture({ distinctId: userId, event: 'review session completed', properties: { card_count: questionsArray.length } })
                 navigate('/dashboard/srs')
             }
         }, 500)

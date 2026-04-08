@@ -26,3 +26,4 @@ dist-ssr
 # Large data files (managed on server)
 src/util/jlptArray.js
 src/util/similar.json
+.env

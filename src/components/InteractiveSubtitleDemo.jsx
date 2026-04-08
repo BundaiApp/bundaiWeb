@@ -239,21 +239,12 @@ export default function InteractiveSubtitleDemo({ colors }) {
 
   return (
     <div className="px-4 mb-12 sm:mb-14">
-      <div className="text-center mb-6 sm:mb-8">
-        <h3
-          className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3"
-          style={{ color: colors.textPrimary }}
-        >
-          Real Hover Demo
-        </h3>
-        <p
-          className="text-sm sm:text-base max-w-3xl mx-auto"
-          style={{ color: colors.textSecondary }}
-        >
-          A real scene, local subtitle overlays, and a hover card that behaves
-          like the extension without calling the backend.
-        </p>
-      </div>
+      <p
+        className="text-center text-base sm:text-lg max-w-3xl mx-auto mb-5 sm:mb-6"
+        style={{ color: colors.textSecondary }}
+      >
+        Hover over the words to see it in action.
+      </p>
 
       <div
         ref={frameRef}

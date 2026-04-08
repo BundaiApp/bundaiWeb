@@ -13,6 +13,7 @@ import {
     redirectToDashboard,
     shouldSkipAuthRedirects
 } from "../lib/auth"
+import posthog from "../lib/posthog"
 
 export default function SignUp() {
     const skipAuthRedirects = shouldSkipAuthRedirects()
@@ -62,6 +63,8 @@ export default function SignUp() {
                 setPassword("")
                 setUsername("")
                 setIsLoggedIn(true)
+                posthog.identify({ distinctId: result.user._id, properties: { email: trimmedEmail, name: username.trim() } })
+                posthog.capture({ distinctId: result.user._id, event: 'user signed up', properties: { signup_method: 'email' } })
                 // Redirect to dashboard
                 setTimeout(() => {
                     if (!redirectToDashboard()) {
@@ -73,6 +76,7 @@ export default function SignUp() {
             }
         } catch (error) {
             console.error("Sign up failed", error)
+            posthog.captureException(error)
             setErrorMessage(error.message || "Something went wrong during sign up.")
         }
     }

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import COLORS from "../theme/colors"
+import posthog from "../lib/posthog"
 
 export default function Dashboard() {
     const [selectedTopic, setSelectedTopic] = useState("jlpt")
@@ -17,18 +18,23 @@ export default function Dashboard() {
         { id: "katakana", label: "Katakana", subtitle: "Foreign sound Letters" },
     ]
 
+    const userId = localStorage.getItem("userId") || "anonymous"
+
     const renderJLPTLevels = () => {
         return (
             <>
                 {[5, 4, 3, 2, 1].map((level) => (
                     <button
                         key={level}
-                        onClick={() => navigate('/dashboard/kanji-template', {
-                            state: {
-                                jlptLevel: level,
-                                title: `JLPT Level ${level}`
-                            }
-                        })}
+                        onClick={() => {
+                            posthog.capture({ distinctId: userId, event: 'kanji category browsed', properties: { category: 'jlpt', level: `N${level}` } })
+                            navigate('/dashboard/kanji-template', {
+                                state: {
+                                    jlptLevel: level,
+                                    title: `JLPT Level ${level}`
+                                }
+                            })
+                        }}
                         className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
                         style={{ backgroundColor: COLORS.interactiveSurface, color: COLORS.textPrimary }}
                         onMouseEnter={(e) => {
@@ -53,12 +59,15 @@ export default function Dashboard() {
                 {Array.from({ length: 24 }, (_, i) => i + 1).map((stroke) => (
                     <button
                         key={stroke}
-                        onClick={() => navigate('/dashboard/kanji-template', {
-                            state: {
-                                strokes: stroke,
-                                title: `${stroke} Stroke Kanji`
-                            }
-                        })}
+                        onClick={() => {
+                            posthog.capture({ distinctId: userId, event: 'kanji category browsed', properties: { category: 'strokes', strokes: stroke } })
+                            navigate('/dashboard/kanji-template', {
+                                state: {
+                                    strokes: stroke,
+                                    title: `${stroke} Stroke Kanji`
+                                }
+                            })
+                        }}
                         className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
                         style={{ backgroundColor: COLORS.interactiveSurface, color: COLORS.textPrimary }}
                         onMouseEnter={(e) => {
@@ -83,12 +92,15 @@ export default function Dashboard() {
                 {Array.from({ length: 9 }, (_, i) => i + 1).map((grade) => (
                     <button
                         key={grade}
-                        onClick={() => navigate('/dashboard/kanji-template', {
-                            state: {
-                                grades: grade,
-                                title: `Grade ${grade}`
-                            }
-                        })}
+                        onClick={() => {
+                            posthog.capture({ distinctId: userId, event: 'kanji category browsed', properties: { category: 'grades', grade } })
+                            navigate('/dashboard/kanji-template', {
+                                state: {
+                                    grades: grade,
+                                    title: `Grade ${grade}`
+                                }
+                            })
+                        }}
                         className="px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium"
                         style={{ backgroundColor: COLORS.interactiveSurface, color: COLORS.textPrimary }}
                         onMouseEnter={(e) => {

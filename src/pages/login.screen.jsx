@@ -13,6 +13,7 @@ import {
   redirectToDashboard,
   shouldSkipAuthRedirects
 } from "../lib/auth"
+import posthog from "../lib/posthog"
 
 export default function Login() {
   const skipAuthRedirects = shouldSkipAuthRedirects()
@@ -53,6 +54,8 @@ export default function Login() {
         setEmail(trimmedEmail)
         setPassword("")
         setIsLoggedIn(true)
+        posthog.identify({ distinctId: result.user._id, properties: { email: trimmedEmail, name: result.user.name || trimmedEmail.split('@')[0] } })
+        posthog.capture({ distinctId: result.user._id, event: 'user logged in', properties: { login_method: 'email' } })
         // Redirect to dashboard
         setTimeout(() => {
           if (!redirectToDashboard()) {
@@ -64,6 +67,7 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Log in failed", error)
+      posthog.captureException(error)
       setErrorMessage(error.message || "Something went wrong during login.")
     }
   }

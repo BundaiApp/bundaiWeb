@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react"
 import COLORS from "../theme/colors"
 import { getLevelContent } from "../util/levelSystem"
 import CALCULATE_NEXT_REVIEW_DATE from "../graphql/mutations/calculateNextReviewDate.mutation"
+import posthog from "../lib/posthog"
 
 export default function StudyEngine() {
     const location = useLocation()
@@ -71,6 +72,7 @@ export default function StudyEngine() {
         if (currentIndex < questionsArray.length - 1) {
             setCurrentIndex(currentIndex + 1)
         } else {
+            posthog.capture({ distinctId: userId, event: 'study session completed', properties: { card_count: questionsArray.length } })
             navigate('/dashboard/srs')
         }
     }

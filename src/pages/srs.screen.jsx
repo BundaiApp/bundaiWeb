@@ -7,6 +7,7 @@ import { LEVEL_SYSTEM_CONFIG } from "../util/levelSystem"
 import FIND_PENDING_FLASHCARDS from "../graphql/queries/findPendingCards.query"
 import GET_FLASHCARDS_BY_LEVEL from "../graphql/queries/getFlashCardsByLevel.query"
 import ME_QUERY from "../graphql/queries/me.query"
+import posthog from "../lib/posthog"
 
 export default function SRS() {
     const navigate = useNavigate()
@@ -100,6 +101,7 @@ export default function SRS() {
             alert("No cards to study!")
             return
         }
+        posthog.capture({ distinctId: userId, event: 'study session started', properties: { card_count: studyQueueCards.length, level: currentLevel } })
         navigate("/dashboard/study-engine", { state: { questionsArray: studyQueueCards } })
     }
 
@@ -112,6 +114,7 @@ export default function SRS() {
             alert("No cards due for review!")
             return
         }
+        posthog.capture({ distinctId: userId, event: 'review session started', properties: { card_count: reviewQueueCards.length } })
         navigate("/dashboard/srs-engine", { state: { questionsArray: reviewQueueCards } })
     }
 
