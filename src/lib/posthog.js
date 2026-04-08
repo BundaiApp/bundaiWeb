@@ -6,13 +6,21 @@ const host = import.meta.env.VITE_PUBLIC_POSTHOG_HOST
 let identifiedDistinctId = null
 
 if (typeof window !== 'undefined' && apiKey) {
+  console.log('PostHog initializing...', { apiKey, host })
   posthogJs.init(apiKey, {
     api_host: host,
     capture_pageview: true,
     capture_pageleave: true,
     autocapture: true,
     persistence: 'localStorage+cookie',
+    debug: true,
+    loaded: (ph) => {
+      console.log('PostHog loaded successfully:', ph)
+    }
   })
+  console.log('PostHog initialized')
+} else {
+  console.log('PostHog NOT initialized:', { windowDefined: typeof window !== 'undefined', apiKey })
 }
 
 function syncDistinctId(distinctId, properties) {
@@ -37,6 +45,7 @@ const posthog = {
       return
     }
 
+    console.log('PostHog capture:', event, properties)
     syncDistinctId(distinctId)
     posthogJs.capture(event, properties)
   },

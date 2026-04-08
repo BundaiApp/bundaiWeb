@@ -251,12 +251,6 @@ export default function InteractiveSubtitleDemo({ colors }) {
   return (
     <div className="px-4 mb-12 sm:mb-14">
       <div className="flex items-center justify-center gap-3 mb-5 sm:mb-6">
-        <p
-          className="text-base sm:text-lg max-w-3xl text-center"
-          style={{ color: colors.textSecondary }}
-        >
-          Hover over the words to see it in action.
-        </p>
         <div className="relative flex items-center justify-center">
           <div
             className="text-sm sm:text-base font-bold px-3 py-1.5 rounded-full"
@@ -311,20 +305,6 @@ export default function InteractiveSubtitleDemo({ colors }) {
             void event.currentTarget.play().catch(() => {});
           }}
         />
-
-        <div className="absolute top-4 left-1/2 z-20 -translate-x-1/2">
-          <div
-            className="rounded-full px-4 py-2 text-xs sm:text-sm font-bold tracking-[0.04em] backdrop-blur-md"
-            style={{
-              backgroundColor: 'rgba(255,255,255,0.88)',
-              color: colors.textPrimary,
-              border: '1px solid rgba(255,255,255,0.48)',
-              boxShadow: '0 10px 30px rgba(31,26,61,0.12)',
-            }}
-          >
-            {demoCue.timecode}
-          </div>
-        </div>
 
         <button
           type="button"
