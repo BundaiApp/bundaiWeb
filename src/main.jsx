@@ -4,6 +4,7 @@ import { ApolloProvider } from '@apollo/client/react'
 import './index.css'
 import App from './App.jsx'
 import client from './lib/apolloClient'
+import './lib/posthog'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
