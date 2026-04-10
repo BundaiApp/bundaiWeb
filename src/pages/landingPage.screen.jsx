@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Menu, X, Globe, Download } from 'lucide-react';
+import { Menu, X, Globe, Download, CheckCircle, Monitor } from 'lucide-react';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { Button } from '../components/Button';
 import InteractiveSubtitleDemo from '../components/InteractiveSubtitleDemo';
@@ -343,6 +343,33 @@ export default function App() {
                 </div>
               </div>
             </div>
+
+            <a
+              href="https://drive.google.com/uc?export=download&id=173UZR20O8YabvLCPe19SwWvxRjugwMh7"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackLandingCtaClick('mac_app')}
+              className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto"
+              style={{ backgroundColor: COLORS.textPrimary }}
+            >
+              <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
+                <Monitor
+                  className="w-6 sm:w-8 h-6 sm:h-8"
+                  style={{ color: COLORS.surface }}
+                />
+                <div className="text-left">
+                  <div className="text-xs" style={{ color: COLORS.textMuted }}>
+                    Download for
+                  </div>
+                  <div
+                    className="text-sm sm:text-lg font-semibold"
+                    style={{ color: COLORS.surface }}
+                  >
+                    macOS
+                  </div>
+                </div>
+              </div>
+            </a>
           </div>
         </div>
       </section>
@@ -425,6 +452,59 @@ export default function App() {
                 workflows.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="relative py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: COLORS.surfaceMuted }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12 sm:mb-16">
+            <div className="inline-block px-4 sm:px-6 py-2 sm:py-3 rounded-full mb-6 sm:mb-8" style={{ backgroundColor: COLORS.successSoft, border: `1px solid ${COLORS.accentSuccess}` }}>
+              <span className="text-sm sm:text-base font-semibold" style={{ color: COLORS.accentSuccess }}>
+                🔥 Lifetime free for first 100 users
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 px-2" style={{ color: COLORS.textPrimary }}>
+              Choose Your
+              <span style={{ color: COLORS.brandPrimary }}>
+                {" "}
+                Learning Path
+              </span>
+            </h2>
+            <p className="text-lg sm:text-xl max-w-3xl mx-auto px-4" style={{ color: COLORS.textSecondary }}>
+              Start free and upgrade when you're ready to accelerate your Japanese mastery.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto px-4">
+            <div className="p-8 sm:p-12 text-center rounded-2xl shadow-lg" style={{ backgroundColor: COLORS.surface }}>
+              <h3 className="text-2xl sm:text-3xl font-bold mb-4" style={{ color: COLORS.textPrimary }}>Weekly</h3>
+              <div className="text-4xl sm:text-5xl font-black mb-2" style={{ color: COLORS.textPrimary }}>$2.99</div>
+              <div className="text-base sm:text-lg mb-6" style={{ color: COLORS.textMuted }}>per week</div>
+              <Button variant="outline" className="w-full" onClick={() => navigate('/signup')} style={{ backgroundColor: 'transparent' }}>
+                Start Weekly
+              </Button>
+            </div>
+
+            <div className="p-8 sm:p-12 text-center relative md:scale-105 rounded-2xl shadow-xl" style={{ backgroundColor: COLORS.surface, border: `2px solid ${COLORS.brandPrimary}` }}>
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-white" style={{ backgroundColor: COLORS.brandPrimary }}>
+                Best Value
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-bold mb-4" style={{ color: COLORS.textPrimary }}>Yearly</h3>
+              <div className="text-4xl sm:text-5xl font-black mb-2" style={{ color: COLORS.textPrimary }}>$29.99</div>
+              <div className="text-base sm:text-lg mb-1" style={{ color: COLORS.textMuted }}>per year</div>
+              <div className="text-sm font-semibold" style={{ color: COLORS.accentSuccess }}>Save $125!</div>
+              <Button variant="primary" className="w-full mt-6" onClick={() => navigate('/signup')}>
+                Start Yearly
+              </Button>
+            </div>
+          </div>
+
+          <div className="text-center mt-8 sm:mt-12 px-4">
+            <p className="mb-4 text-sm sm:text-base" style={{ color: COLORS.textMuted }}>
+              🎯 30-day money-back guarantee • 🔒 Secure payment • 📱 Instant access
+            </p>
           </div>
         </div>
       </section>
