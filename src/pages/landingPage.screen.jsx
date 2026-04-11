@@ -508,16 +508,16 @@ export default function App() {
                   <span className="text-sm sm:text-base">𝕏</span>
                 </a>
                 <a
-                  href="https://www.youtube.com/channel/UChZ7BBgEhuDs7PhcxcwMYcQ"
+                  href="https://www.facebook.com/profile.php?id=61580724227681"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center hover:transition-colors"
                   style={{
                     backgroundColor: COLORS.surfaceElevated,
-                    color: COLORS.accentDanger,
+                    color: '#1877F2',
                   }}
                 >
-                  <span className="text-sm sm:text-base">▶</span>
+                  <span className="text-sm sm:text-base">f</span>
                 </a>
               </div>
             </div>
