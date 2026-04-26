@@ -1,13 +1,13 @@
 import { useState, useMemo, useEffect } from "react"
 import { useQuery } from "@apollo/client/react"
 import { useNavigate } from "react-router-dom"
-import { RefreshCw, Play, Book, MessageSquare, Volume2 } from "lucide-react"
+import { RefreshCw, Play, Book, MessageSquare, Volume2, Zap } from "lucide-react"
 import COLORS from "../theme/colors"
-import { LEVEL_SYSTEM_CONFIG } from "../util/levelSystem"
+import { LEVEL_SYSTEM_CONFIG, getLevelContent } from "../util/levelSystem"
+import { arr as jlptKanjiData } from "../util/jlptArray"
 import FIND_PENDING_FLASHCARDS from "../graphql/queries/findPendingCards.query"
 import GET_FLASHCARDS_BY_LEVEL from "../graphql/queries/getFlashCardsByLevel.query"
 import ME_QUERY from "../graphql/queries/me.query"
-import posthog from "../lib/posthog"
 
 export default function SRS() {
     const navigate = useNavigate()
@@ -17,7 +17,7 @@ export default function SRS() {
 
     const isGuest = !userId || userId === "defaultUser"
 
-    const { data: userData, refetch: refetchUser } = useQuery(ME_QUERY, {
+    const { data: userData, loading: userLoading, refetch: refetchUser } = useQuery(ME_QUERY, {
         variables: { _id: userId },
         skip: isGuest,
         fetchPolicy: "network-only"
@@ -29,24 +29,76 @@ export default function SRS() {
         }
     }, [userData])
 
-    const { data: pendingData, loading: pendingLoading, error: pendingError, refetch: refetchPending } = useQuery(FIND_PENDING_FLASHCARDS, {
-        variables: { userId },
-        skip: isGuest,
-        fetchPolicy: "network-only"
-    })
-
     const { data: levelCardsData, loading: levelLoading, refetch: refetchLevelCards } = useQuery(GET_FLASHCARDS_BY_LEVEL, {
         variables: { userId, level: currentLevel },
         skip: isGuest,
         fetchPolicy: "network-only"
     })
 
+    const { data: pendingData, refetch: refetchPending } = useQuery(FIND_PENDING_FLASHCARDS, {
+        variables: { userId },
+        skip: isGuest,
+        fetchPolicy: "network-only"
+    })
+
+    const kanjiLookup = useMemo(() => {
+        const lookup = new Map()
+        jlptKanjiData.forEach((item) => {
+            if (item?.kanjiName) {
+                lookup.set(item.kanjiName, item)
+            }
+        })
+        return lookup
+    }, [])
+
+    const jlptDataMap = useMemo(() => {
+        const map = { 1: [], 2: [], 3: [], 4: [], 5: [] }
+        jlptKanjiData.forEach((item) => {
+            if (item?.jlpt && map[item.jlpt]) {
+                map[item.jlpt].push(item)
+            }
+        })
+        return map
+    }, [])
+
+    const localLevelContent = useMemo(() => {
+        try {
+            return getLevelContent(currentLevel, jlptDataMap)
+        } catch (error) {
+            console.error("Error getting local level content:", error)
+            return { kanji: [], words: [] }
+        }
+    }, [currentLevel, jlptDataMap])
+
     const displayKanji = useMemo(() => {
         if (!levelCardsData?.getFlashCardsByLevel) return []
-        return levelCardsData.getFlashCardsByLevel.filter(
-            (card) => card.kanjiName && card.kanjiName.length === 1
-        )
-    }, [levelCardsData])
+        return levelCardsData.getFlashCardsByLevel
+            .filter((card) => card.kanjiName && card.kanjiName.length === 1)
+            .map((card) => {
+                const localKanji = kanjiLookup.get(card.kanjiName)
+
+                if (!localKanji) {
+                    return card
+                }
+
+                return {
+                    ...localKanji,
+                    ...card,
+                    kanji: localKanji.kanjiName,
+                    kanjiName: localKanji.kanjiName,
+                    meanings: localKanji.meanings || card.meanings || [],
+                    quizAnswers: localKanji.quizAnswers || card.quizAnswers || [],
+                    on: localKanji.on || [],
+                    kun: localKanji.kun || [],
+                    usedIn: localKanji.usedIn || [],
+                    similars: localKanji.similars || [],
+                    jlpt: localKanji.jlptLevel,
+                    grade: localKanji.grade,
+                    strokes: localKanji.strokes,
+                    freq: localKanji.frequency,
+                }
+            })
+    }, [kanjiLookup, levelCardsData])
 
     const displayWords = useMemo(() => {
         if (!levelCardsData?.getFlashCardsByLevel) return []
@@ -60,6 +112,13 @@ export default function SRS() {
         return allCurrentLevelCards.filter((card) => (card.rating || 0) === 0)
     }, [displayKanji, displayWords])
 
+    // Study count: total level content minus cards already saved to backend
+    const levelTotal = (localLevelContent.kanji?.length || 0) + (localLevelContent.words?.length || 0)
+    const savedCount = displayKanji.length + displayWords.length
+    const effectiveStudyCount = studyQueueCards.length > 0
+        ? studyQueueCards.length
+        : Math.max(0, levelTotal - savedCount)
+
     const reviewQueueCards = useMemo(() => {
         if (!pendingData?.getPendingFlashCards) return []
         return pendingData.getPendingFlashCards.filter(
@@ -67,7 +126,7 @@ export default function SRS() {
         )
     }, [pendingData])
 
-    const studyCount = studyQueueCards.length
+    const studyCount = effectiveStudyCount
     const reviewCount = reviewQueueCards.length
 
     const levelProgress = useMemo(() => {
@@ -86,7 +145,7 @@ export default function SRS() {
     const handleRefresh = async () => {
         try {
             setRefreshing(true)
-            await Promise.all([refetchUser(), refetchPending(), refetchLevelCards()])
+            await Promise.all([refetchUser(), refetchLevelCards(), refetchPending()])
         } finally {
             setRefreshing(false)
         }
@@ -97,12 +156,57 @@ export default function SRS() {
             alert("Please sign in to use this feature")
             return
         }
-        if (studyQueueCards.length === 0) {
-            alert("No cards to study!")
-            return
+
+        let cards = studyQueueCards
+        if (cards.length === 0) {
+            // Generate from local level content — cards will be created on server as user studies
+            const content = localLevelContent
+            if (!content.kanji?.length && !content.words?.length) {
+                alert("No content available for this level.")
+                return
+            }
+
+            // Get already saved kanji and words
+            const savedKanjiNames = new Set(displayKanji.map(c => c.kanjiName))
+            const savedWordNames = new Set(displayWords.map(c => c.kanjiName))
+
+            const generated = [
+                    ...(content.kanji || []).map((k) => ({
+                        kanjiName: k.kanji || k.kanjiName,
+                        hiragana: k.kun?.[0] || k.reading || "",
+                        meanings: k.meanings || [k.meaning || ""],
+                        quizAnswers: k.quizAnswers || k.meanings || [k.meaning || ""],
+                        kun: k.kun,
+                        on: k.on,
+                        strokes: k.strokes,
+                        kanji: k.kanji || k.kanjiName,
+                    })),
+                    ...(content.words || []).map((w) => ({
+                        kanjiName: w.word || w.kanjiName || "",
+                        hiragana: w.reading || "",
+                        meanings: [w.meaning || ""],
+                        quizAnswers: w.quizAnswers || [w.meaning || ""],
+                        reading: w.reading,
+                        meaning: w.meaning,
+                    }))
+                ]
+                .filter((c) => c.kanjiName && c.meanings[0])
+                .filter((c) => {
+                    // Filter out cards that are already saved to server
+                    if (c.kanjiName.length === 1) {
+                        return !savedKanjiNames.has(c.kanjiName)
+                    }
+                    return !savedWordNames.has(c.kanjiName)
+                })
+
+                if (generated.length === 0) {
+                    alert("No new cards to study! All cards in this level have been reviewed.")
+                    return
+                }
+                cards = generated
         }
-        posthog.capture({ distinctId: userId, event: 'study session started', properties: { card_count: studyQueueCards.length, level: currentLevel } })
-        navigate("/dashboard/study-engine", { state: { questionsArray: studyQueueCards } })
+
+        navigate("/dashboard/study-engine", { state: { questionsArray: cards } })
     }
 
     const handleStartReview = () => {
@@ -114,7 +218,6 @@ export default function SRS() {
             alert("No cards due for review!")
             return
         }
-        posthog.capture({ distinctId: userId, event: 'review session started', properties: { card_count: reviewQueueCards.length } })
         navigate("/dashboard/srs-engine", { state: { questionsArray: reviewQueueCards } })
     }
 
@@ -133,36 +236,6 @@ export default function SRS() {
         })
     }
 
-    const loading = pendingLoading || levelLoading
-    const error = pendingError
-
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: COLORS.background }}>
-                <RefreshCw className="w-12 h-12 animate-spin" style={{ color: COLORS.interactivePrimary }} />
-            </div>
-        )
-    }
-
-    if (error) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-screen p-4" style={{ backgroundColor: COLORS.background }}>
-                <h2 className="text-xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>
-                    Unable to load your queue
-                </h2>
-                <p className="text-sm mb-4" style={{ color: COLORS.interactiveTextInactive }}>
-                    Tap below to try again.
-                </p>
-                <button
-                    onClick={() => refetchPending()}
-                    className="px-6 py-3 rounded-xl font-bold"
-                    style={{ backgroundColor: COLORS.interactivePrimary, color: COLORS.interactiveTextOnPrimary }}
-                >
-                    Retry
-                </button>
-            </div>
-        )
-    }
 
     return (
         <div className="max-w-5xl mx-auto p-4 md:p-6 space-y-6" style={{ backgroundColor: COLORS.background }}>
@@ -193,14 +266,24 @@ export default function SRS() {
                 </div>
             </div>
 
-            {/* View All Levels Button */}
-            <button
-                onClick={handleViewAllLevels}
-                className="w-full py-3 rounded-xl font-bold transition-all duration-300"
-                style={{ backgroundColor: COLORS.cardWord, color: COLORS.surface }}
-            >
-                View all levels
-            </button>
+            {/* Level Actions */}
+            <div className="flex gap-3">
+                <button
+                    onClick={() => navigate("/dashboard/level-test")}
+                    className="flex-1 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+                    style={{ backgroundColor: COLORS.cardKanji, color: COLORS.surface }}
+                >
+                    <Zap className="w-4 h-4" />
+                    Skip Level
+                </button>
+                <button
+                    onClick={handleViewAllLevels}
+                    className="flex-1 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-105"
+                    style={{ backgroundColor: COLORS.cardWord, color: COLORS.surface }}
+                >
+                    View all levels
+                </button>
+            </div>
 
             {isGuest ? (
                 <div className="rounded-2xl p-6 text-center shadow-lg" style={{ backgroundColor: COLORS.surface }}>

@@ -36,24 +36,28 @@ export default function App() {
   const [executeLogOut, { loading: logoutLoading }] =
     useMutation(logOutMutation);
 
-  useEffect(() => {
+useEffect(() => {
     const syncAuthState = () => {
-      const loggedIn = hasAuthToken();
-      setIsLoggedIn(loggedIn);
+      const loggedIn = hasAuthToken()
+      setIsLoggedIn(loggedIn)
       if (loggedIn && !skipAuthRedirects) {
-        redirectToDashboard();
+        redirectToDashboard()
       }
-    };
+    }
 
-    syncAuthState();
-    window.addEventListener('storage', syncAuthState);
-    window.addEventListener('bundai:auth-change', syncAuthState);
+    if (skipAuthRedirects) {
+      return
+    }
+
+    syncAuthState()
+    window.addEventListener('storage', syncAuthState)
+    window.addEventListener('bundai:auth-change', syncAuthState)
 
     return () => {
-      window.removeEventListener('storage', syncAuthState);
-      window.removeEventListener('bundai:auth-change', syncAuthState);
-    };
-  }, [skipAuthRedirects]);
+      window.removeEventListener('storage', syncAuthState)
+      window.removeEventListener('bundai:auth-change', syncAuthState)
+    }
+  }, [skipAuthRedirects])
 
   useEffect(() => {
     posthog.capture({

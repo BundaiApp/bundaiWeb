@@ -1,59 +1,70 @@
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Share2 } from "lucide-react"
 import COLORS from "../theme/colors"
 
-const JLPT_LEVELS = ["All", "N5", "N4", "N3", "N2", "N1"]
-
-const LevelFilter = ({ selectedLevel, onLevelChange }) => (
-    <div className="flex flex-wrap justify-center gap-2 mb-6">
-        {JLPT_LEVELS.map((level) => (
-            <button
-                key={level}
-                onClick={() => onLevelChange(level)}
-                className="px-4 py-2 rounded-full transition-all duration-300 hover:scale-105"
-                style={{
-                    backgroundColor: selectedLevel === level ? COLORS.brandPrimary : COLORS.interactiveSurface,
-                    color: selectedLevel === level ? COLORS.interactiveTextOnPrimary : COLORS.textPrimary,
-                    border: `1px solid ${selectedLevel === level ? COLORS.brandPrimary : COLORS.outline}`
-                }}
+const KanjiCard = ({ item, type }) => {
+    const isMain = type === "main"
+    return (
+        <div
+            className="rounded-2xl p-5 flex flex-col items-center flex-1 max-w-[140px]"
+            style={{
+                backgroundColor: isMain ? COLORS.successSoft : "#fde8ea",
+                border: `2px solid ${isMain ? COLORS.accentSuccess : COLORS.accentDanger}`,
+                boxShadow: `0 4px 12px ${COLORS.brandPrimaryDark}0F`
+            }}
+        >
+            <span
+                className="text-5xl font-bold mb-1"
+                style={{ color: isMain ? COLORS.accentSuccess : COLORS.accentDanger }}
             >
-                {level}
-            </button>
-        ))}
+                {item.kanji}
+            </span>
+            <span className="text-lg font-medium" style={{ color: COLORS.textSecondary }}>
+                {item.meaning}
+            </span>
+            {(item.furigana || item.reading) && (
+                <span className="text-sm" style={{ color: COLORS.textMuted }}>
+                    {item.furigana || item.reading}
+                </span>
+            )}
+        </div>
+    )
+}
+
+const TrapPair = ({ main, confused }) => (
+    <div className="flex items-center justify-center gap-3 mb-4">
+        <KanjiCard item={main} type="main" />
+        <div className="flex flex-col items-center gap-1 px-2">
+            <span className="text-lg font-bold" style={{ color: COLORS.textMuted }}>vs</span>
+            <div className="w-6 h-0.5 rounded-full" style={{ backgroundColor: COLORS.divider }} />
+        </div>
+        <KanjiCard item={confused} type="confused" />
     </div>
 )
 
 export default function SimilarDetail() {
     const location = useLocation()
     const navigate = useNavigate()
-    const { kanji, meaning, furigana, kanjiArray = [], usedIn = [] } = location.state || {}
+    const { kanji, meaning, furigana, kanjiArray = [] } = location.state || {}
 
-    const [selectedLevel, setSelectedLevel] = useState("All")
-
-    // Check if usedIn data has jlptLevel field
-    const hasJlptLevel = useMemo(() => {
-        return usedIn.length > 0 && usedIn[0].jlptLevel !== undefined
-    }, [usedIn])
-
-    // Filter and limit usedIn words based on JLPT level
-    const filteredUsedIn = useMemo(() => {
-        if (!hasJlptLevel) {
-            return usedIn
+    const handleShare = async () => {
+        const shareUrl = `${window.location.origin}/dashboard/similar-detail?kanji=${kanji}`
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: `Kanji Trap: ${kanji}`,
+                    text: `Kanji Trap: ${kanji} — Learn Japanese Kanji the smart way at www.bundai.app`,
+                    url: shareUrl
+                })
+            } else {
+                await navigator.clipboard.writeText(shareUrl)
+                alert("Link copied to clipboard!")
+            }
+        } catch (err) {
+            console.error("Share failed:", err)
         }
-
-        const jlptOrder = ["n5", "n4", "n3", "n2", "n1"]
-
-        const filtered = selectedLevel === "All"
-            ? usedIn
-            : usedIn.filter(word => word.jlptLevel?.toLowerCase() === selectedLevel.toLowerCase())
-
-        return filtered.sort((a, b) => {
-            const aIndex = jlptOrder.indexOf(a.jlptLevel?.toLowerCase() || "")
-            const bIndex = jlptOrder.indexOf(b.jlptLevel?.toLowerCase() || "")
-            return aIndex - bIndex
-        })
-    }, [usedIn, selectedLevel, hasJlptLevel])
+    }
 
     if (!kanji) {
         return (
@@ -67,7 +78,7 @@ export default function SimilarDetail() {
                         className="px-6 py-3 rounded-xl font-bold"
                         style={{ backgroundColor: COLORS.interactivePrimary, color: COLORS.interactiveTextOnPrimary }}
                     >
-                        Back to Similars
+                        Back to Kanji Trap
                     </button>
                 </div>
             </div>
@@ -84,19 +95,19 @@ export default function SimilarDetail() {
                 >
                     <ArrowLeft className="w-6 h-6" style={{ color: COLORS.textPrimary }} />
                 </button>
-                <h1 className="text-xl font-bold" style={{ color: COLORS.textPrimary }}>
-                    Similar Kanjis
+                <h1 className="text-xl font-bold" style={{ color: COLORS.brandPrimary }}>
+                    Kanji Trap
                 </h1>
             </div>
 
             {/* Content */}
-            <div className="max-w-6xl mx-auto p-4 md:p-8 pb-24">
-                {/* Main Kanji Display */}
-                <div className="text-center mb-12">
-                    <div className="text-8xl md:text-9xl font-bold mb-4" style={{ color: COLORS.textPrimary }}>
+            <div className="max-w-4xl mx-auto p-4 md:p-8 pb-24">
+                {/* Hero */}
+                <div className="text-center mb-10">
+                    <div className="text-8xl md:text-9xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>
                         {kanji}
                     </div>
-                    <div className="text-2xl md:text-3xl font-medium mb-2" style={{ color: COLORS.textPrimary }}>
+                    <div className="text-2xl md:text-3xl font-medium mb-1" style={{ color: COLORS.textPrimary }}>
                         {meaning}
                     </div>
                     {furigana && (
@@ -106,114 +117,44 @@ export default function SimilarDetail() {
                     )}
                 </div>
 
-                {/* Similar Kanjis Section */}
+                {/* Trap Pairs Section */}
                 {kanjiArray.length > 0 && (
                     <div className="mb-12">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-6" style={{ color: COLORS.textPrimary }}>
-                            Similar Kanjis
+                        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center" style={{ color: COLORS.textPrimary }}>
+                            Don't Confuse With
                         </h2>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                            {kanjiArray.map((similar, index) => (
-                                <div
-                                    key={index}
-                                    className="p-6 rounded-2xl transition-all duration-300 hover:scale-105 cursor-pointer"
-                                    style={{
-                                        backgroundColor: COLORS.surface,
-                                        border: `3px solid ${COLORS.brandPrimary}`,
-                                        boxShadow: `0 4px 8px ${COLORS.brandPrimaryDark}1A`
-                                    }}
-                                >
-                                    <div className="text-center">
-                                        <div className="text-4xl md:text-5xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>
-                                            {similar.kanji}
-                                        </div>
-                                        {similar.meaning && (
-                                            <div className="text-sm" style={{ color: COLORS.textSecondary }}>
-                                                {similar.meaning}
-                                            </div>
-                                        )}
-                                        {similar.furigana && (
-                                            <div className="text-xs mt-1" style={{ color: COLORS.textMuted }}>
-                                                {similar.furigana}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
+                        <div className="max-w-2xl mx-auto">
+                            {kanjiArray.map((item, index) => (
+                                <TrapPair
+                                    key={`${item.kanji}-${index}`}
+                                    main={{ kanji, meaning, furigana }}
+                                    confused={item}
+                                />
                             ))}
                         </div>
                     </div>
                 )}
 
-                {/* Words Made With Section */}
-                {usedIn.length > 0 && (
-                    <div className="mb-12">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: COLORS.textPrimary }}>
-                            Words Made With {kanji}
-                        </h2>
-                        <p className="mb-6" style={{ color: COLORS.textSecondary }}>
-                            Common words and phrases that use this kanji
-                        </p>
-
-                        {hasJlptLevel && (
-                            <LevelFilter selectedLevel={selectedLevel} onLevelChange={setSelectedLevel} />
-                        )}
-
-                        <div className="space-y-3">
-                            {filteredUsedIn.map((word, index) => (
-                                <div
-                                    key={index}
-                                    className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 md:p-5 rounded-xl transition-all duration-300 hover:scale-[1.02]"
-                                    style={{
-                                        backgroundColor: COLORS.surface,
-                                        border: `2px solid ${COLORS.outline}`,
-                                        boxShadow: `0 2px 4px ${COLORS.brandPrimaryDark}0A`
-                                    }}
-                                >
-                                    <div className="mb-2 sm:mb-0 sm:max-w-[30%]">
-                                        <div className="text-xl md:text-2xl font-bold" style={{ color: COLORS.textPrimary }}>
-                                            {word.kanji}
-                                        </div>
-                                        {word.furigana && (
-                                            <div className="text-sm mt-1" style={{ color: COLORS.textSecondary }}>
-                                                {word.furigana}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="flex-1 sm:ml-6">
-                                        {word.meaning && (
-                                            <div className="text-base md:text-lg" style={{ color: COLORS.textPrimary }}>
-                                                {word.meaning || word.meanings}
-                                            </div>
-                                        )}
-                                        {word.jlptLevel && (
-                                            <span
-                                                className="inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium"
-                                                style={{
-                                                    backgroundColor: COLORS.brandPrimary,
-                                                    color: COLORS.interactiveTextOnPrimary
-                                                }}
-                                            >
-                                                {word.jlptLevel.toUpperCase()}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        {filteredUsedIn.length === 0 && (
-                            <div className="text-center py-12" style={{ color: COLORS.textSecondary }}>
-                                No words found for the selected JLPT level
-                            </div>
-                        )}
-                    </div>
-                )}
+                {/* Share Button */}
+                <div className="flex justify-center">
+                    <button
+                        onClick={handleShare}
+                        className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
+                        style={{
+                            backgroundColor: COLORS.brandPrimary,
+                            color: COLORS.interactiveTextOnPrimary
+                        }}
+                    >
+                        <Share2 className="w-5 h-5" />
+                        Share this trap
+                    </button>
+                </div>
 
                 {/* Empty state */}
-                {kanjiArray.length === 0 && usedIn.length === 0 && (
+                {kanjiArray.length === 0 && (
                     <div className="text-center py-12">
                         <p className="text-xl" style={{ color: COLORS.textSecondary }}>
-                            No related data available for this kanji
+                            No trap pairs available for this kanji
                         </p>
                     </div>
                 )}

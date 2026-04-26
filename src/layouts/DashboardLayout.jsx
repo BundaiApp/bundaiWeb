@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
-import { hasAuthToken } from "../lib/auth"
+import { hasAuthToken, shouldSkipAuthRedirects } from "../lib/auth"
 import Sidebar from "../components/Sidebar"
 import { Menu } from "lucide-react"
 import COLORS from "../theme/colors"
@@ -15,9 +15,14 @@ export default function DashboardLayout({ children }) {
         location.pathname.includes('/kanji-detail') ||
         location.pathname.includes('/quiz-engine') ||
         location.pathname.includes('/srs-engine') ||
-        location.pathname.includes('/similar-detail')
+        location.pathname.includes('/similar-detail') ||
+        location.pathname.includes('/kanji-swap-detail')
 
     useEffect(() => {
+        // Skip auth check in local dev mode
+        if (shouldSkipAuthRedirects()) {
+            return
+        }
         // Check if user is authenticated
         if (!hasAuthToken()) {
             navigate("/", { replace: true })

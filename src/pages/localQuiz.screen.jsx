@@ -1,15 +1,11 @@
-import { useMutation, useQuery } from '@apollo/client/react'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import COLORS from '../theme/colors'
 import { topics, kana } from '../util/constants'
 import Hiragana from '../util/hiragana.json'
 import Katakana from '../util/katakana.json'
-import ADD_BULK_FLASHCARD from '../graphql/mutations/addBulkFlashCard.mutation'
-import getKanjiByJLPT from '../graphql/queries/getKanjiByJLPT.query'
-import getKanjiByStrokes from '../graphql/queries/getKanjiByStrokes.query'
-import getKanjiByGrade from '../graphql/queries/getKanjiByGrade.query'
-import getTopWordsByType from '../graphql/queries/getTopWordsByType.query'
+import { provideData, provideTopWordsData } from '../util/jlptArray'
+import { X } from 'lucide-react'
 
 export default function LocalQuiz() {
     const navigate = useNavigate()
@@ -19,60 +15,25 @@ export default function LocalQuiz() {
     const [quizType, setQuizType] = useState('meaning')
     const [isWritten, setIsWritten] = useState(false)
     const [itemCount, setItemCount] = useState(10)
-    const userId = localStorage.getItem("userId") || "defaultUser"
-
-    const [addBulk, { loading }] = useMutation(ADD_BULK_FLASHCARD)
 
     const count = itemCount === "All" ? 1000 : itemCount
 
-    const { data: jlptData } = useQuery(getKanjiByJLPT, {
-        variables: { level },
-        skip: type !== 'jlpt'
-    })
+    const currentData = useMemo(() => {
+        if (type === 'jlpt') return provideData('jlpt', level) || []
+        if (type === 'strokes') return provideData('strokes', level) || []
+        if (type === 'grades') return provideData('grade', level) || []
+        if (type === 'verbs') return provideTopWordsData('verbs', `n${level}`, count) || []
+        if (type === 'nouns') return provideTopWordsData('nouns', `n${level}`, count) || []
+        if (type === 'adjectives') return provideTopWordsData('adjectives', `n${level}`, count) || []
+        if (type === 'adverbs') return provideTopWordsData('adverbs', `n${level}`, count) || []
+        if (type === 'hiragana') return Hiragana
+        if (type === 'katakana') return Katakana
+        return []
+    }, [count, level, type])
 
-    const { data: strokesData } = useQuery(getKanjiByStrokes, {
-        variables: { strokes: level },
-        skip: type !== 'strokes'
-    })
-
-    const { data: gradesData } = useQuery(getKanjiByGrade, {
-        variables: { grade: level },
-        skip: type !== 'grades'
-    })
-
-    const { data: verbsData } = useQuery(getTopWordsByType, {
-        variables: { type: 'verbs', jlptLevel: `n${level}`, count },
-        skip: type !== 'verbs'
-    })
-
-    const { data: nounsData } = useQuery(getTopWordsByType, {
-        variables: { type: 'nouns', jlptLevel: `n${level}`, count },
-        skip: type !== 'nouns'
-    })
-
-    const { data: adjectivesData } = useQuery(getTopWordsByType, {
-        variables: { type: 'adjectives', jlptLevel: `n${level}`, count },
-        skip: type !== 'adjectives'
-    })
-
-    const { data: adverbsData } = useQuery(getTopWordsByType, {
-        variables: { type: 'adverbs', jlptLevel: `n${level}`, count },
-        skip: type !== 'adverbs'
-    })
-
-    const addCardsInBulk = async () => {
-        const modifiedSelected = selected.map((item) => ({
-            kanjiName: item.kanjiName || item.kanji,
-            meanings: item.meanings || [item.meaning],
-            quizAnswers: item.quizAnswers
-        }))
-        await addBulk({
-            variables: {
-                userId,
-                kanjis: modifiedSelected
-            }
-        })
-    }
+    useEffect(() => {
+        setSelected([])
+    }, [type, level, itemCount])
 
     const checkIfSelected = (item) => {
         return selected.includes(item)
@@ -81,9 +42,7 @@ export default function LocalQuiz() {
     }
 
     const selectAll = () => {
-        return type === 'jlpt' || type === 'strokes' || type === 'grades'
-            ? setSelected([...selected, ...currentData])
-            : setSelected([...selected, ...currentData])
+        setSelected(currentData)
     }
 
     const checkThenNavigate = () => {
@@ -94,30 +53,19 @@ export default function LocalQuiz() {
             })
     }
 
-    const currentData = type === 'jlpt'
-        ? (jlptData?.getKanjiByJLPT || [])
-        : type === 'strokes'
-        ? (strokesData?.getKanjiByStrokes || [])
-        : type === 'grades'
-        ? (gradesData?.getKanjiByGrade || [])
-        : type === 'verbs'
-        ? (verbsData?.getTopWordsByType || [])
-        : type === 'nouns'
-        ? (nounsData?.getTopWordsByType || [])
-        : type === 'adjectives'
-        ? (adjectivesData?.getTopWordsByType || [])
-        : type === 'adverbs'
-        ? (adverbsData?.getTopWordsByType || [])
-        : type === 'hiragana'
-        ? Hiragana
-        : type === 'katakana'
-        ? Katakana
-        : []
-
     const ITEM_COUNTS = [10, 20, 50, 100, 'All']
 
     return (
         <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-4" style={{ backgroundColor: COLORS.background }}>
+            {/* Close Button */}
+            <button
+                onClick={() => navigate(-1)}
+                className="p-2 rounded-full transition-all duration-300 hover:scale-110"
+                style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}
+            >
+                <X size={24} />
+            </button>
+
             {/* Category Pills */}
             <div className="flex flex-wrap gap-2">
                 {[...topics, ...kana].map((item) => {
@@ -266,8 +214,8 @@ export default function LocalQuiz() {
 
             {/* Selection Controls */}
             <div className="space-y-3">
-                {/* Top Row: select all, unselect, save all */}
-                <div className="grid grid-cols-3 gap-3">
+                {/* Top Row: select all, unselect */}
+                <div className="grid grid-cols-2 gap-3">
                     <button
                         onClick={selectAll}
                         className="px-4 py-3 rounded-xl font-medium transition-all duration-300"
@@ -293,20 +241,6 @@ export default function LocalQuiz() {
                         }}
                     >
                         unselect
-                    </button>
-                    <button
-                        onClick={addCardsInBulk}
-                        disabled={loading}
-                        className="px-4 py-3 rounded-xl font-medium transition-all duration-300 disabled:opacity-50"
-                        style={{
-                            backgroundColor: COLORS.interactiveSurface,
-                            color: COLORS.textPrimary,
-                            borderWidth: '1px',
-                            borderStyle: 'solid',
-                            borderColor: COLORS.interactiveBorder
-                        }}
-                    >
-                        {loading ? 'loading...' : 'save all'}
                     </button>
                 </div>
 

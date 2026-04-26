@@ -27,6 +27,9 @@ import AnimeList from './pages/animeList.screen';
 import AnimeDetail from './pages/animeDetail.screen';
 import Similars from './pages/similars.screen';
 import SimilarDetail from './pages/similarDetail.screen';
+import KanjiSwap from './pages/kanjiSwap.screen';
+import KanjiSwapDetail from './pages/kanjiSwapDetail.screen';
+import LevelTest from './pages/levelTest.screen';
 import Settings from './pages/settings.screen';
 import posthog from './lib/posthog';
 import { getTrafficProperties } from './lib/trafficAttribution';
@@ -83,8 +86,11 @@ export default function App() {
         <Route path="/dashboard/anime-words" element={<DashboardLayout><AnimeWords /></DashboardLayout>} />
          <Route path="/dashboard/similars" element={<DashboardLayout><Similars /></DashboardLayout>} />
          <Route path="/dashboard/similar-detail" element={<DashboardLayout><SimilarDetail /></DashboardLayout>} />
+         <Route path="/dashboard/kanji-swap" element={<DashboardLayout><KanjiSwap /></DashboardLayout>} />
+         <Route path="/dashboard/kanji-swap-detail" element={<DashboardLayout><KanjiSwapDetail /></DashboardLayout>} />
          <Route path="/dashboard/anime-list" element={<DashboardLayout><AnimeList /></DashboardLayout>} />
          <Route path="/dashboard/anime-detail" element={<DashboardLayout><AnimeDetail /></DashboardLayout>} />
+         <Route path="/dashboard/level-test" element={<DashboardLayout><LevelTest /></DashboardLayout>} />
          <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
       </Routes>
     </Router>

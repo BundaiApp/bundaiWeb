@@ -1,88 +1,119 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { useQuery } from "@apollo/client/react"
 import { Search } from "lucide-react"
+import { provideKanjiObject } from "../util/jlptArray.js"
 import COLORS from "../theme/colors"
-import getAllKanji from "../graphql/queries/getAllKanji.query"
+
+const KanjiTrapCard = ({ kanji, data, onClick }) => {
+    return (
+        <div
+            className="rounded-2xl p-3 flex items-center cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] mb-3"
+            style={{
+                backgroundColor: COLORS.surface,
+                boxShadow: `0 4px 12px ${COLORS.brandPrimaryDark}14`
+            }}
+            onClick={onClick}
+        >
+            {/* Lead Kanji */}
+            <div
+                className="rounded-xl p-2.5 mr-3 flex flex-col items-center min-w-[80px]"
+                style={{
+                    backgroundColor: COLORS.interactiveSurface,
+                    border: `2px solid ${COLORS.brandPrimary}`,
+                    boxShadow: `0 4px 8px ${COLORS.brandPrimaryDark}14`
+                }}
+            >
+                <span className="text-3xl font-bold" style={{ color: COLORS.textPrimary }}>
+                    {kanji}
+                </span>
+                {data.furigana && (
+                    <span className="text-xs font-medium mt-1" style={{ color: COLORS.textPrimary }}>
+                        {data.furigana}
+                    </span>
+                )}
+                {data.meaning && (
+                    <span className="text-[10px] mt-0.5" style={{ color: COLORS.textSecondary }}>
+                        {data.meaning}
+                    </span>
+                )}
+            </div>
+
+            <span className="text-xl font-bold mr-3" style={{ color: COLORS.textSecondary }} />
+            {/* Similar kanji */}
+            <div className="flex flex-wrap gap-2 flex-1">
+                {(data.related_kanji || []).slice(0, 3).map((similar, index) => (
+                    <div
+                        key={`${kanji}-${similar.kanji}-${index}`}
+                        className="rounded-xl p-2 flex flex-col items-center min-w-[70px]"
+                        style={{
+                            backgroundColor: COLORS.kanjiHighlight,
+                            boxShadow: `0 4px 8px ${COLORS.brandPrimaryDark}14`
+                        }}
+                    >
+                        <span className="text-xl font-bold" style={{ color: COLORS.surface }}>
+                            {similar.kanji}
+                        </span>
+                        {similar.reading && (
+                            <span className="text-[10px] mt-0.5 opacity-90" style={{ color: COLORS.surface }}>
+                                {similar.reading}
+                            </span>
+                        )}
+                        {similar.meaning && (
+                            <span className="text-[9px] mt-0.5 opacity-90" style={{ color: COLORS.surface }}>
+                                {similar.meaning}
+                            </span>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
 
 export default function Similars() {
     const navigate = useNavigate()
     const [search, setSearch] = useState("")
+    const searchInputRef = useRef(null)
 
-    const { data: allKanjiData, loading, error } = useQuery(getAllKanji)
+    const SIMILAR_DATA = useMemo(() => provideKanjiObject(), [])
 
-    const SIMILAR_DATA = useMemo(() => {
-        if (loading) {
-            console.log('Still loading...')
-            return {}
+    const filteredData = useMemo(() => {
+        if (!search) {
+            return Object.entries(SIMILAR_DATA)
         }
 
-        if (!allKanjiData?.getAllKanji || allKanjiData.getAllKanji.length === 0) {
-            console.log('No kanji data available')
-            return {}
-        }
-
-        console.log('Total kanji received:', allKanjiData.getAllKanji.length)
-
-        const result = allKanjiData.getAllKanji.reduce((acc, kanji) => {
-            acc[kanji.kanjiName] = {
-                kanji: kanji.kanjiName,
-                meaning: kanji.meanings?.[0] || "",
-                furigana: kanji.kun?.[0] || "",
-                related_kanji: kanji.similars?.map(s => ({
-                    kanji: s.kanji,
-                    meaning: s.meaning,
-                    furigana: s.reading
-                })) || [],
-                usedIn: kanji.usedIn?.map(u => ({
-                    kanji: u.kanji,
-                    furigana: u.reading,
-                    meaning: u.meaning
-                })) || []
-            }
-            return acc
-        }, {})
-
-        console.log('Similar data processed, kanji count:', Object.keys(result).length)
-        return result
-    }, [allKanjiData, loading])
-
-    const [filteredData, setFilteredData] = useState([])
-
-    useEffect(() => {
-        setFilteredData(Object.keys(SIMILAR_DATA))
-    }, [SIMILAR_DATA])
-
-    const searchKanji = (query) => {
-        if (!query) return Object.keys(SIMILAR_DATA)
+        const lowerQuery = search.toLowerCase()
 
         return Object.entries(SIMILAR_DATA).filter(([kanji, data]) => {
-            const lowerQuery = query.toLowerCase()
-
-            // Check kanji
-            if (kanji.includes(query)) return true
-
-            // Check meaning
+            if (kanji.includes(search)) return true
             if (data.meaning && data.meaning.toLowerCase().includes(lowerQuery)) return true
-
-            // Check furigana/readings
-            if (data.furigana && data.furigana.includes(query)) return true
-
+            if (data.furigana && data.furigana.includes(search)) return true
+            if (
+                data.related_kanji?.some(
+                    (item) =>
+                        item.kanji?.includes(search) ||
+                        item.meaning?.toLowerCase().includes(lowerQuery) ||
+                        item.reading?.includes(search) ||
+                        item.furigana?.includes(search)
+                )
+            ) {
+                return true
+            }
             return false
-        }).map(([kanji]) => kanji)
-    }
+        })
+    }, [SIMILAR_DATA, search])
 
     const handleSearch = (text) => {
         setSearch(text)
-        const results = searchKanji(text)
-        setFilteredData(results)
     }
 
     const handleKanjiClick = (kanji) => {
         const kanjiData = SIMILAR_DATA[kanji]
+        if (!kanjiData) return
+
         navigate('/dashboard/similar-detail', {
             state: {
-                kanji: kanji,
+                kanji,
                 meaning: kanjiData.meaning,
                 furigana: kanjiData.furigana,
                 kanjiArray: kanjiData.related_kanji,
@@ -92,39 +123,17 @@ export default function Similars() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-6" style={{ backgroundColor: COLORS.background }}>
+        <div className="max-w-4xl mx-auto p-4 md:p-6 space-y-6" style={{ backgroundColor: COLORS.background }}>
             {/* Header */}
             <div className="mb-6">
                 <h1 className="text-3xl md:text-4xl font-bold mb-2" style={{ color: COLORS.textPrimary }}>
-                    Similar Kanjis
+                    Kanji Trap
                 </h1>
                 <p style={{ color: COLORS.textSecondary }}>
-                    Find and compare similar-looking kanji characters
+                    Spot the differences — learn to tell similar kanji apart
                 </p>
             </div>
 
-            {/* Loading */}
-            {loading && (
-                <div className="text-center py-12">
-                    <p style={{ color: COLORS.textSecondary }}>Loading similar kanji...</p>
-                </div>
-            )}
-
-            {/* Error */}
-            {!loading && error && (
-                <div className="text-center py-12">
-                    <p className="text-xl mb-2" style={{ color: COLORS.textPrimary }}>
-                        Error loading data
-                    </p>
-                    <p style={{ color: COLORS.textSecondary }}>
-                        {error.message || 'Please try again later'}
-                    </p>
-                </div>
-            )}
-
-            {/* Content */}
-            {!loading && !error && (
-                <>
             {/* Search Bar */}
             <div className="rounded-2xl p-4 shadow-md" style={{ backgroundColor: COLORS.surface }}>
                 <div className="relative">
@@ -133,6 +142,7 @@ export default function Similars() {
                         style={{ color: COLORS.textMuted }}
                     />
                     <input
+                        ref={searchInputRef}
                         type="text"
                         value={search}
                         onChange={(e) => handleSearch(e.target.value)}
@@ -157,40 +167,23 @@ export default function Similars() {
 
             {/* Results Count */}
             <div className="text-sm" style={{ color: COLORS.textSecondary }}>
-                Showing {filteredData.length} kanji
+                {filteredData.length} trap sets
             </div>
 
-            {/* Kanji Grid */}
-            {!loading && !error && (
-                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
-                    {filteredData.map((kanji) => (
-                        <button
-                            key={kanji}
-                            onClick={() => handleKanjiClick(kanji)}
-                            className="aspect-square rounded-xl flex items-center justify-center text-3xl font-medium transition-all duration-300 hover:scale-105 active:scale-95"
-                            style={{
-                                backgroundColor: COLORS.surface,
-                                color: COLORS.textPrimary,
-                                border: `3px solid ${COLORS.brandPrimary}`,
-                                boxShadow: `0 4px 8px ${COLORS.brandPrimaryDark}1A`
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.borderColor = COLORS.brandPrimaryDark
-                                e.currentTarget.style.transform = 'scale(1.05)'
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.borderColor = COLORS.brandPrimary
-                                e.currentTarget.style.transform = 'scale(1)'
-                            }}
-                        >
-                            {kanji}
-                        </button>
-                    ))}
-                </div>
-            )}
+            {/* Trap Cards */}
+            <div>
+                {filteredData.map(([kanji, data]) => (
+                    <KanjiTrapCard
+                        key={kanji}
+                        kanji={kanji}
+                        data={data}
+                        onClick={() => handleKanjiClick(kanji)}
+                    />
+                ))}
+            </div>
 
             {/* No Results */}
-            {!loading && !error && filteredData.length === 0 && (
+            {filteredData.length === 0 && (
                 <div className="text-center py-12">
                     <p className="text-xl mb-2" style={{ color: COLORS.textPrimary }}>
                         No kanji found
@@ -199,8 +192,6 @@ export default function Similars() {
                         Try searching with different keywords
                     </p>
                 </div>
-            )}
-            </>
             )}
         </div>
     )

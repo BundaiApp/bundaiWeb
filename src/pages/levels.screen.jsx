@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useQuery } from "@apollo/client/react"
 import { LEVEL_SYSTEM_CONFIG } from "../util/levelSystem"
-import { RefreshCw } from "lucide-react"
+import { RefreshCw, Zap } from "lucide-react"
 import COLORS from "../theme/colors"
 import ME_QUERY from "../graphql/queries/me.query"
 
@@ -78,17 +78,27 @@ export default function Levels() {
                     </p>
                 </div>
                 {!isGuest && (
-                    <button
-                        onClick={handleRefresh}
-                        disabled={loadingData}
-                        className="p-3 rounded-xl transition-all duration-300 hover:scale-105"
-                        style={{ backgroundColor: COLORS.interactiveSurface }}
-                    >
-                        <RefreshCw
-                            className={`w-6 h-6 ${loadingData ? 'animate-spin' : ''}`}
-                            style={{ color: COLORS.brandPrimary }}
-                        />
-                    </button>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => navigate('/dashboard/level-test')}
+                            className="flex items-center gap-2 px-4 py-3 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105"
+                            style={{ backgroundColor: COLORS.cardKanji, color: COLORS.surface }}
+                        >
+                            <Zap className="w-5 h-5" />
+                            Skip Level
+                        </button>
+                        <button
+                            onClick={handleRefresh}
+                            disabled={loadingData}
+                            className="p-3 rounded-xl transition-all duration-300 hover:scale-105"
+                            style={{ backgroundColor: COLORS.interactiveSurface }}
+                        >
+                            <RefreshCw
+                                className={`w-6 h-6 ${loadingData ? 'animate-spin' : ''}`}
+                                style={{ color: COLORS.brandPrimary }}
+                            />
+                        </button>
+                    </div>
                 )}
             </div>
 

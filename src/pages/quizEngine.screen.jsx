@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toHiragana } from "wanakana"
+import { X } from "lucide-react"
 import COLORS from "../theme/colors"
 
 export default function QuizEngine() {
@@ -11,12 +12,131 @@ export default function QuizEngine() {
     const [number, setNumber] = useState(0)
     const [selectedAns, setSelectedAns] = useState(null)
     const [textInput, setTextInput] = useState("")
-    const [answerState, setAnswerState] = useState("static") // "static", "right", "wrong"
+    const [answerState, setAnswerState] = useState("static")
+    const [answers, setAnswers] = useState([])
+    const [showResult, setShowResult] = useState(false)
     const inputRef = useRef(null)
+
+    const totalQuestions = questionsArray.length
+    const score = answers.filter((a) => a.correct).length
+    const scorePercent = answers.length > 0 ? (score / answers.length) * 100 : 0
+
+    const currentQuestion = questionsArray[number]
+    const currentPrompt = currentQuestion?.kanjiName || currentQuestion?.kanji || ''
+
+    const typeLabel =
+        quizType === "meaning"
+            ? "What does this mean?"
+            : quizType === "part"
+                ? "On'yomi (Chinese reading)"
+                : "Kun'yomi (Japanese reading)"
+
+    const checkMcqAnswer = (answer) => {
+        if (quizType === "meaning") {
+            return currentQuestion?.meanings?.includes(answer)
+        } else if (quizType === "part") {
+            return currentQuestion?.on?.includes(answer)
+        } else {
+            return currentQuestion?.kun?.includes(answer)
+        }
+    }
+
+    const mcqOptions =
+        quizType === "meaning"
+            ? currentQuestion?.quizAnswers
+            : quizType === "part"
+                ? currentQuestion?.quizAnswersOn
+                : currentQuestion?.quizAnswersKun
+
+    const moveToNextQuestion = (answer) => {
+        setSelectedAns(answer)
+        const isCorrect = checkMcqAnswer(answer)
+        const newAnswers = [...answers, { answer, correct: isCorrect }]
+        setAnswers(newAnswers)
+
+        setTimeout(() => {
+            if (number < totalQuestions - 1) {
+                setNumber(number + 1)
+                setSelectedAns(null)
+            } else {
+                setAnswers(newAnswers)
+                setShowResult(true)
+            }
+        }, 400)
+    }
+
+    const checkWrittenAnswer = () => {
+        if (quizType === "part") {
+            if (currentQuestion?.on && currentQuestion.on.includes(textInput)) {
+                setAnswerState("right")
+                return true
+            }
+            setAnswerState("wrong")
+            return false
+        }
+        if (quizType === "full") {
+            if (currentQuestion?.kun && currentQuestion.kun.includes(textInput)) {
+                setAnswerState("right")
+                return true
+            }
+            setAnswerState("wrong")
+            return false
+        }
+        if (quizType === "meaning") {
+            const capitalizedInput = textInput.charAt(0).toUpperCase() + textInput.slice(1)
+            if (currentQuestion?.meanings && currentQuestion.meanings.includes(capitalizedInput)) {
+                setAnswerState("right")
+                return true
+            }
+            setAnswerState("wrong")
+            return false
+        }
+        return false
+    }
+
+    const writeToNextQuestion = () => {
+        const isCorrect = checkWrittenAnswer()
+        const newAnswers = [...answers, { answer: textInput, correct: isCorrect }]
+
+        setTimeout(() => {
+            if (number < totalQuestions - 1) {
+                setNumber(number + 1)
+                setTextInput("")
+                setAnswerState("static")
+            } else {
+                setAnswers(newAnswers)
+                setShowResult(true)
+            }
+        }, 400)
+    }
+
+    const handleTextChange = (text) => {
+        if (quizType === "part" || quizType === "full") {
+            setTextInput(toHiragana(text, { IMEMode: true }))
+        } else {
+            setTextInput(text)
+        }
+    }
+
+    const handleSubmit = (e) => {
+        e?.preventDefault()
+        writeToNextQuestion()
+    }
+
+    const handleRestart = () => {
+        navigate('/dashboard/quiz')
+    }
 
     if (!questionsArray.length) {
         return (
-            <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: COLORS.background }}>
+            <div className="flex items-center justify-center min-h-screen relative" style={{ backgroundColor: COLORS.background }}>
+                <button
+                    onClick={() => navigate('/dashboard/quiz')}
+                    className="absolute top-4 right-4 p-2 rounded-full transition-all duration-300 hover:scale-110 z-10"
+                    style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}
+                >
+                    <X size={24} />
+                </button>
                 <div className="text-center">
                     <p className="text-xl font-bold mb-4" style={{ color: COLORS.textPrimary }}>
                         No questions available
@@ -33,159 +153,94 @@ export default function QuizEngine() {
         )
     }
 
-    const currentQuestion = questionsArray[number]
-
-    // Get the correct answers and options based on quiz type
-    const getQuizData = () => {
-        switch (quizType) {
-            case 'meaning':
-                return {
-                    answers: currentQuestion?.quizAnswers || [],
-                    correctAnswers: currentQuestion?.meanings || []
-                }
-            case 'part': // onyomi
-                return {
-                    answers: currentQuestion?.quizAnswersOn || currentQuestion?.on || [],
-                    correctAnswers: currentQuestion?.on || []
-                }
-            case 'full': // kunyomi
-                return {
-                    answers: currentQuestion?.quizAnswersKun || currentQuestion?.kun || [],
-                    correctAnswers: currentQuestion?.kun || []
-                }
-            default:
-                return {
-                    answers: currentQuestion?.quizAnswers || [],
-                    correctAnswers: currentQuestion?.meanings || []
-                }
-        }
-    }
-
-    const quizData = getQuizData()
-
-    // Reset text input and state when question changes
-    useEffect(() => {
-        setTextInput("")
-        setAnswerState("static")
-        if (isWritten && inputRef.current) {
-            setTimeout(() => inputRef.current?.focus(), 100)
-        }
-    }, [number, isWritten])
-
-    const moveToNextQuestion = (answer) => {
-        setSelectedAns(answer)
-
-        // Local quiz - no backend calls, just practice
-        // Move to next question after delay
-        setTimeout(() => {
-            if (number < questionsArray.length - 1) {
-                setNumber(number + 1)
-                setSelectedAns(null)
-            } else {
-                // Quiz completed
-                navigate('/dashboard/quiz')
-            }
-        }, 500)
-    }
-
-    const checkAnswer = () => {
-        const currentQuestion = questionsArray[number]
-
-        if (quizType === "part") {
-            // Check onyomi (on reading)
-            if (currentQuestion?.on && currentQuestion.on.includes(textInput)) {
-                setAnswerState("right")
-            } else {
-                setAnswerState("wrong")
-            }
-        } else if (quizType === "full") {
-            // Check kunyomi (kun reading)
-            if (currentQuestion?.kun && currentQuestion.kun.includes(textInput)) {
-                setAnswerState("right")
-            } else {
-                setAnswerState("wrong")
-            }
-        } else if (quizType === "meaning") {
-            // Check meaning (capitalize first letter)
-            const capitalizedInput = textInput.charAt(0).toUpperCase() + textInput.slice(1)
-            if (currentQuestion?.meanings && currentQuestion.meanings.includes(capitalizedInput)) {
-                setAnswerState("right")
-            } else {
-                setAnswerState("wrong")
-            }
-        }
-    }
-
-    const writeToNextQuestion = () => {
-        setTimeout(() => {
-            if (number < questionsArray.length - 1) {
-                setNumber(number + 1)
-                setTextInput("")
-                setAnswerState("static")
-            } else {
-                // Quiz completed
-                navigate('/dashboard/quiz')
-            }
-        }, 500)
-    }
-
-    const handleTextChange = (text) => {
-        if (quizType === "part" || quizType === "full") {
-            // Convert to hiragana for readings
-            setTextInput(toHiragana(text))
-        } else {
-            // Keep as is for meanings
-            setTextInput(text)
-        }
-    }
-
-    const handleSubmit = (e) => {
-        e?.preventDefault()
-        checkAnswer()
-        writeToNextQuestion()
-    }
-
-    const getButtonColor = (answer) => {
-        if (!selectedAns) return COLORS.surface
-
-        if (selectedAns === answer) {
-            return quizData.correctAnswers.includes(answer)
-                ? COLORS.accentSuccess
-                : COLORS.accentDanger
-        }
-
-        return COLORS.surface
+    // Result screen
+    if (showResult) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center px-8 text-center relative" style={{ backgroundColor: COLORS.background }}>
+                <button
+                    onClick={handleRestart}
+                    className="absolute top-4 right-4 p-2 rounded-full transition-all duration-300 hover:scale-110 z-10"
+                    style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}
+                >
+                    <X size={24} />
+                </button>
+                <h2 className="text-2xl font-bold mb-4" style={{ color: COLORS.textPrimary }}>
+                    Quiz Complete
+                </h2>
+                <p className="text-7xl font-bold mb-4" style={{ color: COLORS.brandPrimary }}>
+                    {Math.round(scorePercent)}%
+                </p>
+                <p className="text-sm mb-8" style={{ color: COLORS.textSecondary }}>
+                    {score} correct out of {totalQuestions} questions
+                </p>
+                <button
+                    onClick={handleRestart}
+                    className="w-full max-w-sm py-4 rounded-2xl text-lg font-bold transition-all duration-200 hover:scale-105"
+                    style={{ backgroundColor: COLORS.cardKanji, color: COLORS.surface }}
+                >
+                    Done
+                </button>
+            </div>
+        )
     }
 
     return (
-        <div className="fixed inset-0 flex flex-col" style={{ backgroundColor: COLORS.background }}>
-            {/* Top Section - Kanji Display */}
-            <div className="flex-[3] flex items-center justify-center pb-8">
-                <div className="text-center">
-                    <div className="text-8xl md:text-9xl font-bold mb-4" style={{ color: COLORS.textPrimary }}>
-                        {currentQuestion.kanjiName}
-                    </div>
-                    <div className="text-lg" style={{ color: COLORS.textSecondary }}>
-                        Question {number + 1} of {questionsArray.length}
-                    </div>
-                </div>
+        <div className="min-h-screen flex flex-col relative" style={{ backgroundColor: COLORS.background }}>
+            {/* Close Button */}
+            <button
+                onClick={handleRestart}
+                className="absolute top-4 right-4 p-2 rounded-full transition-all duration-300 hover:scale-110 z-10"
+                style={{ backgroundColor: COLORS.surface, color: COLORS.textPrimary }}
+            >
+                <X size={24} />
+            </button>
+
+            {/* Progress Bar */}
+            <div className="h-1" style={{ backgroundColor: COLORS.interactiveSurface }}>
+                <div
+                    className="h-full transition-all duration-300"
+                    style={{
+                        backgroundColor: COLORS.brandPrimary,
+                        width: `${((number + 1) / totalQuestions) * 100}%`
+                    }}
+                />
             </div>
 
-            {/* Bottom Section - Answer Input/Options */}
-            <div className="flex-[2] flex items-start justify-center px-4 md:px-8 pb-8">
+            <div className="flex justify-between px-6 py-3">
+                <span className="text-sm" style={{ color: COLORS.textSecondary }}>
+                    {number + 1} of {totalQuestions}
+                </span>
+                <span className="text-sm" style={{ color: COLORS.textSecondary }}>
+                    Score: {score}/{number}
+                </span>
+            </div>
+
+            {/* Question */}
+            <div className="flex-1 flex flex-col items-center justify-center px-6">
+                <p className="text-sm mb-3" style={{ color: COLORS.textSecondary }}>
+                    {typeLabel}
+                </p>
+                <p className={`font-bold text-center ${currentPrompt.length > 4 ? 'text-5xl' : 'text-7xl'}`}
+                    style={{ color: COLORS.textPrimary }}>
+                    {currentPrompt}
+                </p>
+            </div>
+
+            {/* Answer Section */}
+            <div className="px-6 pb-8">
                 {isWritten ? (
-                    // Written mode - Text input
-                    <div className="w-full max-w-2xl flex flex-col items-center gap-6">
-                        <form onSubmit={handleSubmit} className="w-full">
+                    <div className="flex flex-col items-center gap-4">
+                        <form onSubmit={handleSubmit} className="w-full max-w-2xl">
                             <input
                                 ref={inputRef}
                                 type="text"
                                 value={textInput}
                                 onChange={(e) => handleTextChange(e.target.value)}
-                                placeholder="write your answer here"
+                                placeholder="Write your answer here"
                                 autoCapitalize="none"
                                 autoComplete="off"
-                                className="w-full text-2xl md:text-3xl text-center pb-3 bg-transparent outline-none"
+                                autoFocus
+                                className="w-full text-xl text-center pb-3 bg-transparent outline-none"
                                 style={{
                                     color: COLORS.textPrimary,
                                     borderBottom: `2px solid ${COLORS.outline}`
@@ -194,41 +249,47 @@ export default function QuizEngine() {
                         </form>
                         <button
                             onClick={handleSubmit}
-                            className="w-4/5 py-4 rounded-2xl font-bold text-xl transition-all duration-300 hover:scale-105"
+                            className="w-full max-w-2xl py-4 rounded-2xl font-bold text-lg transition-all duration-200"
                             style={{
                                 backgroundColor: answerState === "right"
                                     ? COLORS.accentSuccess
                                     : answerState === "wrong"
                                         ? COLORS.accentDanger
-                                        : COLORS.brandSecondary,
-                                color: COLORS.textPrimary,
-                                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+                                        : COLORS.brandPrimary,
+                                color: COLORS.surface
                             }}
                         >
-                            answer
+                            Answer
                         </button>
                     </div>
                 ) : (
-                    // MCQ mode - Multiple choice buttons
-                    <div className="grid grid-cols-2 gap-3 w-full max-w-3xl">
-                        {quizData.answers.length > 0 ? (
-                            quizData.answers.slice(0, 4).map((answer, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => !selectedAns && moveToNextQuestion(answer)}
-                                    disabled={selectedAns !== null}
-                                    className="aspect-square rounded-2xl flex items-center justify-center text-xl md:text-2xl font-medium transition-all duration-300 hover:scale-105 active:scale-95 disabled:cursor-not-allowed"
-                                    style={{
-                                        backgroundColor: getButtonColor(answer),
-                                        color: COLORS.textPrimary,
-                                        boxShadow: selectedAns ? 'none' : '0 4px 6px rgba(0, 0, 0, 0.1)'
-                                    }}
-                                >
-                                    {answer}
-                                </button>
-                            ))
+                    <div className="space-y-3 max-w-2xl mx-auto">
+                        {mcqOptions?.length > 0 ? (
+                            mcqOptions.slice(0, 4).map((option, index) => {
+                                const isSelected = selectedAns === option
+                                const isCorrectOption = isSelected && checkMcqAnswer(option)
+
+                                return (
+                                    <button
+                                        key={index}
+                                        onClick={() => !selectedAns && moveToNextQuestion(option)}
+                                        disabled={!!selectedAns}
+                                        className="w-full rounded-2xl p-4 text-center text-base font-bold transition-all duration-200"
+                                        style={{
+                                            backgroundColor: isSelected
+                                                ? (isCorrectOption ? COLORS.accentSuccess : COLORS.accentDanger)
+                                                : COLORS.surface,
+                                            color: isSelected ? COLORS.surface : COLORS.textPrimary,
+                                            opacity: selectedAns && !isSelected ? 0.5 : 1,
+                                            cursor: selectedAns ? 'default' : 'pointer'
+                                        }}
+                                    >
+                                        {option}
+                                    </button>
+                                )
+                            })
                         ) : (
-                            <div className="col-span-2 text-center" style={{ color: COLORS.textSecondary }}>
+                            <div className="text-center py-8" style={{ color: COLORS.textSecondary }}>
                                 No quiz answers available for this item
                             </div>
                         )}
@@ -238,4 +299,3 @@ export default function QuizEngine() {
         </div>
     )
 }
-

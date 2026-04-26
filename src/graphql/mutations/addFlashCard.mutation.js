@@ -7,6 +7,8 @@ export default gql`
     $hiragana: String
     $meanings: [String]
     $quizAnswers: [String]
+    $level: Int
+    $source: String
   ) {
     addFlashCard(
       userId: $userId
@@ -14,12 +16,17 @@ export default gql`
       hiragana: $hiragana
       meanings: $meanings
       quizAnswers: $quizAnswers
+      level: $level
+      source: $source
     ) {
+      _id
       userId
       kanjiName
       hiragana
       meanings
       quizAnswers
+      level
+      source
     }
   }
 `;
