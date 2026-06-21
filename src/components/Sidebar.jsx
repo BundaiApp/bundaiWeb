@@ -1,11 +1,10 @@
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { Home, FileText, RefreshCw, Eye, Settings as SettingsIcon, LogOut, X, BookOpen, Shuffle } from "lucide-react"
+import { Home, FileText, RefreshCw, Eye, Settings as SettingsIcon, LogOut, X, Shuffle } from "lucide-react"
 import { useMutation, useQuery } from "@apollo/client/react"
 import { useState, useEffect, useMemo } from "react"
 import { clearAuthToken } from "../lib/auth"
 import logOutMutation from "../graphql/mutations/logOut.mutation"
 import FIND_PENDING_FLASHCARDS from "../graphql/queries/findPendingCards.query"
-import GET_PENDING_SOUND_FLASHCARDS from "../graphql/queries/getPendingSoundFlashCards.query"
 import COLORS from "../theme/colors"
 
 export default function Sidebar({ isOpen, onClose }) {
@@ -31,12 +30,6 @@ export default function Sidebar({ isOpen, onClose }) {
         fetchPolicy: "cache-and-network"
     })
 
-    const { data: soundData } = useQuery(GET_PENDING_SOUND_FLASHCARDS, {
-        variables: { userId },
-        skip: !userId,
-        fetchPolicy: "cache-and-network"
-    })
-
     // Count ALL kanji cards with rating > 0 (for SRS - matches React Native app)
     const kanjiDueCount = useMemo(() => {
         const pendingCards = kanjiData?.getPendingFlashCards ?? []
@@ -44,11 +37,6 @@ export default function Sidebar({ isOpen, onClose }) {
 
         return pendingCards.filter((card) => (card.rating || 0) > 0).length
     }, [kanjiData])
-
-    // Get ALL sound cards due count
-    const soundDueCount = soundData?.getPendingSoundFlashCards?.length || 0
-
-    const totalDueCount = kanjiDueCount + soundDueCount
 
     const handleLogout = async () => {
         try {
@@ -63,10 +51,9 @@ export default function Sidebar({ isOpen, onClose }) {
     }
 
     const navItems = [
-        { path: "/dashboard/sound-words", icon: BookOpen, label: "Words", badge: soundDueCount > 0 ? soundDueCount : null },
         { path: "/dashboard", icon: Home, label: "Dashboard" },
         { path: "/dashboard/quiz", icon: FileText, label: "Local Quiz" },
-        { path: "/dashboard/srs", icon: RefreshCw, label: "SRS", badge: totalDueCount > 0 ? totalDueCount : null },
+        { path: "/dashboard/srs", icon: RefreshCw, label: "SRS", badge: kanjiDueCount > 0 ? kanjiDueCount : null },
         { path: "/dashboard/similars", icon: Eye, label: "Kanji Trap" },
         { path: "/dashboard/kanji-swap", icon: Shuffle, label: "Kanji Swap" },
         { path: "/dashboard/settings", icon: SettingsIcon, label: "Settings" },

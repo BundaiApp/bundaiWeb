@@ -1,21 +1,19 @@
 import { useState, useMemo, useEffect } from "react"
 import { Search, X } from "lucide-react"
 import COLORS from "../theme/colors"
-import animeWordsData from "../util/animeWords.json"
+import vocabData from "../util/top2000_vocab.json"
 
 export default function AnimeWords() {
     const [searchQuery, setSearchQuery] = useState("")
 
     const vocab = useMemo(() => {
-        return animeWordsData.slice(0, 1000).map((word) => {
-            return {
-                word: word.word,
-                reading: word.reading,
-                romaji: word.romaji,
-                meaning: word.meaning,
-                frequency: word.animeCount
-            }
-        })
+        return vocabData.slice(0, 1600).map((word) => ({
+            word: word.kanji,
+            reading: word.reading,
+            romaji: word.romaji,
+            meaning: word.meaning,
+            frequency: word.frequency,
+        }))
     }, [])
 
     const filteredVocab = useMemo(() => {
@@ -34,7 +32,7 @@ export default function AnimeWords() {
     const filteredCount = filteredVocab.length
 
     useEffect(() => {
-        document.title = "Top 1000 Anime Words"
+        document.title = "Top 2000 Anime Words"
     }, [])
 
     return (

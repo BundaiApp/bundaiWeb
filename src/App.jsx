@@ -19,9 +19,6 @@ import SRSEngine from './pages/srsEngine.screen';
 import StudyEngine from './pages/studyEngine.screen';
 import Levels from './pages/levels.screen';
 import LevelDetails from './pages/levelDetails.screen';
-import SoundWords from './pages/soundWords.screen';
-import WordCategory from './pages/wordCategory.screen';
-import ImageQuizEngine from './pages/imageQuizEngine.screen';
 import AnimeWords from './pages/animeWords.screen';
 import AnimeList from './pages/animeList.screen';
 import AnimeDetail from './pages/animeDetail.screen';
@@ -71,9 +68,6 @@ export default function App() {
 
         {/* Protected Dashboard Routes */}
         <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
-        <Route path="/dashboard/sound-words" element={<DashboardLayout><SoundWords /></DashboardLayout>} />
-        <Route path="/dashboard/word-category" element={<DashboardLayout><WordCategory /></DashboardLayout>} />
-        <Route path="/dashboard/image-quiz-engine" element={<DashboardLayout><ImageQuizEngine /></DashboardLayout>} />
         <Route path="/dashboard/kanji-template" element={<DashboardLayout><KanjiTemplate /></DashboardLayout>} />
         <Route path="/dashboard/kanji-detail" element={<DashboardLayout><KanjiDetails /></DashboardLayout>} />
         <Route path="/dashboard/quiz" element={<DashboardLayout><LocalQuiz /></DashboardLayout>} />

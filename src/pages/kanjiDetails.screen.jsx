@@ -242,20 +242,6 @@ export default function KanjiDetails() {
                                 </button>
                             )}
                         </div>
-                        {item?.image && (
-                            <div className="w-full md:w-48 aspect-square flex items-center justify-center rounded-xl overflow-hidden" style={{ backgroundColor: COLORS.interactiveSurface }}>
-                                <img
-                                    src={`/images/${item.image}.png`}
-                                    alt={glyph}
-                                    className="w-full h-full object-contain"
-                                    loading="lazy"
-                                    onError={(e) => {
-                                        const fallbackPaths = [item.image.toLowerCase()]
-                                        e.target.src = `/images/${fallbackPaths[0].toLowerCase()}.png`
-                                    }}
-                                />
-                            </div>
-                        )}
                     </div>
 
                     {(onyomi.length > 0 || kunyomi.length > 0) && (

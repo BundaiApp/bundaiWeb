@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context'
 import { LOCAL_GRAPHQL_URL, TOKEN_STORAGE_KEY, isLocalRuntime } from './auth'
 
 const getGraphqlUri = () => {
-  const configuredUri = import.meta?.env?.VITE_GRAPHQL_URL
+  const configuredUri = import.meta.env.VITE_GRAPHQL_URL
   if (configuredUri) {
     return configuredUri
   }
