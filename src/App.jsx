@@ -28,6 +28,7 @@ import KanjiSwap from './pages/kanjiSwap.screen';
 import KanjiSwapDetail from './pages/kanjiSwapDetail.screen';
 import LevelTest from './pages/levelTest.screen';
 import Settings from './pages/settings.screen';
+import DeleteAccount from './pages/deleteAccount.screen';
 import posthog from './lib/posthog';
 import { getTrafficProperties } from './lib/trafficAttribution';
 
@@ -86,6 +87,7 @@ export default function App() {
          <Route path="/dashboard/anime-detail" element={<DashboardLayout><AnimeDetail /></DashboardLayout>} />
          <Route path="/dashboard/level-test" element={<DashboardLayout><LevelTest /></DashboardLayout>} />
          <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
+         <Route path="/dashboard/delete-account" element={<DashboardLayout><DeleteAccount /></DashboardLayout>} />
       </Routes>
     </Router>
   );
