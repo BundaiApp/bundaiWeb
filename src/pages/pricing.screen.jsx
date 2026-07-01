@@ -3,11 +3,8 @@ import { Link } from "react-router-dom"
 import PricingPlans from "../components/PricingPlans"
 import { Button } from "../components/Button"
 import COLORS from "../theme/colors"
-import { hasAuthToken } from "../lib/auth"
 
 export default function PricingPage() {
-  const isLoggedIn = hasAuthToken()
-
   return (
     <div
       className="min-h-screen"
@@ -32,19 +29,12 @@ export default function PricingPage() {
             </span>
           </Link>
 
-          <div className="flex items-center gap-3">
-            <Link to="/">
-              <Button variant="secondary" size="sm" className="gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Back
-              </Button>
-            </Link>
-            {isLoggedIn ? null : (
-              <Link to="/login">
-                <Button variant="outline" size="sm">Log In</Button>
-              </Link>
-            )}
-          </div>
+          <Link to="/">
+            <Button variant="secondary" size="sm" className="gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </Button>
+          </Link>
         </div>
       </header>
 

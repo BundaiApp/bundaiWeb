@@ -49,7 +49,7 @@ export default function Terms() {
 
             <section>
               <h2 className="text-2xl font-semibold text-white mb-4">What Bundai Is</h2>
-              <p>Bundai is a Japanese language learning platform with mobile app and browser extension.</p>
+              <p>Bundai is a Japanese language learning mobile app.</p>
             </section>
 
             <section>

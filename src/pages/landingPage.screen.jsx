@@ -1,22 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Menu, X, Globe, Download, CheckCircle, Monitor } from 'lucide-react';
+import { Menu, X, Download } from 'lucide-react';
 import { AnimatedBackground } from '../components/AnimatedBackground';
-import { Button } from '../components/Button';
 import InteractiveSubtitleDemo from '../components/InteractiveSubtitleDemo';
-import { Link, useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client/react';
-import {
-  hasAuthToken,
-  clearAuthToken,
-  redirectToDashboard,
-  shouldSkipAuthRedirects,
-} from '../lib/auth';
-import logOutMutation from '../graphql/mutations/logOut.mutation';
 import COLORS from '../theme/colors';
 import posthog from '../lib/posthog';
 import { getTrafficProperties } from '../lib/trafficAttribution';
+
+const APP_STORE_URL = 'https://apps.apple.com/gb/app/bundai/id6751961361';
 
 function trackLandingCtaClick(destination) {
   posthog.capture({
@@ -29,35 +21,7 @@ function trackLandingCtaClick(destination) {
 }
 
 export default function App() {
-  const skipAuthRedirects = shouldSkipAuthRedirects();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
-  const [executeLogOut, { loading: logoutLoading }] =
-    useMutation(logOutMutation);
-
-useEffect(() => {
-    const syncAuthState = () => {
-      const loggedIn = hasAuthToken()
-      setIsLoggedIn(loggedIn)
-      if (loggedIn && !skipAuthRedirects) {
-        redirectToDashboard()
-      }
-    }
-
-    if (skipAuthRedirects) {
-      return
-    }
-
-    syncAuthState()
-    window.addEventListener('storage', syncAuthState)
-    window.addEventListener('bundai:auth-change', syncAuthState)
-
-    return () => {
-      window.removeEventListener('storage', syncAuthState)
-      window.removeEventListener('bundai:auth-change', syncAuthState)
-    }
-  }, [skipAuthRedirects])
 
   useEffect(() => {
     posthog.capture({
@@ -67,29 +31,6 @@ useEffect(() => {
   }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
-  const handleLoginClick = () => {
-    if (isLoggedIn && !skipAuthRedirects) {
-      redirectToDashboard();
-      return;
-    }
-
-    navigate('/login');
-  };
-
-  const handleLogout = async () => {
-    try {
-      // Call the backend logout mutation
-      await executeLogOut();
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      // Clear local token regardless of backend response
-      clearAuthToken();
-      posthog.reset();
-      setIsLoggedIn(false);
-    }
-  };
 
   return (
     <div
@@ -127,26 +68,21 @@ useEffect(() => {
               </span>
             </div>
 
-            {/* Desktop Menu */}
+            {/* Desktop Download */}
             <div className="hidden md:flex items-center">
-              {isLoggedIn ? (
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={handleLogout}
-                  disabled={logoutLoading}
-                >
-                  {logoutLoading ? 'Logging Out...' : 'Log Out'}
-                </Button>
-              ) : (
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={handleLoginClick}
-                >
-                  Log In
-                </Button>
-              )}
+              <a
+                href={APP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackLandingCtaClick('ios_app_nav')}
+                className="rounded-xl px-4 py-2 text-sm font-semibold hover:opacity-90 transition-opacity"
+                style={{
+                  backgroundColor: COLORS.brandPrimary,
+                  color: COLORS.surface,
+                }}
+              >
+                Download
+              </a>
             </div>
 
             {/* Mobile Menu Button */}
@@ -173,33 +109,26 @@ useEffect(() => {
               style={{ borderColor: COLORS.divider }}
             >
               <div className="flex flex-col space-y-4 pt-4">
-                {isLoggedIn ? (
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={handleLogout}
-                    disabled={logoutLoading}
-                    className="w-fit"
-                  >
-                    {logoutLoading ? 'Logging Out...' : 'Log Out'}
-                  </Button>
-                ) : (
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={handleLoginClick}
-                    className="w-fit"
-                  >
-                    Log In
-                  </Button>
-                )}
+                <a
+                  href={APP_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackLandingCtaClick('ios_app_nav_mobile')}
+                  className="rounded-xl px-4 py-3 text-sm font-semibold text-center hover:opacity-90 transition-opacity w-fit"
+                  style={{
+                    backgroundColor: COLORS.brandPrimary,
+                    color: COLORS.surface,
+                  }}
+                >
+                  Download on the App Store
+                </a>
               </div>
             </div>
           )}
         </div>
       </nav>
 
-      {/* Demo Section */}
+      {/* Hero Section */}
       <section
         id="home"
         className="relative py-12 sm:py-16 px-4 sm:px-6"
@@ -212,39 +141,18 @@ useEffect(() => {
             className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black mb-5 sm:mb-6 leading-tight max-w-5xl mx-auto px-2 animate-fade-up animate-delay-150"
             style={{ color: COLORS.textPrimary }}
           >
-            Start Watching{' '}
-            <span style={{ color: COLORS.brandPrimary }}>Anime</span>
+            Learn{' '}
+            <span style={{ color: COLORS.brandPrimary }}>Japanese</span>
             <br />
-            in
-            <span
-              style={{
-                color: COLORS.brandPrimary,
-                position: 'relative',
-                left: '10px',
-              }}
-            >
-              Japanese
-              <span
-                style={{
-                  color: '#F97316',
-                  position: 'absolute',
-                  top: '-5px',
-                  right: '-155px',
-                  fontSize: '0.45em',
-                  fontWeight: '800',
-                  transform: 'rotate(8deg)',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                effortlessly
-              </span>
-            </span>
+            through{' '}
+            <span style={{ color: COLORS.brandPrimary }}>Anime</span>
           </h1>
           <p
             className="text-lg sm:text-xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4 animate-fade-up animate-delay-300"
             style={{ color: COLORS.textSecondary }}
           >
-            Pick up words by sound as you watch anime, with or without kanji.
+            Master vocabulary, kanji, and pronunciation with the Bundai iOS app —
+            SRS, anime word feeds, and on-device speech practice.
           </p>
 
           <figure
@@ -253,7 +161,7 @@ useEffect(() => {
           >
             <img
               src="/hero-combined.jpg"
-              alt="Dual Subtitle Loader capture beside Bundai mobile app study views"
+              alt="Bundai mobile app study views"
               width="1160"
               height="430"
               className="w-full max-w-6xl mx-auto rounded-[2rem] shadow-2xl"
@@ -266,34 +174,7 @@ useEffect(() => {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-6 sm:mt-8 px-4 animate-fade-up animate-delay-450">
             <a
-              href="https://chromewebstore.google.com/detail/bundai-extension-plasmo/aoencglmiihcheldbcpjlnlfnemcglfe?authuser=1&hl=en"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackLandingCtaClick('chrome_extension')}
-              className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto"
-              style={{ backgroundColor: COLORS.textPrimary }}
-            >
-              <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
-                <Globe
-                  className="w-6 sm:w-8 h-6 sm:h-8"
-                  style={{ color: COLORS.surface }}
-                />
-                <div className="text-left">
-                  <div className="text-xs" style={{ color: COLORS.textMuted }}>
-                    Available in
-                  </div>
-                  <div
-                    className="text-sm sm:text-lg font-semibold"
-                    style={{ color: COLORS.surface }}
-                  >
-                    Chrome Web Store
-                  </div>
-                </div>
-              </div>
-            </a>
-
-            <a
-              href="https://apps.apple.com/gb/app/bundai/id6751961361"
+              href={APP_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackLandingCtaClick('ios_app')}
@@ -347,33 +228,6 @@ useEffect(() => {
                 </div>
               </div>
             </div>
-
-            <a
-              href="https://drive.google.com/uc?export=download&id=173UZR20O8YabvLCPe19SwWvxRjugwMh7"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackLandingCtaClick('mac_app')}
-              className="rounded-2xl p-2 sm:p-3 hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto"
-              style={{ backgroundColor: COLORS.textPrimary }}
-            >
-              <div className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4">
-                <Monitor
-                  className="w-6 sm:w-8 h-6 sm:h-8"
-                  style={{ color: COLORS.surface }}
-                />
-                <div className="text-left">
-                  <div className="text-xs" style={{ color: COLORS.textMuted }}>
-                    Download for
-                  </div>
-                  <div
-                    className="text-sm sm:text-lg font-semibold"
-                    style={{ color: COLORS.surface }}
-                  >
-                    macOS
-                  </div>
-                </div>
-              </div>
-            </a>
           </div>
         </div>
       </section>
@@ -387,17 +241,19 @@ useEffect(() => {
         }}
       >
         <div className="mx-auto">
+          {/* Interactive subtitle demo (video) — temporarily disabled
           <div className="text-center mb-4 sm:mb-5">
             <h2
               className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3 px-2"
               style={{ color: COLORS.textPrimary }}
             >
-              See The Extension
+              See Bundai
               <span style={{ color: COLORS.brandPrimary }}> In Action</span>
             </h2>
           </div>
 
           <InteractiveSubtitleDemo colors={COLORS} />
+          */}
 
           <div className="mb-12 sm:mb-14 px-4">
             <h3
@@ -430,32 +286,6 @@ useEffect(() => {
                 />
               </div>
             </figure>
-          </div>
-
-          <div className="max-w-4xl mx-auto px-4">
-            <div
-              className="rounded-2xl p-5 sm:p-6 text-center"
-              style={{
-                backgroundColor: COLORS.surface,
-                border: `1px solid ${COLORS.outline}`,
-              }}
-            >
-              <p
-                className="text-base sm:text-lg leading-relaxed"
-                style={{ color: COLORS.textSecondary }}
-              >
-                Prefer studying on desktop? The web app already includes
-                <span
-                  className="font-bold"
-                  style={{ color: COLORS.brandPrimary }}
-                >
-                  {' '}
-                  60% to 70% feature parity
-                </span>{' '}
-                with the mobile app, with synced progress and core review
-                workflows.
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -537,24 +367,13 @@ useEffect(() => {
               <ul className="space-y-2 text-sm sm:text-base">
                 <li>
                   <a
-                    href="https://apps.apple.com/gb/app/bundai/id6751961361"
+                    href={APP_STORE_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:transition-colors"
                     style={{ color: COLORS.textSecondary }}
                   >
                     iOS App
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://chromewebstore.google.com/detail/bundai-extension-plasmo/aoencglmiihcheldbcpjlnlfnemcglfe?authuser=1&hl=en"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:transition-colors"
-                    style={{ color: COLORS.textSecondary }}
-                  >
-                    Chrome Extension
                   </a>
                 </li>
               </ul>
@@ -569,49 +388,51 @@ useEffect(() => {
               </h4>
               <ul className="space-y-2">
                 <li>
-                  <Link
-                    to="#"
+                  <a
+                    href={APP_STORE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="hover:transition-colors"
                     style={{ color: COLORS.textSecondary }}
                   >
                     Help Center
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link
-                    to="#"
+                  <a
+                    href="mailto:tech@bundai.app"
                     className="hover:transition-colors"
                     style={{ color: COLORS.textSecondary }}
                   >
                     Contact Us
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link
-                    to="/privacy"
+                  <a
+                    href="/privacy"
                     className="hover:transition-colors"
                     style={{ color: COLORS.textSecondary }}
                   >
                     Privacy Policy
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link
-                    to="/terms"
+                  <a
+                    href="/terms"
                     className="hover:transition-colors"
                     style={{ color: COLORS.textSecondary }}
                   >
                     Terms of Service
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link
-                    to="/refund"
+                  <a
+                    href="/refund"
                     className="hover:transition-colors"
                     style={{ color: COLORS.textSecondary }}
                   >
                     Refund Policy
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
