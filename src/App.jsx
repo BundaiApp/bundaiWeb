@@ -1,10 +1,43 @@
 import { useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+
+// Public pages
 import LandingPage from './pages/landingPage.screen';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Refund from './pages/Refund';
 import PricingPage from './pages/pricing.screen';
+
+// Auth pages
+import Login from './pages/login.screen';
+import SignUp from './pages/signup.screen';
+import ForgotPassword from './pages/forgotPassword.screen';
+
+// Dashboard layout
+import DashboardLayout from './layouts/DashboardLayout';
+
+// Dashboard pages
+import Dashboard from './pages/dashboard.screen';
+import LocalQuiz from './pages/localQuiz.screen';
+import SRS from './pages/srs.screen';
+import SRSEngine from './pages/srsEngine.screen';
+import StudyEngine from './pages/studyEngine.screen';
+import SRSReview from './pages/srsReview.screen';
+import Similars from './pages/similars.screen';
+import SimilarDetail from './pages/similarDetail.screen';
+import KanjiSwap from './pages/kanjiSwap.screen';
+import KanjiSwapDetail from './pages/kanjiSwapDetail.screen';
+import KanjiTemplate from './pages/kanjiTemplate.screen';
+import KanjiDetails from './pages/kanjiDetails.screen';
+import Levels from './pages/levels.screen';
+import LevelDetails from './pages/levelDetails.screen';
+import LevelTest from './pages/levelTest.screen';
+import AnimeList from './pages/animeList.screen';
+import AnimeWords from './pages/animeWords.screen';
+import AnimeDetail from './pages/animeDetail.screen';
+import Settings from './pages/settings.screen';
+import DeleteAccount from './pages/deleteAccount.screen';
+
 import posthog from './lib/posthog';
 import { getTrafficProperties } from './lib/trafficAttribution';
 
@@ -39,6 +72,35 @@ export default function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/refund" element={<Refund />} />
+
+        {/* Auth routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        {/* Dashboard routes (wrapped in DashboardLayout) */}
+        <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
+        <Route path="/dashboard/quiz" element={<DashboardLayout><LocalQuiz /></DashboardLayout>} />
+        <Route path="/dashboard/srs" element={<DashboardLayout><SRS /></DashboardLayout>} />
+        <Route path="/dashboard/srs-engine" element={<DashboardLayout><SRSEngine /></DashboardLayout>} />
+        <Route path="/dashboard/study-engine" element={<DashboardLayout><StudyEngine /></DashboardLayout>} />
+        <Route path="/dashboard/srs-review" element={<DashboardLayout><SRSReview /></DashboardLayout>} />
+        <Route path="/dashboard/similars" element={<DashboardLayout><Similars /></DashboardLayout>} />
+        <Route path="/dashboard/similar-detail" element={<DashboardLayout><SimilarDetail /></DashboardLayout>} />
+        <Route path="/dashboard/kanji-swap" element={<DashboardLayout><KanjiSwap /></DashboardLayout>} />
+        <Route path="/dashboard/kanji-swap-detail" element={<DashboardLayout><KanjiSwapDetail /></DashboardLayout>} />
+        <Route path="/dashboard/kanji-template" element={<DashboardLayout><KanjiTemplate /></DashboardLayout>} />
+        <Route path="/dashboard/kanji-detail" element={<DashboardLayout><KanjiDetails /></DashboardLayout>} />
+        <Route path="/dashboard/levels" element={<DashboardLayout><Levels /></DashboardLayout>} />
+        <Route path="/dashboard/level-details" element={<DashboardLayout><LevelDetails /></DashboardLayout>} />
+        <Route path="/dashboard/level-test" element={<DashboardLayout><LevelTest /></DashboardLayout>} />
+        <Route path="/dashboard/anime-list" element={<DashboardLayout><AnimeList /></DashboardLayout>} />
+        <Route path="/dashboard/anime-words" element={<DashboardLayout><AnimeWords /></DashboardLayout>} />
+        <Route path="/dashboard/anime-detail" element={<DashboardLayout><AnimeDetail /></DashboardLayout>} />
+        <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
+        <Route path="/dashboard/delete-account" element={<DashboardLayout><DeleteAccount /></DashboardLayout>} />
+
+        {/* Fallback */}
         <Route path="*" element={<LandingPage />} />
       </Routes>
     </Router>

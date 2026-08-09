@@ -1,12 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X, Download } from 'lucide-react';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import InteractiveSubtitleDemo from '../components/InteractiveSubtitleDemo';
 import COLORS from '../theme/colors';
 import posthog from '../lib/posthog';
 import { getTrafficProperties } from '../lib/trafficAttribution';
+import { hasAuthToken } from '../lib/auth';
 
 const APP_STORE_URL = 'https://apps.apple.com/gb/app/bundai/id6751961361';
 
@@ -22,12 +24,19 @@ function trackLandingCtaClick(destination) {
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(hasAuthToken());
 
   useEffect(() => {
     posthog.capture({
       event: 'landing page viewed',
       properties: getTrafficProperties(),
     });
+  }, []);
+
+  useEffect(() => {
+    const onAuthChange = () => setLoggedIn(hasAuthToken());
+    window.addEventListener('bundai:auth-change', onAuthChange);
+    return () => window.removeEventListener('bundai:auth-change', onAuthChange);
   }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -68,8 +77,43 @@ export default function App() {
               </span>
             </div>
 
-            {/* Desktop Download */}
-            <div className="hidden md:flex items-center">
+            {/* Desktop Nav */}
+            <div className="hidden md:flex items-center space-x-3">
+              {loggedIn ? (
+                <Link
+                  to="/dashboard"
+                  className="rounded-xl px-4 py-2 text-sm font-semibold hover:opacity-90 transition-opacity"
+                  style={{
+                    backgroundColor: COLORS.brandPrimary,
+                    color: COLORS.surface,
+                  }}
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="rounded-xl px-4 py-2 text-sm font-semibold hover:opacity-90 transition-opacity"
+                    style={{
+                      backgroundColor: COLORS.surfaceMuted,
+                      color: COLORS.textPrimary,
+                    }}
+                  >
+                    Log In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="rounded-xl px-4 py-2 text-sm font-semibold hover:opacity-90 transition-opacity"
+                    style={{
+                      backgroundColor: COLORS.brandPrimary,
+                      color: COLORS.surface,
+                    }}
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
               <a
                 href={APP_STORE_URL}
                 target="_blank"
@@ -77,7 +121,7 @@ export default function App() {
                 onClick={() => trackLandingCtaClick('ios_app_nav')}
                 className="rounded-xl px-4 py-2 text-sm font-semibold hover:opacity-90 transition-opacity"
                 style={{
-                  backgroundColor: COLORS.brandPrimary,
+                  backgroundColor: COLORS.textPrimary,
                   color: COLORS.surface,
                 }}
               >
@@ -109,6 +153,41 @@ export default function App() {
               style={{ borderColor: COLORS.divider }}
             >
               <div className="flex flex-col space-y-4 pt-4">
+                {loggedIn ? (
+                  <Link
+                    to="/dashboard"
+                    className="rounded-xl px-4 py-3 text-sm font-semibold text-center hover:opacity-90 transition-opacity w-fit"
+                    style={{
+                      backgroundColor: COLORS.brandPrimary,
+                      color: COLORS.surface,
+                    }}
+                  >
+                    Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="rounded-xl px-4 py-3 text-sm font-semibold text-center hover:opacity-90 transition-opacity w-fit"
+                      style={{
+                        backgroundColor: COLORS.surfaceMuted,
+                        color: COLORS.textPrimary,
+                      }}
+                    >
+                      Log In
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="rounded-xl px-4 py-3 text-sm font-semibold text-center hover:opacity-90 transition-opacity w-fit"
+                      style={{
+                        backgroundColor: COLORS.brandPrimary,
+                        color: COLORS.surface,
+                      }}
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                )}
                 <a
                   href={APP_STORE_URL}
                   target="_blank"
@@ -116,7 +195,7 @@ export default function App() {
                   onClick={() => trackLandingCtaClick('ios_app_nav_mobile')}
                   className="rounded-xl px-4 py-3 text-sm font-semibold text-center hover:opacity-90 transition-opacity w-fit"
                   style={{
-                    backgroundColor: COLORS.brandPrimary,
+                    backgroundColor: COLORS.textPrimary,
                     color: COLORS.surface,
                   }}
                 >
