@@ -104,7 +104,36 @@ Even at 1/5 = ~$900/mo (survival). The asymmetry is the whole story: views are h
 
 ---
 
-## 9. Deprecated / superseded
+## 9. Changelog — bundaiWeb
+
+### 2026-08-10 — Static → Server reconnection + JLPT data split
+
+**Re-enabled server-backed features:**
+- Reconnected Apollo Client to `api.bundai.app/graphql`
+- Added `ApolloProvider` to `main.jsx`
+- Re-enabled all 20+ dashboard routes in `App.jsx` (lazy-loaded)
+- Re-enabled auth pages: login, signup, forgot password
+- Re-enabled DashboardLayout + Sidebar with auth gate
+- Added login/signup nav links to landing page (desktop + mobile)
+- Fixed login/signup/forgot password CSS to use COLORS theme
+
+**JLPT data split (6 MB → per-level lazy loading):**
+- Split `src/util/jlptArray.js` (250K lines, 6 MB) into per-level JSON files
+- Created `src/util/jlpt/` directory with `n1.json`–`n5.json` + async loader
+- Removed dead code: `provideTopWordsData`, `getTopWords`, `provideData`, lodash dependency
+- Updated `srs.screen.jsx` to load data async via `loadLevelsUpTo()`
+- Updated `localQuiz.screen.jsx` to load data async via `loadLevel()`, removed strokes/grades tabs
+- Removed `similars.screen.jsx`, `similarDetail.screen.jsx` (Kanji Trap — removed from UI)
+- Removed `kanjiSwap.screen.jsx`, `kanjiSwapDetail.screen.jsx` (Kanji Swap — removed)
+- Removed `lodash` from `package.json`
+
+**Bundle size impact:**
+- Landing page main bundle: 29 KB (unchanged)
+- SRS page for N5 student: ~500 KB instead of 6 MB
+- Quiz page for N5 student: ~500 KB instead of 6 MB
+- Each JLPT level loads independently on demand
+
+## 10. Deprecated / superseded
 
 - `IMPLEMENTATION_PLAN.md` — **removed.** Described the dead server-backed web app (login/signup/dashboard + kanji-server work).
 - `posthog-setup-report.md` — **stale.** Lists events on screens that no longer exist (login/signup/SRS). Live app currently fires only `site entry viewed`, `landing page viewed`, `landing cta clicked`. Needs refresh after Phase 0.

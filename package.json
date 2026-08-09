@@ -20,7 +20,6 @@
     "clsx": "^2.1.1",
     "graphql": "^16.11.0",
     "graphql-tag": "^2.12.6",
-    "lodash": "^4.17.21",
     "lucide-react": "^0.515.0",
     "posthog-js": "^1.364.7",
     "posthog-node": "^5.28.11",

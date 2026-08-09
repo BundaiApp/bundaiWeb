@@ -41,12 +41,24 @@ export default function QuizEngine() {
         }
     }
 
-    const mcqOptions =
-        quizType === "meaning"
-            ? currentQuestion?.quizAnswers
-            : quizType === "part"
-                ? currentQuestion?.quizAnswersOn
-                : currentQuestion?.quizAnswersKun
+    const getMcqOptions = () => {
+        if (quizType === "meaning") {
+            return currentQuestion?.quizAnswers
+        }
+        const field = quizType === "part" ? "on" : "kun"
+        const correctOptions = currentQuestion?.[field]
+        if (!correctOptions?.length) return []
+        const correct = correctOptions[0]
+        const wrongPool = questionsArray
+            .filter((q) => q.kanjiName !== currentQuestion?.kanjiName)
+            .map((q) => q[field]?.[0])
+            .filter(Boolean)
+        const wrongs = [...new Set(wrongPool)].filter((w) => w !== correct).slice(0, 3)
+        const all = [correct, ...wrongs]
+        return all.sort(() => Math.random() - 0.5)
+    }
+
+    const mcqOptions = getMcqOptions()
 
     const moveToNextQuestion = (answer) => {
         setSelectedAns(answer)

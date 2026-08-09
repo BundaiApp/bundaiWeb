@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { RefreshCw, Play, Book, MessageSquare, Volume2, Zap } from "lucide-react"
 import COLORS from "../theme/colors"
 import { LEVEL_SYSTEM_CONFIG, getLevelContent } from "../util/levelSystem"
-import { arr as jlptKanjiData } from "../util/jlptArray"
+import { loadLevelsUpTo } from "../util/jlpt"
 import FIND_PENDING_FLASHCARDS from "../graphql/queries/findPendingCards.query"
 import GET_FLASHCARDS_BY_LEVEL from "../graphql/queries/getFlashCardsByLevel.query"
 import ME_QUERY from "../graphql/queries/me.query"
@@ -13,6 +13,7 @@ export default function SRS() {
     const navigate = useNavigate()
     const [refreshing, setRefreshing] = useState(false)
     const [currentLevel, setCurrentLevel] = useState(10)
+    const [jlptKanjiData, setJlptKanjiData] = useState([])
     const userId = localStorage.getItem("userId") || "defaultUser"
 
     const isGuest = !userId || userId === "defaultUser"
@@ -28,6 +29,18 @@ export default function SRS() {
             setCurrentLevel(userData.me.currentLevel)
         }
     }, [userData])
+
+    // Load JLPT kanji data for levels 1→currentLevel (lazy, on demand)
+    useEffect(() => {
+        let cancelled = false
+        loadLevelsUpTo(5).then((map) => {
+            if (!cancelled) {
+                const all = Object.values(map).flat()
+                setJlptKanjiData(all)
+            }
+        })
+        return () => { cancelled = true }
+    }, [currentLevel])
 
     const { data: levelCardsData, loading: levelLoading, refetch: refetchLevelCards } = useQuery(GET_FLASHCARDS_BY_LEVEL, {
         variables: { userId, level: currentLevel },
@@ -49,7 +62,7 @@ export default function SRS() {
             }
         })
         return lookup
-    }, [])
+    }, [jlptKanjiData])
 
     const jlptDataMap = useMemo(() => {
         const map = { 1: [], 2: [], 3: [], 4: [], 5: [] }
@@ -59,7 +72,7 @@ export default function SRS() {
             }
         })
         return map
-    }, [])
+    }, [jlptKanjiData])
 
     const localLevelContent = useMemo(() => {
         try {

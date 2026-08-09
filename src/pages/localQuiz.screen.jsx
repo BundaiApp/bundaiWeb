@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import COLORS from '../theme/colors'
 import { topics, kana } from '../util/constants'
 import Hiragana from '../util/hiragana.json'
 import Katakana from '../util/katakana.json'
-import { provideData, provideTopWordsData } from '../util/jlptArray'
+import { loadLevel } from '../util/jlpt'
 import { X } from 'lucide-react'
 
 export default function LocalQuiz() {
@@ -14,26 +14,37 @@ export default function LocalQuiz() {
     const [selected, setSelected] = useState([])
     const [quizType, setQuizType] = useState('meaning')
     const [isWritten, setIsWritten] = useState(false)
-    const [itemCount, setItemCount] = useState(10)
+    const [currentData, setCurrentData] = useState([])
+    const [loading, setLoading] = useState(false)
 
-    const count = itemCount === "All" ? 1000 : itemCount
+    useEffect(() => {
+        let cancelled = false
+        setLoading(true)
 
-    const currentData = useMemo(() => {
-        if (type === 'jlpt') return provideData('jlpt', level) || []
-        if (type === 'strokes') return provideData('strokes', level) || []
-        if (type === 'grades') return provideData('grade', level) || []
-        if (type === 'verbs') return provideTopWordsData('verbs', `n${level}`, count) || []
-        if (type === 'nouns') return provideTopWordsData('nouns', `n${level}`, count) || []
-        if (type === 'adjectives') return provideTopWordsData('adjectives', `n${level}`, count) || []
-        if (type === 'adverbs') return provideTopWordsData('adverbs', `n${level}`, count) || []
-        if (type === 'hiragana') return Hiragana
-        if (type === 'katakana') return Katakana
-        return []
-    }, [count, level, type])
+        if (type === 'hiragana') {
+            setCurrentData(Hiragana)
+            setLoading(false)
+        } else if (type === 'katakana') {
+            setCurrentData(Katakana)
+            setLoading(false)
+        } else if (type === 'jlpt') {
+            loadLevel(level).then((data) => {
+                if (!cancelled) {
+                    setCurrentData(data)
+                    setLoading(false)
+                }
+            })
+        } else {
+            setCurrentData([])
+            setLoading(false)
+        }
+
+        return () => { cancelled = true }
+    }, [type, level])
 
     useEffect(() => {
         setSelected([])
-    }, [type, level, itemCount])
+    }, [type, level])
 
     const checkIfSelected = (item) => {
         return selected.includes(item)
@@ -53,7 +64,7 @@ export default function LocalQuiz() {
             })
     }
 
-    const ITEM_COUNTS = [10, 20, 50, 100, 'All']
+    const displayData = currentData
 
     return (
         <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-4" style={{ backgroundColor: COLORS.background }}>
@@ -89,10 +100,10 @@ export default function LocalQuiz() {
                 })}
             </div>
 
-            {/* Level Selection */}
-            <div className="flex flex-wrap gap-2">
-                {(type === 'jlpt' || type === 'verbs' || type === 'adjectives' || type === 'adverbs' || type === 'nouns') &&
-                    [5, 4, 3, 2, 1].map((value) => {
+            {/* Level Selection (JLPT only) */}
+            {type === 'jlpt' && (
+                <div className="flex flex-wrap gap-2">
+                    {[5, 4, 3, 2, 1].map((value) => {
                         const isActive = value === level
                         return (
                             <button
@@ -111,106 +122,42 @@ export default function LocalQuiz() {
                             </button>
                         )
                     })}
+                </div>
+            )}
 
-                {type === 'grades' &&
-                    Array.from({ length: 9 }, (_, i) => i + 1).map((value) => {
-                        const isActive = value === level
-                        return (
-                            <button
-                                key={`grade${value}`}
-                                onClick={() => setLevel(value)}
-                                className="px-6 py-2 rounded-full font-medium transition-all duration-300"
-                                style={{
-                                    backgroundColor: isActive ? COLORS.interactivePrimary : COLORS.interactiveSurface,
-                                    color: isActive ? COLORS.interactiveTextOnPrimary : COLORS.interactiveTextInactive,
-                                    borderWidth: '1px',
-                                    borderStyle: 'solid',
-                                    borderColor: isActive ? COLORS.interactivePrimary : COLORS.interactiveBorder
-                                }}
-                            >
-                                {value}
-                            </button>
-                        )
-                    })}
-
-                {type === 'strokes' &&
-                    Array.from({ length: 24 }, (_, i) => i + 1).map((value) => {
-                        const isActive = value === level
-                        return (
-                            <button
-                                key={`stroke${value}`}
-                                onClick={() => setLevel(value)}
-                                className="px-6 py-2 rounded-full font-medium transition-all duration-300"
-                                style={{
-                                    backgroundColor: isActive ? COLORS.interactivePrimary : COLORS.interactiveSurface,
-                                    color: isActive ? COLORS.interactiveTextOnPrimary : COLORS.interactiveTextInactive,
-                                    borderWidth: '1px',
-                                    borderStyle: 'solid',
-                                    borderColor: isActive ? COLORS.interactivePrimary : COLORS.interactiveBorder
-                                }}
-                            >
-                                {value}
-                            </button>
-                        )
-                    })}
-            </div>
-
-            {/* Item Count Filter for Words */}
-            {(type === 'verbs' || type === 'adjectives' || type === 'adverbs' || type === 'nouns') && (
-                <div className="flex flex-wrap gap-2">
-                    {ITEM_COUNTS.map((count) => {
-                        const isActive = itemCount === count
-                        return (
-                            <button
-                                key={count}
-                                onClick={() => setItemCount(count)}
-                                className="px-4 py-2 rounded-lg font-medium transition-all duration-300"
-                                style={{
-                                    backgroundColor: isActive ? COLORS.interactivePrimary : COLORS.interactiveSurface,
-                                    color: isActive ? COLORS.interactiveTextOnPrimary : COLORS.interactiveTextInactive,
-                                    borderWidth: '1px',
-                                    borderStyle: 'solid',
-                                    borderColor: isActive ? COLORS.interactivePrimary : COLORS.interactiveBorder
-                                }}
-                            >
-                                {count}
-                            </button>
-                        )
-                    })}
+            {/* Loading */}
+            {loading && (
+                <div className="flex items-center justify-center py-12">
+                    <div className="w-8 h-8 rounded-full border-4 border-t-4 animate-spin" style={{ borderColor: COLORS.brandPrimary, borderTopColor: 'transparent' }} />
                 </div>
             )}
 
             {/* Kanji Grid */}
-            <div className="rounded-2xl p-4 shadow-lg" style={{ backgroundColor: COLORS.surface }}>
-                <div className={`grid gap-2 ${type === 'jlpt' || type === 'strokes' || type === 'grades'
-                        ? 'grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10'
-                        : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4'
-                    }`}>
-                    {currentData.map((item, index) => {
-                        const isActive = selected.includes(item)
-                        const displayText = (type === 'jlpt' || type === 'strokes' || type === 'grades' || type === 'hiragana' || type === 'katakana')
-                            ? item.kanjiName
-                            : item.kanji || item.kanjiName
-
-                        return (
-                            <button
-                                key={`${displayText}-${index}`}
-                                onClick={() => checkIfSelected(item)}
-                                className="p-3 rounded-xl font-medium text-xl transition-all duration-300 hover:scale-105"
-                                style={{
-                                    backgroundColor: isActive ? COLORS.interactivePrimary : COLORS.interactiveSurface,
-                                    color: isActive ? COLORS.interactiveTextOnPrimary : COLORS.textPrimary,
-                                    borderWidth: '1px',
-                                    borderStyle: 'solid',
-                                    borderColor: isActive ? COLORS.interactivePrimary : COLORS.interactiveBorder
-                                }}
-                            >
-                                {displayText}
-                            </button>
-                        )
-                    })}
+            {!loading && displayData.length > 0 && (
+                <div className="rounded-2xl p-4 shadow-lg" style={{ backgroundColor: COLORS.surface }}>
+                    <div className="grid gap-2 grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
+                        {displayData.map((item, index) => {
+                            const isActive = selected.includes(item)
+                            return (
+                                <button
+                                    key={`${item.kanjiName}-${index}`}
+                                    onClick={() => checkIfSelected(item)}
+                                    className="p-3 rounded-xl font-medium text-xl transition-all duration-300 hover:scale-105"
+                                    style={{
+                                        backgroundColor: isActive ? COLORS.interactivePrimary : COLORS.interactiveSurface,
+                                        color: isActive ? COLORS.interactiveTextOnPrimary : COLORS.textPrimary,
+                                        borderWidth: '1px',
+                                        borderStyle: 'solid',
+                                        borderColor: isActive ? COLORS.interactivePrimary : COLORS.interactiveBorder
+                                    }}
+                                >
+                                    {item.kanjiName}
+                                </button>
+                            )
+                        })}
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Selection Controls */}
             <div className="space-y-3">

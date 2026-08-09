@@ -1,45 +1,48 @@
-import { useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
-// Public pages
+// Public pages (eager — small, always needed)
 import LandingPage from './pages/landingPage.screen';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Refund from './pages/Refund';
 import PricingPage from './pages/pricing.screen';
 
-// Auth pages
-import Login from './pages/login.screen';
-import SignUp from './pages/signup.screen';
-import ForgotPassword from './pages/forgotPassword.screen';
+// Auth pages (lazy)
+const Login = lazy(() => import('./pages/login.screen'));
+const SignUp = lazy(() => import('./pages/signup.screen'));
+const ForgotPassword = lazy(() => import('./pages/forgotPassword.screen'));
 
-// Dashboard layout
-import DashboardLayout from './layouts/DashboardLayout';
+// Dashboard layout (lazy)
+const DashboardLayout = lazy(() => import('./layouts/DashboardLayout'));
 
-// Dashboard pages
-import Dashboard from './pages/dashboard.screen';
-import LocalQuiz from './pages/localQuiz.screen';
-import SRS from './pages/srs.screen';
-import SRSEngine from './pages/srsEngine.screen';
-import StudyEngine from './pages/studyEngine.screen';
-import SRSReview from './pages/srsReview.screen';
-import Similars from './pages/similars.screen';
-import SimilarDetail from './pages/similarDetail.screen';
-import KanjiSwap from './pages/kanjiSwap.screen';
-import KanjiSwapDetail from './pages/kanjiSwapDetail.screen';
-import KanjiTemplate from './pages/kanjiTemplate.screen';
-import KanjiDetails from './pages/kanjiDetails.screen';
-import Levels from './pages/levels.screen';
-import LevelDetails from './pages/levelDetails.screen';
-import LevelTest from './pages/levelTest.screen';
-import AnimeList from './pages/animeList.screen';
-import AnimeWords from './pages/animeWords.screen';
-import AnimeDetail from './pages/animeDetail.screen';
-import Settings from './pages/settings.screen';
-import DeleteAccount from './pages/deleteAccount.screen';
+// Dashboard pages (lazy — these pull in heavy JSON/GraphQL deps)
+const Dashboard = lazy(() => import('./pages/dashboard.screen'));
+const LocalQuiz = lazy(() => import('./pages/localQuiz.screen'));
+const QuizEngine = lazy(() => import('./pages/quizEngine.screen'));
+const SRS = lazy(() => import('./pages/srs.screen'));
+const SRSEngine = lazy(() => import('./pages/srsEngine.screen'));
+const StudyEngine = lazy(() => import('./pages/studyEngine.screen'));
+const SRSReview = lazy(() => import('./pages/srsReview.screen'));
+const KanjiTemplate = lazy(() => import('./pages/kanjiTemplate.screen'));
+const KanjiDetails = lazy(() => import('./pages/kanjiDetails.screen'));
+const Levels = lazy(() => import('./pages/levels.screen'));
+const LevelDetails = lazy(() => import('./pages/levelDetails.screen'));
+const LevelTest = lazy(() => import('./pages/levelTest.screen'));
+const AnimeWords = lazy(() => import('./pages/animeWords.screen'));
+const Settings = lazy(() => import('./pages/settings.screen'));
+const DeleteAccount = lazy(() => import('./pages/deleteAccount.screen'));
 
 import posthog from './lib/posthog';
 import { getTrafficProperties } from './lib/trafficAttribution';
+
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: '#f7f5ff' }}>
+      <div className="w-10 h-10 rounded-full border-4 border-t-4 animate-spin" style={{ borderColor: '#7f53f5', borderTopColor: 'transparent' }} />
+    </div>
+  );
+}
 
 function SiteEntryTracker() {
   const location = useLocation();
@@ -61,6 +64,14 @@ function SiteEntryTracker() {
   return null;
 }
 
+function DashboardRoute({ children }) {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <DashboardLayout>{children}</DashboardLayout>
+    </Suspense>
+  );
+}
+
 export default function App() {
   return (
     <Router>
@@ -74,31 +85,26 @@ export default function App() {
         <Route path="/refund" element={<Refund />} />
 
         {/* Auth routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/login" element={<Suspense fallback={<PageLoader />}><Login /></Suspense>} />
+        <Route path="/signup" element={<Suspense fallback={<PageLoader />}><SignUp /></Suspense>} />
+        <Route path="/forgot-password" element={<Suspense fallback={<PageLoader />}><ForgotPassword /></Suspense>} />
 
-        {/* Dashboard routes (wrapped in DashboardLayout) */}
-        <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
-        <Route path="/dashboard/quiz" element={<DashboardLayout><LocalQuiz /></DashboardLayout>} />
-        <Route path="/dashboard/srs" element={<DashboardLayout><SRS /></DashboardLayout>} />
-        <Route path="/dashboard/srs-engine" element={<DashboardLayout><SRSEngine /></DashboardLayout>} />
-        <Route path="/dashboard/study-engine" element={<DashboardLayout><StudyEngine /></DashboardLayout>} />
-        <Route path="/dashboard/srs-review" element={<DashboardLayout><SRSReview /></DashboardLayout>} />
-        <Route path="/dashboard/similars" element={<DashboardLayout><Similars /></DashboardLayout>} />
-        <Route path="/dashboard/similar-detail" element={<DashboardLayout><SimilarDetail /></DashboardLayout>} />
-        <Route path="/dashboard/kanji-swap" element={<DashboardLayout><KanjiSwap /></DashboardLayout>} />
-        <Route path="/dashboard/kanji-swap-detail" element={<DashboardLayout><KanjiSwapDetail /></DashboardLayout>} />
-        <Route path="/dashboard/kanji-template" element={<DashboardLayout><KanjiTemplate /></DashboardLayout>} />
-        <Route path="/dashboard/kanji-detail" element={<DashboardLayout><KanjiDetails /></DashboardLayout>} />
-        <Route path="/dashboard/levels" element={<DashboardLayout><Levels /></DashboardLayout>} />
-        <Route path="/dashboard/level-details" element={<DashboardLayout><LevelDetails /></DashboardLayout>} />
-        <Route path="/dashboard/level-test" element={<DashboardLayout><LevelTest /></DashboardLayout>} />
-        <Route path="/dashboard/anime-list" element={<DashboardLayout><AnimeList /></DashboardLayout>} />
-        <Route path="/dashboard/anime-words" element={<DashboardLayout><AnimeWords /></DashboardLayout>} />
-        <Route path="/dashboard/anime-detail" element={<DashboardLayout><AnimeDetail /></DashboardLayout>} />
-        <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
-        <Route path="/dashboard/delete-account" element={<DashboardLayout><DeleteAccount /></DashboardLayout>} />
+        {/* Dashboard routes (lazy loaded) */}
+        <Route path="/dashboard" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
+        <Route path="/dashboard/quiz" element={<DashboardRoute><LocalQuiz /></DashboardRoute>} />
+        <Route path="/dashboard/quiz-engine" element={<DashboardRoute><QuizEngine /></DashboardRoute>} />
+        <Route path="/dashboard/srs" element={<DashboardRoute><SRS /></DashboardRoute>} />
+        <Route path="/dashboard/srs-engine" element={<DashboardRoute><SRSEngine /></DashboardRoute>} />
+        <Route path="/dashboard/study-engine" element={<DashboardRoute><StudyEngine /></DashboardRoute>} />
+        <Route path="/dashboard/srs-review" element={<DashboardRoute><SRSReview /></DashboardRoute>} />
+        <Route path="/dashboard/kanji-template" element={<DashboardRoute><KanjiTemplate /></DashboardRoute>} />
+        <Route path="/dashboard/kanji-detail" element={<DashboardRoute><KanjiDetails /></DashboardRoute>} />
+        <Route path="/dashboard/levels" element={<DashboardRoute><Levels /></DashboardRoute>} />
+        <Route path="/dashboard/level-details" element={<DashboardRoute><LevelDetails /></DashboardRoute>} />
+        <Route path="/dashboard/level-test" element={<DashboardRoute><LevelTest /></DashboardRoute>} />
+        <Route path="/dashboard/anime-words" element={<DashboardRoute><AnimeWords /></DashboardRoute>} />
+        <Route path="/dashboard/settings" element={<DashboardRoute><Settings /></DashboardRoute>} />
+        <Route path="/dashboard/delete-account" element={<DashboardRoute><DeleteAccount /></DashboardRoute>} />
 
         {/* Fallback */}
         <Route path="*" element={<LandingPage />} />

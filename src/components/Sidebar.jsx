@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { Home, FileText, RefreshCw, Eye, Settings as SettingsIcon, LogOut, X, Shuffle } from "lucide-react"
+import { Home, FileText, RefreshCw, Settings as SettingsIcon, LogOut, X } from "lucide-react"
 import { useMutation, useQuery } from "@apollo/client/react"
 import { useState, useEffect, useMemo } from "react"
 import { clearAuthToken } from "../lib/auth"
@@ -54,8 +54,6 @@ export default function Sidebar({ isOpen, onClose }) {
         { path: "/dashboard", icon: Home, label: "Dashboard" },
         { path: "/dashboard/quiz", icon: FileText, label: "Local Quiz" },
         { path: "/dashboard/srs", icon: RefreshCw, label: "SRS", badge: kanjiDueCount > 0 ? kanjiDueCount : null },
-        { path: "/dashboard/similars", icon: Eye, label: "Kanji Trap" },
-        { path: "/dashboard/kanji-swap", icon: Shuffle, label: "Kanji Swap" },
         { path: "/dashboard/settings", icon: SettingsIcon, label: "Settings" },
     ]
 
