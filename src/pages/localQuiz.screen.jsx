@@ -28,7 +28,7 @@ export default function LocalQuiz() {
             setCurrentData(Katakana)
             setLoading(false)
         } else if (type === 'jlpt') {
-            loadLevel(level).then((data) => {
+            loadLevel(level, 'light').then((data) => {
                 if (!cancelled) {
                     setCurrentData(data)
                     setLoading(false)
@@ -56,12 +56,24 @@ export default function LocalQuiz() {
         setSelected(currentData)
     }
 
-    const checkThenNavigate = () => {
-        return selected.length === 0
-            ? alert('please select some kanji')
-            : navigate('/dashboard/quiz-engine', {
+    const checkThenNavigate = async () => {
+        if (selected.length === 0) {
+            alert('please select some kanji')
+            return
+        }
+
+        if (type === 'jlpt') {
+            const quizData = await loadLevel(level, 'quiz')
+            const selectedNames = new Set(selected.map((s) => s.kanjiName))
+            const questions = quizData.filter((q) => selectedNames.has(q.kanjiName))
+            navigate('/dashboard/quiz-engine', {
+                state: { questionsArray: questions, quizType, isWritten }
+            })
+        } else {
+            navigate('/dashboard/quiz-engine', {
                 state: { questionsArray: selected, quizType, isWritten }
             })
+        }
     }
 
     const displayData = currentData

@@ -33,7 +33,9 @@ export default function SRS() {
     // Load JLPT kanji data for levels 1→currentLevel (lazy, on demand)
     useEffect(() => {
         let cancelled = false
-        loadLevelsUpTo(5).then((map) => {
+        const maxLevel = Math.min(currentLevel, 5)
+        if (maxLevel < 1) return
+        loadLevelsUpTo(maxLevel).then((map) => {
             if (!cancelled) {
                 const all = Object.values(map).flat()
                 setJlptKanjiData(all)

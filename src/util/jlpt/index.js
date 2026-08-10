@@ -1,35 +1,38 @@
 // Async loader for per-level JLPT kanji data
-// Each level is a separate JSON file (~200KB-1MB) loaded on demand
+// Each level has three variants loaded on demand:
+//   'light' — just kanjiName + jlpt (for grids/lists, ~2-37KB)
+//   'quiz'  — everything except usedIn/similars (for quiz/SRS, ~15-234KB)
+//   'full'  — everything (for detail pages, ~500KB-1MB)
 
 const cache = {}
 
-export async function loadLevel(level) {
-  if (cache[level]) return cache[level]
+function getImportPath(level, variant) {
+  if (variant === 'light') return () => import(`./n${level}-light.json`)
+  if (variant === 'quiz') return () => import(`./n${level}-quiz.json`)
+  return () => import(`./n${level}.json`)
+}
 
-  let data
-  switch (level) {
-    case 1: data = (await import('./n1.json')).default; break
-    case 2: data = (await import('./n2.json')).default; break
-    case 3: data = (await import('./n3.json')).default; break
-    case 4: data = (await import('./n4.json')).default; break
-    case 5: data = (await import('./n5.json')).default; break
-    default: throw new Error(`Invalid JLPT level: ${level}`)
-  }
+export async function loadLevel(level, variant = 'quiz') {
+  const key = `${level}-${variant}`
+  if (cache[key]) return cache[key]
 
-  cache[level] = data
+  const loader = getImportPath(level, variant)
+  const data = (await loader()).default
+
+  cache[key] = data
   return data
 }
 
-export async function loadLevelsUpTo(maxLevel) {
+export async function loadLevelsUpTo(maxLevel, variant = 'quiz') {
   const map = {}
   for (let lvl = 1; lvl <= 5; lvl++) {
     if (lvl <= maxLevel) {
-      map[lvl] = await loadLevel(lvl)
+      map[lvl] = await loadLevel(lvl, variant)
     }
   }
   return map
 }
 
-export async function loadAllLevels() {
-  return loadLevelsUpTo(5)
+export async function loadAllLevels(variant = 'quiz') {
+  return loadLevelsUpTo(5, variant)
 }
