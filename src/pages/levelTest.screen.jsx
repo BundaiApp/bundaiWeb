@@ -1,9 +1,11 @@
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useMutation } from "@apollo/client/react"
+import { useMutation, useQuery } from "@apollo/client/react"
 import COLORS from "../theme/colors"
 import { getLevelContent } from "../util/levelSystem"
 import UPDATE_CURRENT_LEVEL from "../graphql/mutations/updateCurrentLevel.mutation"
+import ADD_FLASHCARD from "../graphql/mutations/addFlashCard.mutation"
+import getKanjiByJLPT from "../graphql/queries/getKanjiByJLPT.query"
 
 const PASS_THRESHOLD = 0.7
 const TOTAL_QUESTIONS = 20
@@ -11,6 +13,21 @@ const TOTAL_QUESTIONS = 20
 export default function LevelTest() {
     const navigate = useNavigate()
     const [updateCurrentLevel] = useMutation(UPDATE_CURRENT_LEVEL)
+    const [addFlashCard] = useMutation(ADD_FLASHCARD)
+
+    const { data: n5Data } = useQuery(getKanjiByJLPT, { variables: { level: 5 } })
+    const { data: n4Data } = useQuery(getKanjiByJLPT, { variables: { level: 4 } })
+    const { data: n3Data } = useQuery(getKanjiByJLPT, { variables: { level: 3 } })
+    const { data: n2Data } = useQuery(getKanjiByJLPT, { variables: { level: 2 } })
+    const { data: n1Data } = useQuery(getKanjiByJLPT, { variables: { level: 1 } })
+
+    const jlptDataMap = useMemo(() => ({
+        1: n1Data?.getKanjiByJLPT || [],
+        2: n2Data?.getKanjiByJLPT || [],
+        3: n3Data?.getKanjiByJLPT || [],
+        4: n4Data?.getKanjiByJLPT || [],
+        5: n5Data?.getKanjiByJLPT || []
+    }), [n1Data, n2Data, n3Data, n4Data, n5Data])
 
     const userId = localStorage.getItem("userId") || ""
     const isGuest = !userId
@@ -35,7 +52,7 @@ export default function LevelTest() {
         }
         try {
             setTestState("loading")
-            const levelData = await getLevelContent(targetLevel)
+            const levelData = await getLevelContent(targetLevel, jlptDataMap)
 
             const allKanji = levelData.kanji || []
             const allWords = levelData.words || []
@@ -150,7 +167,7 @@ export default function LevelTest() {
             alert("Failed to load level content. Please try another level.")
             setTestState("select")
         }
-    }, [isGuest, navigate])
+    }, [isGuest, navigate, jlptDataMap])
 
     const handleLevelSelect = (level) => {
         setSelectedLevel(level)
@@ -187,7 +204,7 @@ export default function LevelTest() {
             localStorage.setItem("currentLevel", String(selectedLevel))
 
             // Seed the new level's study queue
-            const levelData = await getLevelContent(selectedLevel)
+            const levelData = await getLevelContent(selectedLevel, jlptDataMap)
             const allItems = [
                 ...(levelData.kanji || []).map((k) => ({
                     kanjiName: k.kanji || k.kanjiName,

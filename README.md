@@ -1,8 +1,8 @@
 # Bundai Web
 
-Web app for [Bundai](https://bundai.app) — the Japanese-learning iOS app. Reconnected to the GraphQL backend at `api.bundai.app` (Railway). Serves as both a marketing site and a full dashboard with SRS, kanji browsing, quizzes, and anime vocabulary.
+Web app for [Bundai](https://bundai.app) — the Japanese-learning iOS app. Connected to the GraphQL backend at `api.bundai.app` (Node/Apollo on a Raspberry Pi, exposed via Cloudflare Tunnel). Serves as both a marketing site and a full dashboard with SRS, kanji browsing, quizzes, and anime vocabulary.
 
-Part of the Bundai ecosystem (`~/projects/bundai` iOS app, `~/projects/server` legacy backend, `~/projects/bundaiExtension`).
+Part of the Bundai ecosystem (`~/projects/bundai` iOS app, `~/projects/server` GraphQL backend on Pi, `~/projects/bundaiExtension`).
 
 ## Stack
 
@@ -110,7 +110,23 @@ Loader: `src/util/jlpt/index.js` exports `loadLevel(n)`, `loadLevelsUpTo(n)`, `l
 - DashboardLayout checks auth and redirects to `/` if not logged in
 
 ### Analytics
-PostHog events: `site entry viewed`, `landing page viewed`, `landing cta clicked`, `user signed up`, `user logged in`, `checkout started`, `checkout completed`.
+PostHog is integrated via `src/lib/posthog.js` — a `posthog-js` singleton initialized from `VITE_PUBLIC_POSTHOG_KEY` / `VITE_PUBLIC_POSTHOG_HOST`. `posthog.identify` runs on login + signup (distinctId = user id, with email + name); `posthog.captureException` wraps the critical catch blocks (login, signup, Android waitlist form).
+
+Verified events in code:
+
+| Event | File |
+|---|---|
+| `site entry viewed` | `src/App.jsx` (SiteEntryTracker — fires once per visit) |
+| `landing page viewed` | `src/pages/landingPage.screen.jsx` |
+| `landing cta clicked` | `src/pages/landingPage.screen.jsx` (with `destination`) |
+| `user signed up` | `src/pages/signup.screen.jsx` |
+| `user logged in` | `src/pages/login.screen.jsx` |
+| `kanji category browsed` | `src/pages/dashboard.screen.jsx` |
+| `review session completed` | `src/pages/srsEngine.screen.jsx` |
+
+PostHog project: **371511** (US). A skill for PostHog server-side (Node) integration lives at `.claude/skills/integration-javascript_node/`.
+
+> The old `posthog-setup-report.md` was removed; its useful contents (project id, integration facts) are folded in here. The report's event table was partly aspirational — the table above is the code-verified list.
 
 ## Deleted features (kept for reference)
 

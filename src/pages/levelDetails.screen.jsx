@@ -6,6 +6,7 @@ import COLORS from "../theme/colors"
 import { getLevelContent } from "../util/levelSystem"
 import GET_FLASHCARDS_BY_LEVEL from "../graphql/queries/getFlashCardsByLevel.query"
 import getKanjiByJLPT from "../graphql/queries/getKanjiByJLPT.query"
+import ME_QUERY from "../graphql/queries/me.query"
 
 const LONG_WORD_LENGTH_THRESHOLD = 4
 
@@ -32,6 +33,12 @@ export default function LevelDetails() {
         fetchPolicy: "network-only"
     })
 
+    const { data: userData } = useQuery(ME_QUERY, {
+        variables: { _id: userId },
+        skip: isGuest,
+        fetchPolicy: "network-only"
+    })
+
     const { data: n5Data, loading: loadingN5 } = useQuery(getKanjiByJLPT, { variables: { level: 5 }, skip: false })
     const { data: n4Data, loading: loadingN4 } = useQuery(getKanjiByJLPT, { variables: { level: 4 }, skip: false })
     const { data: n3Data, loading: loadingN3 } = useQuery(getKanjiByJLPT, { variables: { level: 3 }, skip: false })
@@ -49,34 +56,10 @@ export default function LevelDetails() {
     const jlptLoading = loadingN1 || loadingN2 || loadingN3 || loadingN4 || loadingN5
 
     useEffect(() => {
-        const fetchUserLevel = async () => {
-            if (isGuest) return
-            try {
-                const response = await fetch('https://bundaibackend-production.up.railway.app/graphql', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        query: `
-                            query me($_id: String!) {
-                                me(_id: $_id) {
-                                    _id
-                                    currentLevel
-                                }
-                            }
-                        `,
-                        variables: { _id: userId }
-                    })
-                })
-                const data = await response.json()
-                if (data?.data?.me?.currentLevel) {
-                    setCurrentLevel(data.data.me.currentLevel)
-                }
-            } catch (error) {
-                console.error("Error fetching current level:", error)
-            }
+        if (userData?.me?.currentLevel) {
+            setCurrentLevel(userData.me.currentLevel)
         }
-        fetchUserLevel()
-    }, [userId, isGuest])
+    }, [userData])
 
     useEffect(() => {
         const fetchLocalData = async () => {

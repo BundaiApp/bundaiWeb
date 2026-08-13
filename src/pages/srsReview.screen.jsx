@@ -5,6 +5,7 @@ import { RefreshCw, Play, Book, MessageSquare, Volume2 } from "lucide-react"
 import COLORS from "../theme/colors"
 import { LEVEL_SYSTEM_CONFIG, getLevelContent } from "../util/levelSystem"
 import FIND_PENDING_FLASHCARDS from "../graphql/queries/findPendingCards.query"
+import getKanjiByJLPT from "../graphql/queries/getKanjiByJLPT.query"
 
 const KANA_ONLY_REGEX = /^[\u3040-\u309F\u30A0-\u30FFー・\s]+$/
 
@@ -26,6 +27,20 @@ export default function LocalQuiz() {
     })
 
     const pendingCards = data?.getPendingFlashCards ?? []
+
+    const { data: n5Data } = useQuery(getKanjiByJLPT, { variables: { level: 5 } })
+    const { data: n4Data } = useQuery(getKanjiByJLPT, { variables: { level: 4 } })
+    const { data: n3Data } = useQuery(getKanjiByJLPT, { variables: { level: 3 } })
+    const { data: n2Data } = useQuery(getKanjiByJLPT, { variables: { level: 2 } })
+    const { data: n1Data } = useQuery(getKanjiByJLPT, { variables: { level: 1 } })
+
+    const jlptDataMap = useMemo(() => ({
+        1: n1Data?.getKanjiByJLPT || [],
+        2: n2Data?.getKanjiByJLPT || [],
+        3: n3Data?.getKanjiByJLPT || [],
+        4: n4Data?.getKanjiByJLPT || [],
+        5: n5Data?.getKanjiByJLPT || []
+    }), [n1Data, n2Data, n3Data, n4Data, n5Data])
 
     // Build learned set
     const learnedSet = useMemo(() => {
@@ -54,7 +69,7 @@ export default function LocalQuiz() {
             const level = index + 10
 
             try {
-                const data = getLevelContent(level)
+                const data = getLevelContent(level, jlptDataMap)
                 const kanjiList = Array.isArray(data?.kanji) ? data.kanji : []
                 const rawWordList = Array.isArray(data?.words) ? data.words : []
                 const soundList = rawWordList.filter((word) => isKanaOnly(word.word))
@@ -117,7 +132,7 @@ export default function LocalQuiz() {
         }
 
         return { levelSummaries: summaries, currentLevelSummary: current }
-    }, [learnedSet])
+    }, [learnedSet, jlptDataMap])
 
     const handleRefresh = async () => {
         try {

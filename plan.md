@@ -47,7 +47,7 @@ The app is **not** given away — it's free to *download*, paid to *use*, gated 
 
 ### Phase 0 — Web feed (this week, survival-critical)
 Goal: unlock revenue from the existing 6M views/mo by killing the install step.
-- [ ] Upload 10k reels to R2 (or Bunny). Bulk script (`rclone` / `wrangler` / S3 API).
+- [ ] Upload 10k reels to **Cloudflare R2** (decided). Bulk script (`rclone` / `wrangler r2` / S3 API).
 - [ ] New route `/reels` on bundaiWeb (or make it the landing). Vertical TikTok-style feed.
 - [ ] First 5 reels free, then paywall.
 - [ ] Wire Paddle checkout (lib + env vars already exist). Three tiers.
@@ -56,7 +56,7 @@ Goal: unlock revenue from the existing 6M views/mo by killing the install step.
 
 ### Phase 1 — Cross-surface entitlement (once cash flows)
 Goal: one subscription works on web + app.
-- [ ] Small entitlement server: resurrect `bundaiExtension/PADDLE_IMPLEMENTATION_PLAN.md` design — `POST /webhooks/paddle` (verify signature → set `hasPaid`), `GET /api/me`.
+- [ ] **Server is already live** — Node/Apollo on Pi 1 (`bundai1`), MongoDB Atlas, public at `https://api.bundai.app/graphql` via Cloudflare Tunnel (see `~/projects/server/README.md`). It already has JWT auth, a `User` model with a `hasPaid` field, and a `me` query. So entitlement = add a Paddle webhook route (`POST /webhooks/paddle`, verify signature → set `hasPaid`) and expose `hasPaid` on `me` — per `bundaiExtension/PADDLE_IMPLEMENTATION_PLAN.md`. Not a new service. (An optional Go rewrite is sketched in `~/projects/server/goserver.md` — deferred unless a bottleneck appears.)
 - [ ] Re-enable login in bundaiWeb + bundai app.
 - [ ] App paywall checks the same entitlement (same account, same sub).
 - [ ] Paddle sandbox → production cutover.
@@ -136,4 +136,4 @@ Even at 1/5 = ~$900/mo (survival). The asymmetry is the whole story: views are h
 ## 10. Deprecated / superseded
 
 - `IMPLEMENTATION_PLAN.md` — **removed.** Described the dead server-backed web app (login/signup/dashboard + kanji-server work).
-- `posthog-setup-report.md` — **stale.** Lists events on screens that no longer exist (login/signup/SRS). Live app currently fires only `site entry viewed`, `landing page viewed`, `landing cta clicked`. Needs refresh after Phase 0.
+- `posthog-setup-report.md` — **removed.** Insights (PostHog project 371511, integration facts, skill folder) folded into `README.md` → Analytics. The report's event table was partly aspirational; the README now carries the code-verified list.

@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import COLORS from "../theme/colors"
 import { getLevelContent } from "../util/levelSystem"
 import ADD_FLASH_CARD from "../graphql/mutations/addFlashCard.mutation"
+import getKanjiByJLPT from "../graphql/queries/getKanjiByJLPT.query"
 import CALCULATE_NEXT_REVIEW_DATE from "../graphql/mutations/calculateNextReviewDate.mutation"
 import ME_QUERY from "../graphql/queries/me.query"
 
@@ -30,14 +31,28 @@ export default function StudyEngine() {
 
     const currentLevel = userData?.me?.currentLevel || 10
 
+    const { data: n5Data } = useQuery(getKanjiByJLPT, { variables: { level: 5 } })
+    const { data: n4Data } = useQuery(getKanjiByJLPT, { variables: { level: 4 } })
+    const { data: n3Data } = useQuery(getKanjiByJLPT, { variables: { level: 3 } })
+    const { data: n2Data } = useQuery(getKanjiByJLPT, { variables: { level: 2 } })
+    const { data: n1Data } = useQuery(getKanjiByJLPT, { variables: { level: 1 } })
+
+    const jlptDataMap = useMemo(() => ({
+        1: n1Data?.getKanjiByJLPT || [],
+        2: n2Data?.getKanjiByJLPT || [],
+        3: n3Data?.getKanjiByJLPT || [],
+        4: n4Data?.getKanjiByJLPT || [],
+        5: n5Data?.getKanjiByJLPT || []
+    }), [n1Data, n2Data, n3Data, n4Data, n5Data])
+
     const levelContent = useMemo(() => {
         try {
-            return getLevelContent(currentLevel)
+            return getLevelContent(currentLevel, jlptDataMap)
         } catch (error) {
             console.error("Error getting level content:", error)
             return { kanji: [], words: [] }
         }
-    }, [currentLevel])
+    }, [currentLevel, jlptDataMap])
 
     const getKanjiDetails = (kanjiName) => {
         return levelContent.kanji.find(k => k.kanjiName === kanjiName)
